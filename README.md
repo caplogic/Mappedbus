@@ -84,7 +84,7 @@ The byte array based sample is run in the same way.
 
 **Implementation**
 
-Here's how MappedBus guarantees that records can be written by multiple processes in order to the file.
+Here's how MappedBus guarantees that records can be written by multiple processes in the correct order.
 
 The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
 
