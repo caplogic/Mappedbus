@@ -14,7 +14,7 @@ Setting up the MappedBus:
 // Setup a reader
 MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L);
 
-// Set up a writer
+// Setup a writer
 MappedBusWriter writer = new MappedBusWriter();
 writer.init("/tmp/test", 100000L, true);
 ```
