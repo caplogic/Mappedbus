@@ -6,6 +6,8 @@ import java.nio.channels.FileChannel;
  
 import sun.nio.ch.FileChannelImpl;
 import sun.misc.Unsafe;
+
+// This class was inspired from an entry in Bryce Nyeggen's blog
  
 @SuppressWarnings("restriction")
 public class MemoryMappedFile {
