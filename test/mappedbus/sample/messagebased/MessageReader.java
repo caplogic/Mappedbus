@@ -17,10 +17,10 @@ public class MessageReader {
 			
 			Message message = null;
 
-			while(true) {
-				if(reader.hasNext()) {
+			while (true) {
+				if (reader.hasNext()) {
 					int type = reader.readType();
-					switch(type) {
+					switch (type) {
 					case PriceUpdate.TYPE:
 						message = priceUpdate;
 						break;

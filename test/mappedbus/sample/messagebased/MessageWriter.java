@@ -15,7 +15,7 @@ public class MessageWriter {
 
 			PriceUpdate priceUpdate = new PriceUpdate();
 
-			for(int i = 0; i < 1000; i++) {
+			for (int i = 0; i < 1000; i++) {
 				priceUpdate.setSource(source);
 				priceUpdate.setPrice(i * 2);
 				priceUpdate.setQuantity(i * 4);

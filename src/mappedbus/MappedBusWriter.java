@@ -1,6 +1,10 @@
 package mappedbus;
 import java.io.File;
 
+import mappedbus.MappedBus.Commit;
+import mappedbus.MappedBus.Layout;
+import mappedbus.MappedBus.Length;
+
 public class MappedBusWriter {
 
 	private MemoryMappedFile mem;
@@ -9,7 +13,7 @@ public class MappedBusWriter {
 
 	public void init(String file, long size, boolean append) {
 		this.size = size;
-		if(!append) {
+		if (!append) {
 			new File(file).delete();
 		}
 		try {
@@ -17,22 +21,22 @@ public class MappedBusWriter {
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-		if(append) {
-			long limit = mem.getLongVolatile(0);
-			if(limit == 0) {
-				mem.putLongVolatile(0, 8);
+		if (append) {
+			long limit = mem.getLongVolatile(Layout.Limit);
+			if (limit == 0) {
+				mem.putLongVolatile(Layout.Limit, Layout.Data);
 			}
 		} else {
-			mem.putLongVolatile(0, 8);
+			mem.putLongVolatile(Layout.Limit, Layout.Data);
 		}
 	}
 
 	public void add(Message message) {
 		long limit = addRecord(message.size());
 		long commitPos = limit;
-		limit += 4;
+		limit += Length.Commit;
 		mem.putInt(limit, message.type());
-		limit += 4;
+		limit += Length.Metadata;
 		message.write(mem, limit);
 		limit += message.size();
 		commitRecord(commitPos);
@@ -41,24 +45,24 @@ public class MappedBusWriter {
 	public void add(byte[] buffer, int offset, int length) {
 		long limit = addRecord(length);
 		long commitPos = limit;
-		limit += 4;
+		limit += Length.Commit;
 		mem.putInt(limit, length);
-		limit += 4;
+		limit += Length.Metadata;
 		mem.setBytes(limit, buffer, offset, length);
 		limit += length;
 		commitRecord(commitPos);		
 	}
 	
 	private long addRecord(int recordSize) {
-		int entrySize = 4 + 4 + recordSize;
+		int entrySize = Length.Commit + Length.Metadata + recordSize;
 		long limit;
-		while(true) {
-			limit = mem.getLongVolatile(0);
+		while (true) {
+			limit = mem.getLongVolatile(Layout.Limit);
 			long oldLimit = limit;
-			if(limit > size) {
-				limit = 8;
+			if (limit > size) {
+				limit = Layout.Data;
 			}
-			if(mem.compareAndSwapLong(0, oldLimit, limit + entrySize)) {
+			if (mem.compareAndSwapLong(Layout.Limit, oldLimit, limit + entrySize)) {
 				break;
 			}
 		}
@@ -66,6 +70,6 @@ public class MappedBusWriter {
 	}
 
 	private void commitRecord(long commitPos) {
-		mem.putIntVolatile(commitPos, 1);
+		mem.putIntVolatile(commitPos, Commit.Set);
 	}
 }

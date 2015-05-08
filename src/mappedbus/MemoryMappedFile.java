@@ -23,10 +23,8 @@ public class MemoryMappedFile {
 			Field singleoneInstanceField = Unsafe.class.getDeclaredField("theUnsafe");
 			singleoneInstanceField.setAccessible(true);
 			unsafe = (Unsafe) singleoneInstanceField.get(null);
- 
 			mmap = getMethod(FileChannelImpl.class, "map0", int.class, long.class, long.class);
 			unmmap = getMethod(FileChannelImpl.class, "unmap0", long.class, long.class);
- 
 			BYTE_ARRAY_OFFSET = unsafe.arrayBaseOffset(byte[].class);
 		} catch (Exception e){
 			throw new RuntimeException(e);
@@ -46,10 +44,8 @@ public class MemoryMappedFile {
 	private void mapAndSetOffset() throws Exception{
 		final RandomAccessFile backingFile = new RandomAccessFile(this.loc, "rw");
 		backingFile.setLength(this.size);
- 
 		final FileChannel ch = backingFile.getChannel();
 		this.addr = (long) mmap.invoke(ch, 1, 0L, this.size);
- 
 		ch.close();
 		backingFile.close();
 	}

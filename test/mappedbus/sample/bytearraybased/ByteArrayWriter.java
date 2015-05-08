@@ -17,7 +17,7 @@ public class ByteArrayWriter {
 
 			byte[] buffer = new byte[10];
 
-			for(int i = 0; i < 1000; i++) {
+			for (int i = 0; i < 1000; i++) {
 				Arrays.fill(buffer, (byte)source);
 				writer.add(buffer, 0, buffer.length);
 				Thread.sleep(1000);

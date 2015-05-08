@@ -1,10 +1,14 @@
 package mappedbus;
 
+import mappedbus.MappedBus.Commit;
+import mappedbus.MappedBus.Layout;
+import mappedbus.MappedBus.Length;
+
 public class MappedBusReader {
 
 	private final MemoryMappedFile mem;
 
-	private long limit = 8;
+	private long limit = Layout.Data;
 	
 	public MappedBusReader(String file, long size) {
 		try {
@@ -15,34 +19,34 @@ public class MappedBusReader {
 	}
 	
 	public boolean hasNext() {
-		long newLimit = mem.getLongVolatile(0);
-		if(limit > newLimit) {
-			limit = 8;
+		long newLimit = mem.getLongVolatile(Layout.Limit);
+		if (limit > newLimit) {
+			limit = Layout.Data;
 			return true;
 		}
 		return newLimit > limit;
 	}
 	
 	private void next() {
-		while(true) {
-			if(mem.getIntVolatile(limit) == 1) {
+		while (true) {
+			if (mem.getIntVolatile(limit) == Commit.Set) {
 				break;
 			}
 		}
-		limit += 4;	
+		limit += Length.Commit;	
 	}
 
 	public int readType() {
 		next();
 		int type = mem.getInt(limit);
-		limit += 4;
+		limit += Length.Metadata;
 		return type;
 	}
 	
 	public int readBuffer(byte[] dst, int offset) {
 		next();
 		int length = mem.getInt(limit);
-		limit += 4;
+		limit += Length.Metadata;
 		mem.getBytes(limit, dst, offset, length);
 		limit += length;
 		return length;
