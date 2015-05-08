@@ -82,6 +82,24 @@ Read: PriceUpdate [source=1, price=8, quantity=16]
 
 The byte array based sample is run in the same way.
 
+**Performance Tests**
+
+The project contains a performance test which can be run as follows.
+
+In one terminal:
+```
+> java messagebus.perf.MessageWriter /home/youraccount/tmp/test
+...
+```
+
+In a second terminal:
+```
+> java messagebus.perf.MessageReader /home/youraccount/tmp/test
+Elapsed: 1801 ms
+Per op: 22 ns
+Op/s: 44404868
+```
+
 **Implementation**
 
 Here's how MappedBus guarantees that records can be written by multiple processes in the correct order.
