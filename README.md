@@ -5,18 +5,32 @@ It is inspired by Java Chronicle  with the key difference that it's designed to 
 
 The bus is intended to be used as the backbone for an [event driven architecture](http://www.reactivemanifesto.com) where multiple producers create events which should appear in the same sequence to all consumers. When a consumer is restarted the events can be replayed since they're persisted in the memory mapped file.
 
-The performance (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 50 million events per second (128 bytes per record) and the time for writing and reading is around 20 ns.
+The performance (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 50 million events per second (a small message consisting of three ints) and the time for writing and reading is around 20 ns.
 
 **Usage**
+
+Setting up the MappedBus:
+```java
+// Setup a reader
+MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L);
+
+// Set up a writer
+MappedBusWriter writer = new MappedBusWriter();
+writer.init("/tmp/test", 100000L, true);
+```
 
 The bus supports two modes of operation: byte array based (raw data), and message based (object oriented).
 
 Byte Array based:
-```java
-bus.write(buffer, offset, length);
 
-while (bus.hasNext()) {
-   int length = bus.read(buffer)
+Writing data:
+```java
+// write a buffer
+writer.write(buffer, offset, length);
+
+// read a buffer
+while (reader.hasNext()) {
+   int length = reader.read(buffer)
 }
 ```
 
@@ -28,13 +42,13 @@ Each message object need to implement an interface with a size, read and write m
 PriceUpdate priceUpdate = new PriceUpdate();
 
 // write a message
-bus.write(priceUpdate);
+writer.write(priceUpdate);
 
 // read messages
-while (bus.hasNext()) {
-   int type = bus.readType();
+while (reader.hasNext()) {
+   int type = reader.readType();
    if (type == 0) {
-      bus.readMessage(priceUpdate)
+      reader.readMessage(priceUpdate)
    }
 }
 ```
