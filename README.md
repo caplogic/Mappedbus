@@ -8,7 +8,6 @@ The bus is intended to be used as the backbone for an [event driven architecture
 The performance (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 50 million events per second (a small message consisting of three ints) and the time for writing and reading is around 20 ns.
 
 **Usage**
-
 Setting up the MappedBus:
 ```java
 // Setup a reader
@@ -51,8 +50,36 @@ while (reader.hasNext()) {
 }
 ```
 
-**How does the Mapped Bus actually work?**
+**Samples**
+The project contains two samples: one byte array based and one message based.
 
+The message based one can be run as follows:
+In the first terminal:
+```
+> java sample.messagebased.MessageWriter 0
+...
+```
+
+In a second terminal:
+```
+> java sample.messagebased.MessageWriter 0
+...
+```
+
+In a third terminal:
+```
+> java sample.messagebased.MessageReader
+...
+mikael@xbox:~/workspace/InterProcess6/bin$ java sample.messagebased.MessageReader
+...
+Read: PriceUpdate [source=1, price=6, quantity=12]
+Read: PriceUpdate [source=0, price=14, quantity=28]
+Read: PriceUpdate [source=1, price=8, quantity=16]
+```
+
+The byte array based sample is run in the same way.
+
+**How does the Mapped Bus actually work?**
 Here's how MappedBus guarantees that records can be written by multiple processes in order to the file.
 
 The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
@@ -62,5 +89,4 @@ When a writer wants to add a record to the file it will first read the limit fie
 When the limit field has increased a reader will know there's new data to be read, but the writer which updated the limit field might not yet have written any data in the record. To avoid this problem each record contains an initial 4 bytes which make up the commit field. When a writer has finished writing a record it will set the commit field (using volatile) and the reader will only start reading a record once it has seen that the commit field has been set.
 
 **Questions**
-
 For any questions or comments about the MappedBus feel free to drop a mail to: mappedbuf@gmail.com
