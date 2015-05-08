@@ -5,7 +5,7 @@ It is inspired by Java Chronicle  with the key difference that it's designed to 
 
 The bus is intended to be used as the backbone for an [event driven architecture](http://www.reactivemanifesto.com) where multiple producers create events which should appear in the same sequence to all consumers. When a consumer is restarted the events can be replayed since they're persisted in the memory mapped file.
 
-The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million records per second (a small message consisting of three integeger) and the time for writing and reading is around 25 ns.
+The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million records per second (a small message consisting of three integer fields), and the time for writing and reading is around 25 ns per record.
 
 **Usage**
 
