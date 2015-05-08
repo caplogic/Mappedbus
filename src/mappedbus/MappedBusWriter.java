@@ -58,10 +58,10 @@ public class MappedBusWriter {
 		long limit;
 		while (true) {
 			limit = mem.getLongVolatile(Layout.Limit);
-			long oldLimit = limit;
-			if (limit > size) {
-				limit = Layout.Data;
+			if (limit + entrySize > size) {
+				throw new RuntimeException("End of file was reached");
 			}
+			long oldLimit = limit;
 			if (mem.compareAndSwapLong(Layout.Limit, oldLimit, limit + entrySize)) {
 				break;
 			}

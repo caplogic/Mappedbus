@@ -8,9 +8,12 @@ public class MappedBusReader {
 
 	private final MemoryMappedFile mem;
 
+	private final long size;
+	
 	private long limit = Layout.Data;
 	
 	public MappedBusReader(String file, long size) {
+		this.size = size;
 		try {
 			mem = new MemoryMappedFile(file, size);			
 		} catch(Exception e) {
@@ -19,11 +22,10 @@ public class MappedBusReader {
 	}
 	
 	public boolean hasNext() {
-		long newLimit = mem.getLongVolatile(Layout.Limit);
-		if (limit > newLimit) {
-			limit = Layout.Data;
-			return true;
+		if(limit >= size) {
+			throw new RuntimeException("End of file was reached");
 		}
+		long newLimit = mem.getLongVolatile(Layout.Limit);
 		return newLimit > limit;
 	}
 	
