@@ -1,4 +1,4 @@
-# mappedbus
+# MappedBus
 MappedBus is a low latency, high throughput message bus, built on top of a memory mapped file, supporting multiple readers and writers.
 
 It is inspired by Java Chronicle  with the key difference that it's designed to efficiently support multiple writers – enabling use cases where the ordering of events produced by multiple processes are important.
