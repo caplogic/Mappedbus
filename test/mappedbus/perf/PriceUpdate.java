@@ -1,4 +1,4 @@
-package mappedbus.sample.messagebased;
+package mappedbus.perf;
 import mappedbus.MemoryMappedFile;
 import mappedbus.Message;
 
@@ -7,7 +7,7 @@ public class PriceUpdate implements Message {
 	
 	public static final int TYPE = 0;
 	
-	public static final int SIZE = 16;
+	public static final int SIZE = 12;
 
 	private int source;
 	
