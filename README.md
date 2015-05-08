@@ -21,8 +21,6 @@ writer.init("/tmp/test", 100000L, true);
 
 The bus supports two modes of operation: byte array based (raw data), and message based (object oriented).
 
-Byte Array based:
-
 Writing data:
 ```java
 // write a buffer
