@@ -51,11 +51,11 @@ while (reader.hasNext()) {
 }
 ```
 
-**Samples**
+**Sample Applications**
 
-The project contains two samples: one byte array based and one message based.
+The project contains two sample applications: one byte array based and one message based.
 
-The message based sample can be run as follows:
+The message based sample application can be run as follows:
 
 The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
@@ -100,9 +100,9 @@ Per op: 22 ns
 Op/s: 44404868
 ```
 
-**Implementation**
+**Implementation Notes**
 
-Here's how MappedBus guarantees that records can be written by multiple processes in the correct order.
+This is how MappedBus guarantees that records can be written by multiple processes in the correct order.
 
 The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
 
