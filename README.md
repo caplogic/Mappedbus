@@ -94,4 +94,4 @@ When the limit field has increased a reader will know there's new data to be rea
 
 **Questions**
 
-For any questions or comments about the MappedBus feel free to drop a mail to: mappedbuf@gmail.com
+For any questions or comments about the MappedBus feel free to drop a mail to: mappedbus@gmail.com
