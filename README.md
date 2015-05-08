@@ -3,7 +3,7 @@ MappedBus is a low latency, high throughput message bus, built on top of a memor
 
 It is inspired by Java Chronicle  with the key difference that it's designed to efficiently support multiple writers – enabling use cases where the ordering of events produced by multiple processes are important.
 
-The bus is intended to be used as the backbone for an event sourced architecture where multiple producers creates events which should appear in the same sequence to all consumers. When a consumer is restarted the events can be replayed since they're persisted in the memory mapped file.
+The bus is intended to be used as the backbone for an event sourced architecture where multiple producers create events which should appear in the same sequence to all consumers. When a consumer is restarted the events can be replayed since they're persisted in the memory mapped file.
 The performance (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 50 million events per second (128 bytes per record) and the time for writing and reading is around 20 ns.
 
 **Usage**
