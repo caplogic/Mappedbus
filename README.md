@@ -20,6 +20,7 @@ while (bus.hasNext()) {
 ```
 
 Message based:
+
 Each message object need to implement an interface with a size, read and write method.
 
 ```java
