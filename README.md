@@ -55,7 +55,7 @@ while (reader.hasNext()) {
 
 The project contains two sample applications: one byte array based and one message based.
 
-The message based sample application can be run as follows:
+The message based sample application can be run as follows.
 
 The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
