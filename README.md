@@ -55,7 +55,8 @@ while (reader.hasNext()) {
 
 The project contains two samples: one byte array based and one message based.
 
-The message based one can be run as follows:
+The message based sample can be run as follows:
+
 In the first terminal:
 ```
 > java sample.messagebased.MessageWriter 0
@@ -71,8 +72,6 @@ In a second terminal:
 In a third terminal:
 ```
 > java sample.messagebased.MessageReader
-...
-mikael@xbox:~/workspace/InterProcess6/bin$ java sample.messagebased.MessageReader
 ...
 Read: PriceUpdate [source=1, price=6, quantity=12]
 Read: PriceUpdate [source=0, price=14, quantity=28]
