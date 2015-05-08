@@ -61,23 +61,23 @@ The MessageWriter will send a message, PriceUpdate, which contains three fields:
 
 In the first terminal:
 ```
-> java sample.messagebased.MessageWriter 0
+> java mappedbus.sample.messagebased.MessageWriter 0
 ...
 ```
 
 In a second terminal:
 ```
-> java sample.messagebased.MessageWriter 1
+> java mappedbus.sample.messagebased.MessageWriter 1
 ...
 ```
 
 In a third terminal:
 ```
-> java sample.messagebased.MessageReader
+> java mappedbus.sample.messagebased.MessageReader
 ...
-Read: PriceUpdate [source=1, price=6, quantity=12]
-Read: PriceUpdate [source=0, price=14, quantity=28]
+Read: PriceUpdate [source=0, price=20, quantity=40]
 Read: PriceUpdate [source=1, price=8, quantity=16]
+Read: PriceUpdate [source=0, price=22, quantity=44]
 ```
 
 The byte array based sample is run in the same way.
@@ -88,13 +88,13 @@ The project contains a performance test which can be run as follows.
 
 In one terminal:
 ```
-> java messagebus.perf.MessageWriter /home/youraccount/tmp/test
+> java mappedbus.perf.MessageWriter /home/youraccount/tmp/test
 ...
 ```
 
 In a second terminal:
 ```
-> java messagebus.perf.MessageReader /home/youraccount/tmp/test
+> java mappedbus.perf.MessageReader /home/youraccount/tmp/test
 Elapsed: 1801 ms
 Per op: 22 ns
 Op/s: 44404868
