@@ -82,7 +82,7 @@ Read: PriceUpdate [source=1, price=8, quantity=16]
 
 The byte array based sample is run in the same way.
 
-**How is the MappedBus implemented?**
+**Implementation**
 
 Here's how MappedBus guarantees that records can be written by multiple processes in order to the file.
 
@@ -94,4 +94,4 @@ When the limit field has increased a reader will know there's new data to be rea
 
 **Questions**
 
-For any questions or comments about the MappedBus feel free to drop a mail to: mappedbuf@gmail.com
+For any questions or comments about the MappedBus feel free to drop a mail to: mappedbus@gmail.com
