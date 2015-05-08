@@ -24,11 +24,11 @@ The bus supports two modes of operation: byte array based (raw data), and messag
 Byte Array based:
 ```java
 // write a buffer
-writer.write(buffer, offset, length);
+writer.write(buffer, 0, buffer.length);
 
 // read a buffer
 while (reader.hasNext()) {
-   int length = reader.read(buffer)
+   int length = reader.read(buffer, 0);
 }
 ```
 
