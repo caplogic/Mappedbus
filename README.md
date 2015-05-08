@@ -80,7 +80,7 @@ Read: PriceUpdate [source=1, price=8, quantity=16]
 Read: PriceUpdate [source=0, price=22, quantity=44]
 ```
 
-The byte array based sample is run in the same way.
+The byte array based sample application is run in the same way.
 
 **Performance Tests**
 
