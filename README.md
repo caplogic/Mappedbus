@@ -57,7 +57,7 @@ The project contains two samples: one byte array based and one message based.
 
 The message based sample can be run as follows:
 
-The MessageWriter will send a message PriceUpdate which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message is receives.
+The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
 In the first terminal:
 ```
