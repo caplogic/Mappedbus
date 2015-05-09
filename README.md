@@ -86,14 +86,10 @@ The byte array based sample application is run in the same way.
 **Performance Tests**
 
 The project contains a performance test which can be run as follows.
-
-In one terminal:
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.perf.MessageWriter /home/youraccount/tmp/test
 ...
 ```
-
-In a second terminal:
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.perf.MessageReader /home/youraccount/tmp/test
 Elapsed: 1801 ms
