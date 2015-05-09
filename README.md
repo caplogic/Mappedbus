@@ -65,19 +65,14 @@ The message based sample application can be run as follows.
 
 The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
-In the first terminal:
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageWriter 0
 ...
 ```
-
-In a second terminal:
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageWriter 1
 ...
 ```
-
-In a third terminal:
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageReader
 ...
