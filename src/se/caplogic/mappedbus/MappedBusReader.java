@@ -27,6 +27,8 @@ public class MappedBusReader {
 	
 	private long limit = Layout.Data;
 	
+	private boolean typeRead;
+	
 	public MappedBusReader(String file, long size) {
 		this.size = size;
 		try {
@@ -50,10 +52,12 @@ public class MappedBusReader {
 				break;
 			}
 		}
-		limit += Length.Commit;	
+		limit += Length.Commit;
+		typeRead = false;
 	}
 
 	public int readType() {
+		typeRead = true;
 		next();
 		int type = mem.getInt(limit);
 		limit += Length.Metadata;
@@ -69,8 +73,12 @@ public class MappedBusReader {
 		return length;
 	}
 	
-	public void readMessage(Message message) {
+	public Message readMessage(Message message) {
+		if (!typeRead) {
+			readType();
+		}
 		message.read(mem, limit);
 		limit += message.size();
+		return message;
 	}
 }
