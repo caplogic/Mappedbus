@@ -9,6 +9,10 @@ The bus is intended to be used as the backbone for an [event driven architecture
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million records per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record.
 
+**Getting Started**
+
+Simply clone the project (or download the zip). Run "ant" to build "mappedbus.jar" and try out any of the sample applications described below.
+
 **Usage**
 
 Setting up the MappedBus:
@@ -63,19 +67,19 @@ The MessageWriter will send a message, PriceUpdate, which contains three fields:
 
 In the first terminal:
 ```
-> java mappedbus.sample.messagebased.MessageWriter 0
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageWriter 0
 ...
 ```
 
 In a second terminal:
 ```
-> java mappedbus.sample.messagebased.MessageWriter 1
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageWriter 1
 ...
 ```
 
 In a third terminal:
 ```
-> java mappedbus.sample.messagebased.MessageReader
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageReader
 ...
 Read: PriceUpdate [source=0, price=20, quantity=40]
 Read: PriceUpdate [source=1, price=8, quantity=16]
@@ -90,13 +94,13 @@ The project contains a performance test which can be run as follows.
 
 In one terminal:
 ```
-> java mappedbus.perf.MessageWriter /home/youraccount/tmp/test
+> java -cp mappedbus.jar se.caplogic.mappedbus.perf.MessageWriter /home/youraccount/tmp/test
 ...
 ```
 
 In a second terminal:
 ```
-> java mappedbus.perf.MessageReader /home/youraccount/tmp/test
+> java -cp mappedbus.jar se.caplogic.mappedbus.perf.MessageReader /home/youraccount/tmp/test
 Elapsed: 1801 ms
 Per op: 22 ns
 Op/s: 44404868
