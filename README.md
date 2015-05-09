@@ -79,7 +79,7 @@ Read: PriceUpdate [source=0, price=22, quantity=44]
 
 The byte array based sample application is run in the same way.
 
-Another sample application simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives the token it will check whether it's the receiver and if so it will send the token to the next node.
+Another sample application simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the to field set to it's id + 1.
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 0 3
 Read: Token [from=0, to=1]
