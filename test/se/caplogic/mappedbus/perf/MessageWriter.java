@@ -1,7 +1,7 @@
-package mappedbus.perf;
+package se.caplogic.mappedbus.perf;
 import java.io.File;
 
-import mappedbus.MappedBusWriter;
+import se.caplogic.mappedbus.MappedBusWriter;
 
 public class MessageWriter {
 

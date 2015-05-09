@@ -1,13 +1,13 @@
-package mappedbus.perf;
-import mappedbus.MemoryMappedFile;
-import mappedbus.Message;
+package se.caplogic.mappedbus.sample.messagebased;
+import se.caplogic.mappedbus.MemoryMappedFile;
+import se.caplogic.mappedbus.Message;
 
 
 public class PriceUpdate implements Message {
 	
 	public static final int TYPE = 0;
 	
-	public static final int SIZE = 12;
+	public static final int SIZE = 16;
 
 	private int source;
 	

@@ -1,6 +1,6 @@
-package mappedbus.sample.messagebased;
-import mappedbus.Message;
-import mappedbus.MappedBusReader;
+package se.caplogic.mappedbus.sample.messagebased;
+import se.caplogic.mappedbus.MappedBusReader;
+import se.caplogic.mappedbus.Message;
 
 public class MessageReader {
 

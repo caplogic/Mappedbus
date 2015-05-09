@@ -1,7 +1,7 @@
-package mappedbus.sample.bytearraybased;
+package se.caplogic.mappedbus.sample.bytearraybased;
 import java.util.Arrays;
 
-import mappedbus.MappedBusWriter;
+import se.caplogic.mappedbus.MappedBusWriter;
 
 public class ByteArrayWriter {
 

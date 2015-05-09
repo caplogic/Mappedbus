@@ -1,5 +1,5 @@
-package mappedbus.sample.messagebased;
-import mappedbus.MappedBusWriter;
+package se.caplogic.mappedbus.sample.messagebased;
+import se.caplogic.mappedbus.MappedBusWriter;
 
 public class MessageWriter {
 

@@ -13,12 +13,12 @@
 * See the License for the specific language governing permissions and 
 * limitations under the License. 
 */
-package mappedbus;
+package se.caplogic.mappedbus;
 import java.io.File;
 
-import mappedbus.MappedBus.Commit;
-import mappedbus.MappedBus.Layout;
-import mappedbus.MappedBus.Length;
+import se.caplogic.mappedbus.MappedBus.Commit;
+import se.caplogic.mappedbus.MappedBus.Layout;
+import se.caplogic.mappedbus.MappedBus.Length;
 
 public class MappedBusWriter {
 
