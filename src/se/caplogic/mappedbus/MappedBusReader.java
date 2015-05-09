@@ -39,11 +39,10 @@ public class MappedBusReader {
 	}
 	
 	public boolean hasNext() {
-		if(limit >= size) {
+		if (limit >= size) {
 			throw new RuntimeException("End of file was reached");
 		}
-		long newLimit = mem.getLongVolatile(Layout.Limit);
-		return newLimit > limit;
+		return mem.getLongVolatile(Layout.Limit) > limit;
 	}
 	
 	private void next() {
@@ -53,11 +52,10 @@ public class MappedBusReader {
 			}
 		}
 		limit += Length.Commit;
-		typeRead = false;
 	}
 
 	public int readType() {
-		typeRead = true;
+		typeRead = true;	
 		next();
 		int type = mem.getInt(limit);
 		limit += Length.Metadata;
@@ -77,6 +75,7 @@ public class MappedBusReader {
 		if (!typeRead) {
 			readType();
 		}
+		typeRead = false;
 		message.read(mem, limit);
 		limit += message.size();
 		return message;

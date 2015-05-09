@@ -76,8 +76,7 @@ public class MappedBusWriter {
 			if (limit + entrySize > size) {
 				throw new RuntimeException("End of file was reached");
 			}
-			long oldLimit = limit;
-			if (mem.compareAndSwapLong(Layout.Limit, oldLimit, limit + entrySize)) {
+			if (mem.compareAndSwapLong(Layout.Limit, limit, limit + entrySize)) {
 				break;
 			}
 		}
