@@ -59,11 +59,9 @@ while (reader.hasNext()) {
 
 **Sample Applications**
 
-The project contains two sample applications: one byte array based and one message based.
+The project contains two very simple sample applications: one byte array based and one message based.
 
-The message based sample application can be run as follows.
-
-The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
+The message based one works as follows. The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageWriter 0
@@ -82,6 +80,27 @@ Read: PriceUpdate [source=0, price=22, quantity=44]
 ```
 
 The byte array based sample application is run in the same way.
+
+Another sample application simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives the token it will check whether it's the receiver and if so it will send the token to the next node.
+```
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 0 3
+Read: Token [from=0, to=1]
+Read: Token [from=1, to=2]
+...
+```
+```
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 1 3
+Read: Token [from=0, to=1]
+Read: Token [from=1, to=2]
+...
+```
+```
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 2 3
+Read: Token [from=0, to=1]
+Read: Token [from=1, to=2]
+...
+```
+
 
 **Performance Tests**
 
