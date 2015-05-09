@@ -1,4 +1,4 @@
-package se.caplogic.mappedbus.sample.messagebased;
+package se.caplogic.mappedbus.sample.message;
 import se.caplogic.mappedbus.MappedBusReader;
 import se.caplogic.mappedbus.Message;
 

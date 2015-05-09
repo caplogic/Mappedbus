@@ -1,0 +1,85 @@
+<project name="mappedbus" default="dist" basedir=".">
+    <description>
+        MappedBus
+    </description>
+  <!-- set global properties for this build -->
+  <property name="ant.project.name" value="mappedbus"/>
+  <property name="main_class_name" value="changeme"/>
+  <property name="jarname"  value="${ant.project.name}"/> 
+  <!-- set directories -->
+  <property name="src" location="src"/>
+  <property name="test" location="test"/>
+  <property name="build" location="build"/>
+  <property name="dist"  location="dist"/>
+  <property name="lib"  location="lib"/>
+
+  <path id="project.classpath">
+    <pathelement location="${build}" />
+    <pathelement location="${lib}" />
+  </path>
+
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create directories if needed -->
+    <mkdir dir="${src}"/>
+    <mkdir dir="${test}"/>
+    <mkdir dir="${build}"/>
+    <mkdir dir="${dist}"/>
+  </target>
+
+  <target name="compile" depends="init" description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac debug="true" 
+	   srcdir="${src}" 
+	   destdir="${build}"
+	   classpathref="project.classpath"/>
+    <!-- Copy files from ${src} into ${build} -->
+    <copy todir="${build}"> 
+        <fileset dir="${src}">
+          <exclude name="**/*.java"/>
+        </fileset>
+    </copy>
+  </target>
+
+  <target name="test" depends="compiletest" description="run the tests " >
+    <junit printsummary="yes" fork="yes" haltonfailure="yes">
+      <formatter type="plain"/>
+      <batchtest fork="true">
+        <fileset dir="${test}">
+          <include name="**/*Test*.java"/>
+        </fileset>
+      </batchtest>
+      <classpath refid="${project.classpath}" />
+    </junit>
+  </target>
+
+  <target name="compiletest" depends="compile"
+        description="compile the tests " >
+        <javac debug="true" 
+               srcdir="${test}" 
+               destdir="${build}"
+               classpathref="project.classpath" />
+  </target>
+
+  <target name="dist" depends="compile" description="generate the distribution" >
+    <!-- Create the distribution directory -->
+
+    <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+    <jar jarfile="${dist}/${jarname}-${DSTAMP}.jar" basedir="${build}">
+        <manifest>
+        <attribute name="Main-Class"
+                value="${main_class_name}"/>
+        </manifest>
+    </jar>
+    <copy file="${dist}/${jarname}-${DSTAMP}.jar" tofile="./${jarname}.jar" overwrite="true"/>
+  </target>
+
+  <target name="clean"
+        description="clean up" >
+    <!-- Delete the ${build} directory-->
+    <delete dir="${build}"/>
+  </target>
+</project>
+

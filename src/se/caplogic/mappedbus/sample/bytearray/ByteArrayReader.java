@@ -1,4 +1,4 @@
-package se.caplogic.mappedbus.sample.bytearraybased;
+package se.caplogic.mappedbus.sample.bytearray;
 import java.util.Arrays;
 
 import se.caplogic.mappedbus.MappedBusReader;
