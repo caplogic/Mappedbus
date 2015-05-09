@@ -59,7 +59,7 @@ while (reader.hasNext()) {
 
 The project contains two very simple sample applications: one byte array based and one message based.
 
-The message based one works as follows. The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
+The message based one work as follows. The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageWriter 0
