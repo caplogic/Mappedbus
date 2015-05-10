@@ -60,7 +60,7 @@ public class MappedBusWriter {
 	/**
 	 * Writes a message.
 	 *
-	 * @param message the message to be written
+	 * @param message the message object to write
 	 */
 	public void write(Message message) {
 		long limit = allocate(message.size());
@@ -76,9 +76,9 @@ public class MappedBusWriter {
 	/**
 	 * Writes a buffer of data.
 	 *
-	 * @param buffer the buffer containing data to be written
-	 * @param offset where in the buffer to start
-	 * @param length the size of the data
+	 * @param buffer the output buffer
+	 * @param offset the offset in the buffer of the first byte to write
+	 * @param length the length of the data
 	 */
 	public void write(byte[] buffer, int offset, int length) {
 		long limit = allocate(length);

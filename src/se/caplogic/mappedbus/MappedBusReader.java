@@ -28,13 +28,13 @@ public class MappedBusReader {
 	private final MemoryMappedFile mem;
 
 	private final long size;
-	
+
 	private long limit = Layout.Data;
-	
+
 	private long initialLimit;
 	
 	private boolean typeRead;
-	
+
 	/**
 	 * Creates a new reader.
 	 *
@@ -88,8 +88,8 @@ public class MappedBusReader {
 	/**
 	 * Reads the next message.
 	 *
-	 * @param message an object which the message will be read into
-	 * @return the message
+	 * @param message the message object to populate
+	 * @return the message object
 	 */
 	public Message readMessage(Message message) {
 		if (!typeRead) {
@@ -103,10 +103,10 @@ public class MappedBusReader {
 
 	/**
 	 * Reads the next buffer of data.
-	 *
-	 * @param dst a buffer which the data will be copied to
-	 * @param offset where in the buffer to copy the data
-	 * @return the length of the buffer
+	 * 
+	 * @param dst the input buffer
+	 * @param offset the offset in the buffer of the first byte to read data into
+	 * @return the length of the record that was read
 	 */
 	public int readBuffer(byte[] dst, int offset) {
 		next();
