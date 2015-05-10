@@ -3,7 +3,7 @@
         MappedBus
     </description>
   <!-- set global properties for this build -->
-  <property name="version" value="0.1.1"/>
+  <property name="version" value="0.1"/>
   <property name="ant.project.name" value="mappedbus"/>
   <property name="main_class_name" value="changeme"/>
   <property name="jarname"  value="${ant.project.name}"/> 
