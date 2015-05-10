@@ -31,7 +31,6 @@ writer.init("/tmp/test", 100000L, true);
 
 The bus supports two modes of operation: byte array based (raw data), and message based (object oriented).
 
-Byte Array based:
 ```java
 // write a buffer
 writer.write(buffer, 0, buffer.length);
@@ -41,8 +40,6 @@ while (reader.hasNext()) {
    int length = reader.read(buffer, 0);
 }
 ```
-
-Message based:
 
 ```java
 PriceUpdate priceUpdate = new PriceUpdate();
