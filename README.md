@@ -13,11 +13,11 @@ The bus is intended to be used as the backbone for an [event driven architecture
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million records per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record. MappedBus does not create any objects at all after startup and therefore has zero GC impact.
 
-**Getting Started**
+## Getting Started
 
 Download "mappedbuf.jar" from the release tab above (or clone the project and build it from source by running "ant") and try out any of the sample applications described below.
 
-**Usage**
+## Usage
 
 Setting up the MappedBus:
 ```java
@@ -59,7 +59,7 @@ while (reader.hasNext()) {
 }
 ```
 
-**Sample Applications**
+## Examples
 
 The project contains two very simple sample applications: one byte array based and one message based.
 
@@ -104,7 +104,7 @@ Read: Token [from=1, to=2]
 ```
 
 
-**Performance Tests**
+## Performance
 
 The project contains a performance test which can be run as follows.
 ```
@@ -118,7 +118,7 @@ Per op: 22 ns
 Op/s: 44404868
 ```
 
-**Implementation Notes**
+## Implementation
 
 This is how MappedBus guarantees that records can be written by multiple processes in the correct order.
 
@@ -128,6 +128,6 @@ When a writer wants to add a record to the file it will first read the limit fie
 
 When the limit field has increased a reader will know there's new data to be read, but the writer which updated the limit field might not yet have written any data in the record. To avoid this problem each record contains an initial 4 bytes which make up the commit field. When a writer has finished writing a record it will set the commit field (using volatile) and the reader will only start reading a record once it has seen that the commit field has been set.
 
-**Questions**
+## Questions
 
 For any questions or comments about the MappedBus feel free to drop a mail to: mappedbus@gmail.com
