@@ -1,7 +1,7 @@
 # MappedBus
 MappedBus is a Java based low latency, high throughput message bus, built on top of a memory mapped file, supporting multiple readers and writers.
 
-It is inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the ordering of events produced by multiple processes are important.
+It was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the ordering of events produced by multiple processes are important.
 
 MappedBus can also be described as an efficient IPC mechanism which allows several Java programs to communicate by exchanging messages while leaving an audit trail of the messages that were sent.
 
@@ -11,7 +11,7 @@ MappedBus can also be described as an efficient IPC mechanism which allows sever
 
 The bus is intended to be used as the backbone for an [event driven architecture](http://www.reactivemanifesto.com) where multiple producers create events which should appear in the same sequence to all consumers. When a consumer is restarted the events can be replayed since they're persisted in the memory mapped file.
 
-The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million records per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record.
+The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million records per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record. MappedBus does not create any objects at all after startup and therefore has zero GC impact.
 
 **Getting Started**
 
