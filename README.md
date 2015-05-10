@@ -5,6 +5,10 @@ It is inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) w
 
 MappedBus can also be described as an efficient IPC mechanism which allows several Java programs to communicate by exchanging messages while leaving an audit trail of the messages that were sent.
 
+<p align="center">
+  <img src="http://3.bp.blogspot.com/-L51XiyruNMA/VU5K9dMtx9I/AAAAAAAAACg/AOkdwjTrzgI/s320/mappedbus.png">
+</p>
+
 The bus is intended to be used as the backbone for an [event driven architecture](http://www.reactivemanifesto.com) where multiple producers create events which should appear in the same sequence to all consumers. When a consumer is restarted the events can be replayed since they're persisted in the memory mapped file.
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million records per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record.
