@@ -116,7 +116,7 @@ Op/s: 44404868
 
 ### Implementation
 
-Here's how MappedBus solves the synchronization problem between multiple writers:
+Here's how MappedBus solves the synchronization problem between multiple writers (each running in it's own process/JVM):
 
 * The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
 
