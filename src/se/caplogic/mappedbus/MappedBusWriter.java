@@ -20,12 +20,23 @@ import se.caplogic.mappedbus.MappedBus.Commit;
 import se.caplogic.mappedbus.MappedBus.Layout;
 import se.caplogic.mappedbus.MappedBus.Length;
 
+/**
+ * Class for writing to the MappedBus.
+ *
+ */
 public class MappedBusWriter {
 
 	private MemoryMappedFile mem;
 	
 	private long size;
 
+	/**
+	 * Creates a new writer.
+	 * 
+	 * @param file the name of the memory mapped file
+	 * @param size the maximum size of the file
+	 * @param append whether to append to the file (will create a new file if false)
+	 */
 	public void init(String file, long size, boolean append) {
 		this.size = size;
 		if (!append) {
@@ -46,29 +57,41 @@ public class MappedBusWriter {
 		}
 	}
 
-	public void add(Message message) {
-		long limit = addRecord(message.size());
+	/**
+	 * Writes a message.
+	 *
+	 * @param message the message to be written
+	 */
+	public void write(Message message) {
+		long limit = allocate(message.size());
 		long commitPos = limit;
 		limit += Length.Commit;
 		mem.putInt(limit, message.type());
 		limit += Length.Metadata;
 		message.write(mem, limit);
 		limit += message.size();
-		commitRecord(commitPos);
+		commit(commitPos);
 	}
 	
-	public void add(byte[] buffer, int offset, int length) {
-		long limit = addRecord(length);
+	/**
+	 * Writes a buffer of data.
+	 *
+	 * @param buffer the buffer containing data to be written
+	 * @param offset where in the buffer to start
+	 * @param length the size of the data
+	 */
+	public void write(byte[] buffer, int offset, int length) {
+		long limit = allocate(length);
 		long commitPos = limit;
 		limit += Length.Commit;
 		mem.putInt(limit, length);
 		limit += Length.Metadata;
 		mem.setBytes(limit, buffer, offset, length);
 		limit += length;
-		commitRecord(commitPos);		
+		commit(commitPos);		
 	}
 	
-	private long addRecord(int recordSize) {
+	private long allocate(int recordSize) {
 		int entrySize = Length.Commit + Length.Metadata + recordSize;
 		long limit;
 		while (true) {
@@ -83,7 +106,7 @@ public class MappedBusWriter {
 		return limit;
 	}
 
-	private void commitRecord(long commitPos) {
+	private void commit(long commitPos) {
 		mem.putIntVolatile(commitPos, Commit.Set);
 	}
 }

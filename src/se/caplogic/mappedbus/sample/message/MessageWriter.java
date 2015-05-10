@@ -19,7 +19,7 @@ public class MessageWriter {
 				priceUpdate.setSource(source);
 				priceUpdate.setPrice(i * 2);
 				priceUpdate.setQuantity(i * 4);
-				writer.add(priceUpdate);
+				writer.write(priceUpdate);
 				Thread.sleep(1000);
 			}
 		} catch(Exception e) {

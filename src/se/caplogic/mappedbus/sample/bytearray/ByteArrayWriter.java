@@ -19,7 +19,7 @@ public class ByteArrayWriter {
 
 			for (int i = 0; i < 1000; i++) {
 				Arrays.fill(buffer, (byte)source);
-				writer.add(buffer, 0, buffer.length);
+				writer.write(buffer, 0, buffer.length);
 				Thread.sleep(1000);
 			}
 		} catch(Exception e) {

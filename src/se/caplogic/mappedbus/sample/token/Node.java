@@ -29,7 +29,7 @@ public class Node {
 			if (id == 0) {
 				token.setFrom(id);
 				token.setTo(1);
-				writer.add(token);
+				writer.write(token);
 			}
 
 			while (true) {
@@ -40,7 +40,7 @@ public class Node {
 						Thread.sleep(1000);
 						token.setFrom(id);
 						token.setTo((id + 1) % numberOfNodes);
-						writer.add(token);
+						writer.write(token);
 					}
 				}
 			}

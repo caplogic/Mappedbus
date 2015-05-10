@@ -19,6 +19,10 @@ import se.caplogic.mappedbus.MappedBus.Commit;
 import se.caplogic.mappedbus.MappedBus.Layout;
 import se.caplogic.mappedbus.MappedBus.Length;
 
+/**
+ * Class for reading from the MappedBus.
+ *
+ */
 public class MappedBusReader {
 
 	private final MemoryMappedFile mem;
@@ -31,6 +35,12 @@ public class MappedBusReader {
 	
 	private boolean typeRead;
 	
+	/**
+	 * Creates a new reader.
+	 *
+	 * @param file the name of the memory mapped file
+	 * @param size the maximum size of the file
+	 */
 	public MappedBusReader(String file, long size) {
 		this.size = size;
 		try {
@@ -41,6 +51,11 @@ public class MappedBusReader {
 		}
 	}
 	
+	/**
+	 * Indicates whether there's a new record available.
+	 *
+	 * @return true, if there's a new record available, otherwise false
+	 */
 	public boolean hasNext() {
 		if (limit >= size) {
 			throw new RuntimeException("End of file was reached");
@@ -57,6 +72,11 @@ public class MappedBusReader {
 		limit += Length.Commit;
 	}
 
+	/**
+	 * Reads the message type.
+	 *
+	 * @return an integer specifying the message type
+	 */
 	public int readType() {
 		typeRead = true;	
 		next();
@@ -64,16 +84,13 @@ public class MappedBusReader {
 		limit += Length.Metadata;
 		return type;
 	}
-	
-	public int readBuffer(byte[] dst, int offset) {
-		next();
-		int length = mem.getInt(limit);
-		limit += Length.Metadata;
-		mem.getBytes(limit, dst, offset, length);
-		limit += length;
-		return length;
-	}
-	
+
+	/**
+	 * Reads the next message.
+	 *
+	 * @param message an object which the message will be read into
+	 * @return the message
+	 */
 	public Message readMessage(Message message) {
 		if (!typeRead) {
 			readType();
@@ -83,7 +100,28 @@ public class MappedBusReader {
 		limit += message.size();
 		return message;
 	}
+
+	/**
+	 * Reads the next buffer of data.
+	 *
+	 * @param dst a buffer which the data will be copied to
+	 * @param offset where in the buffer to copy the data
+	 * @return the length of the buffer
+	 */
+	public int readBuffer(byte[] dst, int offset) {
+		next();
+		int length = mem.getInt(limit);
+		limit += Length.Metadata;
+		mem.getBytes(limit, dst, offset, length);
+		limit += length;
+		return length;
+	}
 	
+	/**
+	 * Indicates whether all records available when the reader was created have been read.
+	 *
+	 * @return true, if all records available from the start was read, otherwise false
+	 */
 	public boolean hasRecovered() {
 		return limit >= initialLimit;
 	}
