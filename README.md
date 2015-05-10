@@ -12,7 +12,7 @@ The bus is intended to be used as the backbone for a [message driven architectur
 
 A powerful feature of the MappedBus is that even though the messages are ordered there's no single component (and thus no single point of failure) taking care of the ordering, instead the processes synchronize themselves to determine who has access to the bus.
 
-All messages are persisted in the memory mapped file and if a process crashes it can recover it's state by replaying the messages from the file.
+All messages are persisted in the memory mapped file and if a process crashes it can recover it's state by replaying messages from the file.
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record. MappedBus does not create any objects at all after startup and therefore has zero GC impact.
 
