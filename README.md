@@ -10,7 +10,17 @@ MappedBus can also be described as an efficient IPC mechanism which allows sever
 
 The bus is intended to be used as the backbone for a [message driven architecture](http://www.reactivemanifesto.com) where multiple producers create messages which should appear in the same order to all consumers.
 
+A powerful feature of the MappedBus is that even though the messages are ordered there's no single component (and thus no single point of failure) taking care of the ordering, instead the processes synchronize themselves to determine who has access to the bus.
+
+All messages are persisted in the memory mapped file and if a process crashes it can recover it's state by replaying the messages from the file.
+
 The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record. MappedBus does not create any objects at all after startup and therefore has zero GC impact.
+
+#### Features:
+* IPC between multiple processes by exchanging messages
+* All messages are persisted
+* A process can recover it's state by replaying messages after a crash
+* Two modes of operation: byte array based (raw data) or message based (object oriented) 
 
 ### Getting Started
 
