@@ -10,7 +10,7 @@ MappedBus can be also described as an efficient IPC mechanism which enable sever
 
 The bus is intended to be used as the backbone for a [message driven architecture](http://www.reactivemanifesto.com) where multiple producers create messages which should appear in the same order to all consumers.
 
-A powerful feature of the MappedBus is that even though the messages are ordered there's no single component (and thus no single point of failure) taking care of the ordering, instead the processes independently determines who has access to the bus.
+A powerful feature of the MappedBus is that even though the messages are ordered there's no single component (and thus no single point of failure) taking care of the ordering, instead the processes independently determine who has access to the bus.
 
 All messages are persisted in the memory mapped file and if a process crashes it can recover it's state by replaying messages from the file.
 
