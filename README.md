@@ -8,7 +8,7 @@ MappedBus can also be described as an efficient IPC mechanism which allows sever
   <img src="http://3.bp.blogspot.com/-L51XiyruNMA/VU5K9dMtx9I/AAAAAAAAACg/AOkdwjTrzgI/s320/mappedbus.png">
 </p>
 
-The bus is intended to be used as the backbone for a [message driven architecture](http://www.reactivemanifesto.com) where multiple producers create messages which should appear in the same sequence to all consumers.
+The bus is intended to be used as the backbone for a [message driven architecture](http://www.reactivemanifesto.com) where multiple producers create messages which should appear in the same order to all consumers.
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record. MappedBus does not create any objects at all after startup and therefore has zero GC impact.
 
