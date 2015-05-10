@@ -20,6 +20,7 @@ The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writi
 * IPC between multiple processes by exchanging messages
 * All messages are persisted
 * A process can recover it's state by replaying messages after a crash
+* No single point of failure
 * Two modes of operation: byte array based (raw data) or message based (object oriented) 
 
 ### Getting Started
