@@ -58,7 +58,7 @@ while (reader.hasNext()) {
 
 ## Examples
 
-The project contains two simple examples for a byte array based and a message based reader/writer.
+The project contains examples for how to create both a byte array based and a message based reader/writer.
 
 The message based one work as follows. The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
