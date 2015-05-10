@@ -11,7 +11,7 @@ The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writi
 
 **Getting Started**
 
-Simply clone the project (or download the zip). Run "ant" to build "mappedbus.jar" and try out any of the sample applications described below.
+Download "mappedbuf.jar" from the release tab above (or clone the project and build it from source by running "ant") and try out any of the sample application described below.
 
 **Usage**
 
