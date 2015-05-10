@@ -58,7 +58,7 @@ while (reader.hasNext()) {
 
 ## Examples
 
-The project contains two very simple sample applications: one byte array based and one message based.
+The project contains two simple examples for a byte array based and a message based reader/writer.
 
 The message based one work as follows. The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
@@ -78,9 +78,9 @@ Read: PriceUpdate [source=1, price=8, quantity=16]
 Read: PriceUpdate [source=0, price=22, quantity=44]
 ```
 
-The byte array based sample application is run in the same way.
+The byte array based example is run in the same way.
 
-Another sample application simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the to field set to it's id + 1.
+Another example app simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the "to" field set to it's id + 1 mod "number of nodes".
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 0 3
 Read: Token [from=0, to=1]
@@ -117,7 +117,7 @@ Op/s: 44404868
 
 ## Implementation
 
-This is how MappedBus guarantees that records can be written by multiple processes in the correct order.
+Here's how MappedBus solves the synchronization problem between multiple writers:
 
 * The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
 
@@ -126,6 +126,8 @@ This is how MappedBus guarantees that records can be written by multiple process
 * When the limit field has increased a reader will know there's new data to be read, but the writer which updated the limit field might not yet have written any data in the record. To avoid this problem each record contains an initial 4 bytes which make up the commit field.
 
 * When a writer has finished writing a record it will set the commit field (using volatile) and the reader will only start reading a record once it has seen that the commit field has been set.
+
+The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it probably won't work on all platforms. The project contains a test (called CrunchTest) to check whether it works on the platform used.
 
 ## Questions
 
