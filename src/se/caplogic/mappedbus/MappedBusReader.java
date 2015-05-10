@@ -27,12 +27,15 @@ public class MappedBusReader {
 	
 	private long limit = Layout.Data;
 	
+	private long initialLimit;
+	
 	private boolean typeRead;
 	
 	public MappedBusReader(String file, long size) {
 		this.size = size;
 		try {
-			mem = new MemoryMappedFile(file, size);			
+			mem = new MemoryMappedFile(file, size);
+			initialLimit = mem.getLongVolatile(Layout.Limit);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -79,5 +82,9 @@ public class MappedBusReader {
 		message.read(mem, limit);
 		limit += message.size();
 		return message;
+	}
+	
+	public boolean hasRecovered() {
+		return limit >= initialLimit;
 	}
 }

@@ -3,6 +3,7 @@
         MappedBus
     </description>
   <!-- set global properties for this build -->
+  <property name="version" value="0.1.1"/>
   <property name="ant.project.name" value="mappedbus"/>
   <property name="main_class_name" value="changeme"/>
   <property name="jarname"  value="${ant.project.name}"/> 
@@ -34,6 +35,8 @@
     <javac debug="true" 
 	   srcdir="${src}" 
 	   destdir="${build}"
+	   source="1.7"
+	   target="1.7"
 	   classpathref="project.classpath"/>
     <!-- Copy files from ${src} into ${build} -->
     <copy todir="${build}"> 
@@ -67,13 +70,13 @@
     <!-- Create the distribution directory -->
 
     <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
-    <jar jarfile="${dist}/${jarname}-${DSTAMP}.jar" basedir="${build}">
+    <jar jarfile="${dist}/${jarname}-${version}.jar" basedir="${build}">
         <manifest>
         <attribute name="Main-Class"
                 value="${main_class_name}"/>
         </manifest>
     </jar>
-    <copy file="${dist}/${jarname}-${DSTAMP}.jar" tofile="./${jarname}.jar" overwrite="true"/>
+    <copy file="${dist}/${jarname}-${version}.jar" tofile="./${jarname}.jar" overwrite="true"/>
   </target>
 
   <target name="clean"

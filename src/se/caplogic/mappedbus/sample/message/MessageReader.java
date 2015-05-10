@@ -19,6 +19,7 @@ public class MessageReader {
 
 			while (true) {
 				if (reader.hasNext()) {
+					boolean recovered = reader.hasRecovered();
 					int type = reader.readType();
 					switch (type) {
 					case PriceUpdate.TYPE:
@@ -27,8 +28,8 @@ public class MessageReader {
 					default:
 						throw new RuntimeException("Unknown type: " + type);
 					}
-					reader.readMessage(message);
-					System.out.println("Read: " + message);
+					reader.readMessage(message);					
+					System.out.println("Read: " + message + ", hasRecovered=" + recovered);
 				}
 			}
 		} catch(Exception e) {
