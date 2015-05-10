@@ -1,7 +1,6 @@
-# MappedBus
-MappedBus is a Java based low latency, high throughput message bus, built on top of a memory mapped file, supporting multiple readers and writers.
+## MappedBus is a Java based low latency, high throughput message bus, built on top of a memory mapped file, supporting multiple readers and writers
 
-It was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the ordering of messages produced by multiple processes are important.
+MappedBus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the ordering of messages produced by multiple processes are important.
 
 MappedBus can also be described as an efficient IPC mechanism which allows several Java programs to communicate by exchanging messages.
 
@@ -13,11 +12,11 @@ The bus is intended to be used as the backbone for a [message driven architectur
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record. MappedBus does not create any objects at all after startup and therefore has zero GC impact.
 
-## Getting Started
+### Getting Started
 
 Download "mappedbuf.jar" from the release tab above (or clone the project and build it from source by running "ant") and try out any of the sample applications described below.
 
-## Usage
+### Usage
 
 Setting up the MappedBus:
 ```java
@@ -56,7 +55,7 @@ while (reader.hasNext()) {
 }
 ```
 
-## Examples
+### Examples
 
 The project contains examples for how to create both a byte array based and a message based reader/writer.
 
@@ -101,7 +100,7 @@ Read: Token [from=1, to=2]
 ```
 
 
-## Performance
+### Performance
 
 The project contains a performance test which can be run as follows.
 ```
@@ -115,7 +114,7 @@ Per op: 22 ns
 Op/s: 44404868
 ```
 
-## Implementation
+### Implementation
 
 Here's how MappedBus solves the synchronization problem between multiple writers:
 
@@ -129,6 +128,6 @@ Here's how MappedBus solves the synchronization problem between multiple writers
 
 The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it probably won't work on all platforms. The project contains a test (called CrunchTest) to check whether it works on the platform used.
 
-## Questions
+### Questions
 
 For any questions or comments about the MappedBus feel free to drop a mail to: mappedbus@gmail.com
