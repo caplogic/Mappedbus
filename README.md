@@ -12,7 +12,7 @@ The bus is intended to be used as the backbone for a [message driven architectur
 
 A powerful feature of the MappedBus is that even though the messages are ordered there's no single component (and thus no single point of failure) taking care of the ordering, instead the processes independently determine who has access to the bus.
 
-The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record. MappedBus does not create any objects at all after startup and therefore has zero GC impact.
+The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the time for reading and writing is around 25 ns per record. MappedBus does not create any objects after startup and therefore has zero GC impact.
 
 #### Features:
 * IPC between multiple processes by exchanging messages
@@ -74,7 +74,7 @@ while (true) {
 
 ### Examples
 
-The project contains examples for how to create both a byte array based and a message based reader/writer.
+The project contains examples for how to create a byte array and message based reader/writer.
 
 The message based one work as follows. The MessageWriter will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
 
@@ -96,7 +96,7 @@ Read: PriceUpdate [source=0, price=22, quantity=44]
 
 The byte array based example is run in the same way.
 
-Another example app simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the "to" field set to it's id + 1 mod "number of nodes".
+Another example simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the "to" field set to it's id + 1 mod "number of nodes".
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 0 3
 Read: Token [from=0, to=1]
