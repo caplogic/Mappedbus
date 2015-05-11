@@ -29,11 +29,10 @@ Download "mappedbuf.jar" from the release tab above (or clone the project and bu
 Setting up the MappedBus:
 ```java
 // Setup a reader
-MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L);
+MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
 
 // Setup a writer
-MappedBusWriter writer = new MappedBusWriter();
-writer.init("/tmp/test", 100000L, true);
+MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
 ```
 
 The bus supports two modes of operation: byte array based (raw data), or message based (object oriented):
