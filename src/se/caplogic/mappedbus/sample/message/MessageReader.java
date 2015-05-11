@@ -11,7 +11,7 @@ public class MessageReader {
 
 	public void run() {
 		try {
-			MappedBusReader reader = new MappedBusReader("/tmp/test-message", 2000000L);
+			MappedBusReader reader = new MappedBusReader("/tmp/test-message", 2000000L, 12);
 
 			PriceUpdate priceUpdate = new PriceUpdate();
 			
@@ -20,6 +20,10 @@ public class MessageReader {
 			while (true) {
 				if (reader.hasNext()) {
 					boolean recovered = reader.hasRecovered();
+					boolean status = reader.next();
+					if (!status) {
+						continue; // the record was abandoned, skip it
+					}
 					int type = reader.readType();
 					switch (type) {
 					case PriceUpdate.TYPE:

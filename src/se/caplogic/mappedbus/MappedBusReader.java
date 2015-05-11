@@ -16,8 +16,9 @@
 package se.caplogic.mappedbus;
 
 import se.caplogic.mappedbus.MappedBus.Commit;
-import se.caplogic.mappedbus.MappedBus.Layout;
+import se.caplogic.mappedbus.MappedBus.FileStructure;
 import se.caplogic.mappedbus.MappedBus.Length;
+import se.caplogic.mappedbus.MappedBus.Rollback;
 
 /**
  * Class for reading from the MappedBus.
@@ -25,30 +26,51 @@ import se.caplogic.mappedbus.MappedBus.Length;
  */
 public class MappedBusReader {
 
+	private final long NUM_TIMEOUT_ITERATIONS = 1000000000;
+	
 	private final MemoryMappedFile mem;
 
-	private final long size;
+	private final long fileSize;
+	
+	private final int recordSize;
 
-	private long limit = Layout.Data;
+	private int timeoutMilliseconds = 2000;
+
+	private long limit = FileStructure.Data;
 
 	private long initialLimit;
 	
 	private boolean typeRead;
 
+;
 	/**
 	 * Creates a new reader.
 	 *
-	 * @param file the name of the memory mapped file
-	 * @param size the maximum size of the file
+	 * @param fileName the name of the memory mapped file
+	 * @param fileSize the maximum size of the file
+	 * @param recordSize the maximum size of a record (excluding status flags and meta data)
 	 */
-	public MappedBusReader(String file, long size) {
-		this.size = size;
+	public MappedBusReader(String fileName, long fileSize, int recordSize) {
+		this.fileSize = fileSize;
+		this.recordSize = recordSize;	
 		try {
-			mem = new MemoryMappedFile(file, size);
-			initialLimit = mem.getLongVolatile(Layout.Limit);
+			mem = new MemoryMappedFile(fileName, fileSize);
+			initialLimit = mem.getLongVolatile(FileStructure.Limit);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	/**
+	 * Sets the time for a reader to wait for a record to be committed.
+	 *
+	 * When the timeout occurs the reader will mark the record as "rolled back" and
+	 * the record is ignored.
+	 * 
+	 * @param timeoutMilliseconds the timeout in milliseconds
+	 */
+	public void setTimeoutMilliseconds(int timeoutMilliseconds) {
+		this.timeoutMilliseconds = timeoutMilliseconds;
 	}
 	
 	/**
@@ -57,19 +79,37 @@ public class MappedBusReader {
 	 * @return true, if there's a new record available, otherwise false
 	 */
 	public boolean hasNext() {
-		if (limit >= size) {
+		if (limit >= fileSize) {
 			throw new RuntimeException("End of file was reached");
 		}
-		return mem.getLongVolatile(Layout.Limit) > limit;
+		return mem.getLongVolatile(FileStructure.Limit) > limit;
 	}
 	
-	private void next() {
-		while (true) {
-			if (mem.getIntVolatile(limit) == Commit.Set) {
-				break;
+	public boolean next() {
+		long start = 0;
+		while(true) {
+			for (long i=0; i < NUM_TIMEOUT_ITERATIONS; i++) {
+				int commit = mem.getIntVolatile(limit);
+				int rollback = mem.getIntVolatile(limit + Length.Commit);
+				if(rollback == Rollback.Set) {
+					limit += Length.RecordHeader + recordSize;
+					return false;
+				}
+				if (commit == Commit.Set) {
+					limit += Length.StatusFlags;
+					return true;
+				}
+			}
+			if(start == 0) {
+				start = System.currentTimeMillis();
+			} else {
+				if (System.currentTimeMillis() - start > timeoutMilliseconds) {
+					mem.putIntVolatile(limit + Length.Commit, Rollback.Set);
+					limit += Length.RecordHeader + recordSize;
+					return false;
+				}
 			}
 		}
-		limit += Length.Commit;
 	}
 
 	/**
@@ -78,8 +118,7 @@ public class MappedBusReader {
 	 * @return an integer specifying the message type
 	 */
 	public int readType() {
-		typeRead = true;	
-		next();
+		typeRead = true;
 		int type = mem.getInt(limit);
 		limit += Length.Metadata;
 		return type;
@@ -97,7 +136,7 @@ public class MappedBusReader {
 		}
 		typeRead = false;
 		message.read(mem, limit);
-		limit += message.size();
+		limit += recordSize;
 		return message;
 	}
 
@@ -109,11 +148,10 @@ public class MappedBusReader {
 	 * @return the length of the record that was read
 	 */
 	public int readBuffer(byte[] dst, int offset) {
-		next();
 		int length = mem.getInt(limit);
 		limit += Length.Metadata;
 		mem.getBytes(limit, dst, offset, length);
-		limit += length;
+		limit += recordSize;
 		return length;
 	}
 	

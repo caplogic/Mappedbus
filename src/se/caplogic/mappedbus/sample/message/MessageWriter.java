@@ -10,8 +10,7 @@ public class MessageWriter {
 
 	public void run(int source) {
 		try {
-			MappedBusWriter writer = new MappedBusWriter();
-			writer.init("/tmp/test-message", 2000000L, true);
+			MappedBusWriter writer = new MappedBusWriter("/tmp/test-message", 2000000L, 12, true);
 
 			PriceUpdate priceUpdate = new PriceUpdate();
 

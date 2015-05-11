@@ -17,7 +17,7 @@ package se.caplogic.mappedbus;
 import java.io.File;
 
 import se.caplogic.mappedbus.MappedBus.Commit;
-import se.caplogic.mappedbus.MappedBus.Layout;
+import se.caplogic.mappedbus.MappedBus.FileStructure;
 import se.caplogic.mappedbus.MappedBus.Length;
 
 /**
@@ -26,34 +26,38 @@ import se.caplogic.mappedbus.MappedBus.Length;
  */
 public class MappedBusWriter {
 
-	private MemoryMappedFile mem;
+	private final MemoryMappedFile mem;
 	
-	private long size;
+	private final long fileSize;
+	
+	private final int recordSize;
 
 	/**
 	 * Creates a new writer.
 	 * 
-	 * @param file the name of the memory mapped file
+	 * @param fileName the name of the memory mapped file
 	 * @param size the maximum size of the file
+	 * @param recordSize the maximum size of a record (excluding status flags and meta data)
 	 * @param append whether to append to the file (will create a new file if false)
 	 */
-	public void init(String file, long size, boolean append) {
-		this.size = size;
+	public MappedBusWriter(String fileName, long fileSize, int recordSize, boolean append) {
+		this.fileSize = fileSize;
+		this.recordSize = recordSize;
 		if (!append) {
-			new File(file).delete();
+			new File(fileName).delete();
 		}
 		try {
-			mem = new MemoryMappedFile(file, size);
+			mem = new MemoryMappedFile(fileName, fileSize);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
 		if (append) {
-			long limit = mem.getLongVolatile(Layout.Limit);
+			long limit = mem.getLongVolatile(FileStructure.Limit);
 			if (limit == 0) {
-				mem.putLongVolatile(Layout.Limit, Layout.Data);
+				mem.putLongVolatile(FileStructure.Limit, FileStructure.Data);
 			}
 		} else {
-			mem.putLongVolatile(Layout.Limit, Layout.Data);
+			mem.putLongVolatile(FileStructure.Limit, FileStructure.Data);
 		}
 	}
 
@@ -63,16 +67,15 @@ public class MappedBusWriter {
 	 * @param message the message object to write
 	 */
 	public void write(Message message) {
-		long limit = allocate(message.size());
+		long limit = allocate();
 		long commitPos = limit;
-		limit += Length.Commit;
+		limit += Length.StatusFlags;
 		mem.putInt(limit, message.type());
 		limit += Length.Metadata;
 		message.write(mem, limit);
-		limit += message.size();
 		commit(commitPos);
 	}
-	
+
 	/**
 	 * Writes a buffer of data.
 	 *
@@ -81,25 +84,24 @@ public class MappedBusWriter {
 	 * @param length the length of the data
 	 */
 	public void write(byte[] buffer, int offset, int length) {
-		long limit = allocate(length);
+		long limit = allocate();
 		long commitPos = limit;
-		limit += Length.Commit;
+		limit += Length.StatusFlags;
 		mem.putInt(limit, length);
 		limit += Length.Metadata;
 		mem.setBytes(limit, buffer, offset, length);
-		limit += length;
 		commit(commitPos);		
 	}
 	
-	private long allocate(int recordSize) {
-		int entrySize = Length.Commit + Length.Metadata + recordSize;
+	private long allocate() {
+		int entrySize = Length.RecordHeader + recordSize;
 		long limit;
 		while (true) {
-			limit = mem.getLongVolatile(Layout.Limit);
-			if (limit + entrySize > size) {
+			limit = mem.getLongVolatile(FileStructure.Limit);
+			if (limit + entrySize > fileSize) {
 				throw new RuntimeException("End of file was reached");
 			}
-			if (mem.compareAndSwapLong(Layout.Limit, limit, limit + entrySize)) {
+			if (mem.compareAndSwapLong(FileStructure.Limit, limit, limit + entrySize)) {
 				break;
 			}
 		}

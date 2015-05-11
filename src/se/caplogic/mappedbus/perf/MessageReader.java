@@ -11,7 +11,7 @@ public class MessageReader {
 
 	public void run(String fileName) {
 		try {
-			MappedBusReader reader = new MappedBusReader(fileName, 20000000000L);
+			MappedBusReader reader = new MappedBusReader(fileName, 20000000000L, 12);
 
 			PriceUpdate priceUpdate = new PriceUpdate();
 
@@ -21,16 +21,18 @@ public class MessageReader {
 			for(int i = 0; i < 80000000; i++) {
 				while(true) {
 					if (reader.hasNext()) {
-						int type = reader.readType();
-						switch (type) {
-						case PriceUpdate.TYPE:
-							message = priceUpdate;
+						if(reader.next()) {
+							int type = reader.readType();
+							switch (type) {
+							case PriceUpdate.TYPE:
+								message = priceUpdate;
+								break;
+							default:
+								throw new RuntimeException("Unknown type: " + type);
+							}
+							reader.readMessage(message);
 							break;
-						default:
-							throw new RuntimeException("Unknown type: " + type);
 						}
-						reader.readMessage(message);
-						break;
 					}
 				}
 			}

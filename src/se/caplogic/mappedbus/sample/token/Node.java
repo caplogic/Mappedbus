@@ -16,10 +16,9 @@ public class Node {
 	}
 
 	public void init() {
-		reader = new MappedBusReader("/tmp/token-test", 2000000L);
+		reader = new MappedBusReader("/tmp/token-test", 2000000L, 8);
 
-		writer = new MappedBusWriter();
-		writer.init("/tmp/token-test", 2000000L, true);		
+		writer = new MappedBusWriter("/tmp/token-test", 2000000L, 8, true);
 	}
 
 	public void run(int id, int numberOfNodes) {
@@ -34,6 +33,10 @@ public class Node {
 
 			while (true) {
 				if (reader.hasNext()) {
+					if(!reader.next()) {
+						continue; // the record was abandoned, skip it
+					}
+					
 					System.out.println("Read: " + reader.readMessage(token));
 
 					if(token.getTo() == id) {

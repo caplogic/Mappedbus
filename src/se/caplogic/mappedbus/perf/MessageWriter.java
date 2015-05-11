@@ -14,8 +14,7 @@ public class MessageWriter {
 		try {
 			new File(fileName).delete();
 			
-			MappedBusWriter writer = new MappedBusWriter();
-			writer.init(fileName, 20000000000L, false);
+			MappedBusWriter writer = new MappedBusWriter(fileName, 20000000000L, 12, false);
 
 			PriceUpdate priceUpdate = new PriceUpdate();
 			

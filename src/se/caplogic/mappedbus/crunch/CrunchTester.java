@@ -10,7 +10,7 @@ public class CrunchTester {
 	
 	public static final String FILE_NAME = "/tmp/crunch-test";
 	
-	public static final long FILE_SIZE = 2000000L;
+	public static final long FILE_SIZE = 4000000L;
 	
 	public static final int NUM_WRITERS = 10;
 	
@@ -37,9 +37,12 @@ public class CrunchTester {
 			writers[i].join();
 		}
 		
-		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE);
+		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_LENGTH);
 		byte[] data = new byte[RECORD_LENGTH];
 		while(reader.hasNext()) {
+			if(!reader.next()) {
+				continue; // the record was abandoned, skip it
+			}
 			reader.readBuffer(data, 0);
 			for(int i=0; i < data.length; i++) {
 				System.out.println("Read: " + Arrays.toString(data));
@@ -66,8 +69,7 @@ class Writer extends Thread {
 	
 	public void run() {
 		try {
-			MappedBusWriter writer = new MappedBusWriter();
-			writer.init(CrunchTester.FILE_NAME, CrunchTester.FILE_SIZE, false);
+			MappedBusWriter writer = new MappedBusWriter(CrunchTester.FILE_NAME, CrunchTester.FILE_SIZE, CrunchTester.RECORD_LENGTH, false);
 
 			byte[] data = new byte[CrunchTester.RECORD_LENGTH];
 			Arrays.fill(data, (byte)id);
