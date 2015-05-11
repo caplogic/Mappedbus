@@ -144,7 +144,7 @@ Here's how MappedBus solves the synchronization problem between multiple writers
 
 * When a writer has finished writing a record it will set the commit field (using volatile) and the reader will only start reading a record once it has seen that the commit field has been set.
 
-* A writer might crash after it has updated the limit field but before it has updated the commit field. To avoid this problem there's another field next to the commit field called the rollback field. The reader has a timeout for how long it will wait for the commit field to be set. When that time is reached the reader will set the rollback field and continue with the next record. The rollback field has precedence over the commit field, when the rollback field is set the record is always ignored by the readers.
+* A writer might crash after it has updated the limit field but before it has updated the commit field. To avoid this problem there's a field next to the commit field called the rollback field. The reader has a timeout for how long it will wait for the commit field to be set. When that time is reached the reader will set the rollback field (using volatile) and continue with the next record. The rollback field has precedence over the commit field, when the rollback field is set the record is always ignored by the readers.
 
 The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it probably won't work on all platforms. The project contains a test (called CrunchTest) to check whether it works on the platform used.
 
