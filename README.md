@@ -42,12 +42,14 @@ The bus supports two modes of operation: byte array based (raw data), or message
 // write a buffer
 writer.write(buffer, 0, buffer.length);
 
-// read a buffer
-while (reader.hasNext()) {
-   if (!reader.next()) {
-      continue; // message was rolled back, skip it
+// read buffers
+while (true) {
+   if (reader.hasNext()) {
+      if (!reader.next()) {
+         continue; // message was rolled back, skip it
+      }
+      int length = reader.read(buffer, 0);
    }
-   int length = reader.read(buffer, 0);
 }
 ```
 
@@ -58,13 +60,15 @@ PriceUpdate priceUpdate = new PriceUpdate();
 writer.write(priceUpdate);
 
 // read messages
-while (reader.hasNext()) {
-   if (!reader.next()) {
-      continue; // message was rolled back, skip it
-   }
-   int type = reader.readType();
-   if (type == 0) {
-      reader.readMessage(priceUpdate)
+while (true) {
+   if (reader.hasNext()) {
+      if (!reader.next()) {
+         continue; // message was rolled back, skip it
+      }
+      int type = reader.readType();
+      if (type == 0) {
+         reader.readMessage(priceUpdate)
+      }
    }
 }
 ```
