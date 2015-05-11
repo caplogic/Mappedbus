@@ -110,7 +110,7 @@ Read: Token [from=1, to=2]
 
 ### Performance
 
-The project contains a performance test which can be run as follows.
+The project contains a performance test which can be run as follows:
 ```
 > java -cp mappedbus.jar se.caplogic.mappedbus.perf.MessageWriter /home/youraccount/tmp/test
 ...
