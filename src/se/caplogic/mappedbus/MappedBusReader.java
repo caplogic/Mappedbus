@@ -26,7 +26,7 @@ import se.caplogic.mappedbus.MappedBus.Rollback;
  */
 public class MappedBusReader {
 
-	private final long NUM_TIMEOUT_ITERATIONS = 1000000000;
+	private final long TIMEOUT_ITERATIONS = 1000000000;
 	
 	private final MemoryMappedFile mem;
 
@@ -34,7 +34,7 @@ public class MappedBusReader {
 	
 	private final int recordSize;
 
-	private int timeoutMilliseconds = 2000;
+	private int timeout = 2000;
 
 	private long limit = FileStructure.Data;
 
@@ -67,10 +67,10 @@ public class MappedBusReader {
 	 * When the timeout occurs the reader will mark the record as "rolled back" and
 	 * the record is ignored.
 	 * 
-	 * @param timeoutMilliseconds the timeout in milliseconds
+	 * @param timeout the timeout in milliseconds
 	 */
-	public void setTimeoutMilliseconds(int timeoutMilliseconds) {
-		this.timeoutMilliseconds = timeoutMilliseconds;
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 	
 	/**
@@ -85,13 +85,23 @@ public class MappedBusReader {
 		return mem.getLongVolatile(FileStructure.Limit) > limit;
 	}
 	
+	/**
+	 * Reads the header of the next record.
+	 * 
+	 * This method waits (busy-wait) until either the rollback, or the commit field is set.
+	 * 
+	 * The method has a timeout for how long it will wait for the commit field to be set. When the timeout is
+	 * reached it will set the rollback field and skip over the record. 
+	 *
+	 * @return true, if the record is committed and can be read, otherwise false and if so it should be skipped
+	 */
 	public boolean next() {
 		long start = 0;
-		while(true) {
-			for (long i=0; i < NUM_TIMEOUT_ITERATIONS; i++) {
+		while (true) {
+			for (long i=0; i < TIMEOUT_ITERATIONS; i++) {
 				int commit = mem.getIntVolatile(limit);
 				int rollback = mem.getIntVolatile(limit + Length.Commit);
-				if(rollback == Rollback.Set) {
+				if (rollback == Rollback.Set) {
 					limit += Length.RecordHeader + recordSize;
 					return false;
 				}
@@ -100,10 +110,10 @@ public class MappedBusReader {
 					return true;
 				}
 			}
-			if(start == 0) {
+			if (start == 0) {
 				start = System.currentTimeMillis();
 			} else {
-				if (System.currentTimeMillis() - start > timeoutMilliseconds) {
+				if (System.currentTimeMillis() - start > timeout) {
 					mem.putIntVolatile(limit + Length.Commit, Rollback.Set);
 					limit += Length.RecordHeader + recordSize;
 					return false;
@@ -115,7 +125,7 @@ public class MappedBusReader {
 	/**
 	 * Reads the message type.
 	 *
-	 * @return an integer specifying the message type
+	 * @return the message type
 	 */
 	public int readType() {
 		typeRead = true;
