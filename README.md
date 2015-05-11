@@ -44,6 +44,9 @@ writer.write(buffer, 0, buffer.length);
 
 // read a buffer
 while (reader.hasNext()) {
+   if (!reader.next()) {
+      continue; // message was rolled back, skip it
+   }
    int length = reader.read(buffer, 0);
 }
 ```
@@ -56,6 +59,9 @@ writer.write(priceUpdate);
 
 // read messages
 while (reader.hasNext()) {
+   if (!reader.next()) {
+      continue; // message was rolled back, skip it
+   }
    int type = reader.readType();
    if (type == 0) {
       reader.readMessage(priceUpdate)
