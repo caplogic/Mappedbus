@@ -6,7 +6,7 @@ import se.caplogic.mappedbus.MappedBusWriter;
 
 public class LatencyTest {
 
-	public static final String FILE_NAME = "/home/mikael/tmp/test";
+	public static final String FILE_NAME = "/home/your_account/tmp/test";
 
 	public static final long FILE_SIZE = 20000000000L;
 
