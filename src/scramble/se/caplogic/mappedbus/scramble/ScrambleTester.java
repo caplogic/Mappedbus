@@ -1,4 +1,4 @@
-package se.caplogic.mappedbus.crunch;
+package se.caplogic.mappedbus.scramble;
 
 import java.io.File;
 import java.util.Arrays;
@@ -6,9 +6,9 @@ import java.util.Arrays;
 import se.caplogic.mappedbus.MappedBusReader;
 import se.caplogic.mappedbus.MappedBusWriter;
 
-public class CrunchTester {
+public class ScrambleTester {
 	
-	public static final String FILE_NAME = "/tmp/crunch-test";
+	public static final String FILE_NAME = "/tmp/scramble-test";
 	
 	public static final long FILE_SIZE = 4000000L;
 	
@@ -19,7 +19,7 @@ public class CrunchTester {
 	public static final int NUM_RECORDS = 10000;
 	
 	public static void main(String[] args) throws Exception {
-		CrunchTester tester = new CrunchTester();
+		ScrambleTester tester = new ScrambleTester();
 		tester.run();
 	}
 	
@@ -69,12 +69,12 @@ class Writer extends Thread {
 	
 	public void run() {
 		try {
-			MappedBusWriter writer = new MappedBusWriter(CrunchTester.FILE_NAME, CrunchTester.FILE_SIZE, CrunchTester.RECORD_LENGTH, false);
+			MappedBusWriter writer = new MappedBusWriter(ScrambleTester.FILE_NAME, ScrambleTester.FILE_SIZE, ScrambleTester.RECORD_LENGTH, false);
 
-			byte[] data = new byte[CrunchTester.RECORD_LENGTH];
+			byte[] data = new byte[ScrambleTester.RECORD_LENGTH];
 			Arrays.fill(data, (byte)id);
 			
-			for(int i=0; i < CrunchTester.NUM_RECORDS; i++) {
+			for(int i=0; i < ScrambleTester.NUM_RECORDS; i++) {
 				writer.write(data, 0, data.length);
 			}
 		} catch(Exception e) {
