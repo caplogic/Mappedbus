@@ -78,6 +78,7 @@
         <attribute name="Main-Class"
                 value="${main_class_name}"/>
         </manifest>
+        <fileset dir="${src}" includes="**/*.java"/>
     </jar>
     <copy file="${dist}/${jarname}-${version}.jar" tofile="./${jarname}.jar" overwrite="true"/>
   </target>
