@@ -9,6 +9,9 @@
   <property name="jarname"  value="${ant.project.name}"/> 
   <!-- set directories -->
   <property name="src" location="src"/>
+  <property name="sample" location="sample"/>
+  <property name="perf" location="perf"/>
+  <property name="crunch" location="crunch"/>
   <property name="test" location="test"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
@@ -33,7 +36,7 @@
   <target name="compile" depends="init" description="compile the source " >
     <!-- Compile the java code from ${src} into ${build} -->
     <javac debug="true" 
-	   srcdir="${src}" 
+	   srcdir="${src}:${sample}:${perf}:${crunch}" 
 	   destdir="${build}"
 	   source="1.7"
 	   target="1.7"
