@@ -12,7 +12,7 @@ The bus is intended to be used as the backbone for a [message driven architectur
 
 A powerful feature of MappedBus is that even though the messages are ordered there's no single component (and thus no single point of failure) taking care of the ordering, instead the processes independently determine who has access to the bus.
 
-The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the average read/write latency is at around 25 ns per message. MappedBus does not create any objects after startup and therefore has zero GC impact.
+The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writing at full speed, and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the average read/write latency is at around 25 ns per message. MappedBus does not create any objects after startup and therefore has no GC impact.
 
 #### Features:
 * IPC between multiple processes by exchanging messages
