@@ -15,14 +15,40 @@
 */
 package se.caplogic.mappedbus;
 
+/**
+ * Interface for serializing a message.
+ *
+ */
 public interface Message {
 
+	/**
+	 * Writes the message to the bus.
+	 *
+	 * @param mem an instance of the memory mapped file
+	 * @param pos the start of the current record
+	 */
 	public void write(MemoryMappedFile mem, long pos);
 	
+	/**
+	 * Reads the message from the bus.
+	 * 
+	 * @param mem an instance of the memory mapped file
+	 * @param pos the start of the current record
+	 */
 	public void read(MemoryMappedFile mem, long pos);
 	
+	/**
+	 * Returns the message type.
+	 *
+	 * @return the message type
+	 */
 	public int type();
 	
+	/**
+	 * Return the message length.
+	 *
+	 * @return the length in bytes
+	 */
 	public int size();
 	
 }

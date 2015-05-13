@@ -7,8 +7,8 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.caplogic.mappedbus.MappedBus.FileStructure;
-import se.caplogic.mappedbus.MappedBus.Length;
+import se.caplogic.mappedbus.MappedBusConstants.Structure;
+import se.caplogic.mappedbus.MappedBusConstants.Length;
 
 public class MappedBusWriterTest {
 	
@@ -29,11 +29,11 @@ public class MappedBusWriterTest {
 				
 		byte[] data1 = {0, 1, 2, 3};
 		writer.write(data1, 0, data1.length);
-		assertEquals(FileStructure.Data + Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE , mem.getLongVolatile(FileStructure.Limit));
+		assertEquals(Structure.Data + Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE , mem.getLongVolatile(Structure.Limit));
 		
 		byte[] data2 = {4, 5, 6};
 		writer.write(data2, 0, data2.length);
-		assertEquals(FileStructure.Data + 2 * (Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE), mem.getLongVolatile(FileStructure.Limit));
+		assertEquals(Structure.Data + 2 * (Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE), mem.getLongVolatile(Structure.Limit));
 	}
 
 	@Test public void testWriteMessage() throws Exception {
@@ -43,10 +43,10 @@ public class MappedBusWriterTest {
 				
 		PriceUpdate priceUpdate = new PriceUpdate();
 		writer.write(priceUpdate);
-		assertEquals(FileStructure.Data + Length.Commit + Length.Rollback + Length.Metadata + PriceUpdate.SIZE , mem.getLongVolatile(FileStructure.Limit));
+		assertEquals(Structure.Data + Length.Commit + Length.Rollback + Length.Metadata + PriceUpdate.SIZE , mem.getLongVolatile(Structure.Limit));
 		
 		writer.write(priceUpdate);
-		assertEquals(FileStructure.Data + 2 * (Length.Commit + Length.Rollback + Length.Metadata + PriceUpdate.SIZE), mem.getLongVolatile(FileStructure.Limit));
+		assertEquals(Structure.Data + 2 * (Length.Commit + Length.Rollback + Length.Metadata + PriceUpdate.SIZE), mem.getLongVolatile(Structure.Limit));
 	}
 
 }

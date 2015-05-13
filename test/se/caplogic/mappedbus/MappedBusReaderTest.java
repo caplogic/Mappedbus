@@ -8,7 +8,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.caplogic.mappedbus.MappedBus.FileStructure;
+import se.caplogic.mappedbus.MappedBusConstants.Structure;
 
 public class MappedBusReaderTest {
 
@@ -94,7 +94,7 @@ public class MappedBusReaderTest {
 		writer.write(priceUpdate);
 		
 		MemoryMappedFile mem = new MemoryMappedFile(FILE_NAME, FILE_SIZE);
-		mem.putIntVolatile(FileStructure.Data, 0);
+		mem.putIntVolatile(Structure.Data, 0);
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 

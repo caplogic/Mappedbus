@@ -15,9 +15,13 @@
 */
 package se.caplogic.mappedbus;
 
-public class MappedBus {
+/**
+ * Class with constants used in the MappedBus structures.
+ *
+ */
+public class MappedBusConstants {
 
-	public static class FileStructure {
+	public static class Structure {
 		
 		public static final int Limit = 0;
 		

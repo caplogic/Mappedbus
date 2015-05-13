@@ -15,10 +15,10 @@
 */
 package se.caplogic.mappedbus;
 
-import se.caplogic.mappedbus.MappedBus.Commit;
-import se.caplogic.mappedbus.MappedBus.FileStructure;
-import se.caplogic.mappedbus.MappedBus.Length;
-import se.caplogic.mappedbus.MappedBus.Rollback;
+import se.caplogic.mappedbus.MappedBusConstants.Commit;
+import se.caplogic.mappedbus.MappedBusConstants.Structure;
+import se.caplogic.mappedbus.MappedBusConstants.Length;
+import se.caplogic.mappedbus.MappedBusConstants.Rollback;
 
 /**
  * Class for reading from the MappedBus.
@@ -26,7 +26,7 @@ import se.caplogic.mappedbus.MappedBus.Rollback;
  */
 public class MappedBusReader {
 
-	private final long TIMEOUT_ITERATIONS = 1000000000;
+	private final long TIMEOUT_COUNT = 1000000000;
 	
 	private final MemoryMappedFile mem;
 
@@ -36,7 +36,7 @@ public class MappedBusReader {
 
 	private int timeout = 2000;
 
-	private long limit = FileStructure.Data;
+	private long limit = Structure.Data;
 
 	private long initialLimit;
 	
@@ -55,7 +55,7 @@ public class MappedBusReader {
 		this.recordSize = recordSize;	
 		try {
 			mem = new MemoryMappedFile(fileName, fileSize);
-			initialLimit = mem.getLongVolatile(FileStructure.Limit);
+			initialLimit = mem.getLongVolatile(Structure.Limit);
 		} catch(Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -82,7 +82,7 @@ public class MappedBusReader {
 		if (limit >= fileSize) {
 			throw new RuntimeException("End of file was reached");
 		}
-		return mem.getLongVolatile(FileStructure.Limit) > limit;
+		return mem.getLongVolatile(Structure.Limit) > limit;
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class MappedBusReader {
 	public boolean next() {
 		long start = 0;
 		while (true) {
-			for (long i=0; i < TIMEOUT_ITERATIONS; i++) {
+			for (long i=0; i < TIMEOUT_COUNT; i++) {
 				int commit = mem.getIntVolatile(limit);
 				int rollback = mem.getIntVolatile(limit + Length.Commit);
 				if (rollback == Rollback.Set) {

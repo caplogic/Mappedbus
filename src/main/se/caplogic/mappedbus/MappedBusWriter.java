@@ -16,9 +16,9 @@
 package se.caplogic.mappedbus;
 import java.io.File;
 
-import se.caplogic.mappedbus.MappedBus.Commit;
-import se.caplogic.mappedbus.MappedBus.FileStructure;
-import se.caplogic.mappedbus.MappedBus.Length;
+import se.caplogic.mappedbus.MappedBusConstants.Commit;
+import se.caplogic.mappedbus.MappedBusConstants.Structure;
+import se.caplogic.mappedbus.MappedBusConstants.Length;
 
 /**
  * Class for writing to the MappedBus.
@@ -52,12 +52,12 @@ public class MappedBusWriter {
 			throw new RuntimeException(e);
 		}
 		if (append) {
-			long limit = mem.getLongVolatile(FileStructure.Limit);
+			long limit = mem.getLongVolatile(Structure.Limit);
 			if (limit == 0) {
-				mem.putLongVolatile(FileStructure.Limit, FileStructure.Data);
+				mem.putLongVolatile(Structure.Limit, Structure.Data);
 			}
 		} else {
-			mem.putLongVolatile(FileStructure.Limit, FileStructure.Data);
+			mem.putLongVolatile(Structure.Limit, Structure.Data);
 		}
 	}
 
@@ -79,17 +79,17 @@ public class MappedBusWriter {
 	/**
 	 * Writes a buffer of data.
 	 *
-	 * @param buffer the output buffer
+	 * @param src the output buffer
 	 * @param offset the offset in the buffer of the first byte to write
 	 * @param length the length of the data
 	 */
-	public void write(byte[] buffer, int offset, int length) {
+	public void write(byte[] src, int offset, int length) {
 		long limit = allocate();
 		long commitPos = limit;
 		limit += Length.StatusFlags;
 		mem.putInt(limit, length);
 		limit += Length.Metadata;
-		mem.setBytes(limit, buffer, offset, length);
+		mem.setBytes(limit, src, offset, length);
 		commit(commitPos);		
 	}
 	
@@ -97,11 +97,11 @@ public class MappedBusWriter {
 		int entrySize = Length.RecordHeader + recordSize;
 		long limit;
 		while (true) {
-			limit = mem.getLongVolatile(FileStructure.Limit);
+			limit = mem.getLongVolatile(Structure.Limit);
 			if (limit + entrySize > fileSize) {
 				throw new RuntimeException("End of file was reached");
 			}
-			if (mem.compareAndSwapLong(FileStructure.Limit, limit, limit + entrySize)) {
+			if (mem.compareAndSwapLong(Structure.Limit, limit, limit + entrySize)) {
 				break;
 			}
 		}
