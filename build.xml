@@ -16,7 +16,7 @@
 
   <path id="project.classpath">
     <pathelement location="${build}" />
-    <pathelement location="${lib}" />
+    <fileset dir="${lib}" includes="**/*.jar"/>
   </path>
 
 
