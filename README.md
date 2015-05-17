@@ -26,7 +26,7 @@ Download mappedbus.jar from the release tab (or clone the project and build it f
 
 ### Usage
 
-Setup the MappedBus:
+Setup a reader and writer:
 ```java
 // Setup a reader
 MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
