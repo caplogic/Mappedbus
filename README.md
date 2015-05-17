@@ -58,6 +58,8 @@ while (true) {
 
 Read/write messages using byte arrays:
 ```java
+byte[] buffer = new byte[32];
+
 // write a buffer
 writer.write(buffer, 0, buffer.length);
 
