@@ -18,7 +18,7 @@ The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writi
 * IPC between multiple processes by exchanging messages
 * All messages are persisted
 * No single point of failure
-* Support for either object or byte array based messages
+* Support for either object or byte array (raw data) based messages
 
 ### Getting Started
 
@@ -26,7 +26,7 @@ Download mappedbus.jar from the release tab (or clone the project and build it f
 
 ### Usage
 
-Setting up the MappedBus:
+Setup the MappedBus:
 ```java
 // Setup a reader
 MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
@@ -35,8 +35,7 @@ MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
 MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
 ```
 
-Object based read/write: 
-
+Read/write messages using objects:
 ```java
 PriceUpdate priceUpdate = new PriceUpdate();
 
@@ -57,8 +56,7 @@ while (true) {
 }
 ```
 
-Byte array based read/write:
-
+Read/write messages using byte arrays:
 ```java
 // write a buffer
 writer.write(buffer, 0, buffer.length);
