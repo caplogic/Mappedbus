@@ -78,18 +78,18 @@ while (true) {
 
 The project contains examples of an object based and a byte array based reader/writer.
 
-The object based one work as follows. The MessageWriter class will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the MessageWriter is used to populate the source. The MessageReader simply prints every message it receives.
+The object based one work as follows. The ObjectWriter class will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the ObjectWriter is used to populate the source. The ObjectReader simply prints every message it receives.
 
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageWriter 0
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.object.ObjectWriter 0
 ...
 ```
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageWriter 1
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.object.ObjectWriter 1
 ...
 ```
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.message.MessageReader
+> java -cp mappedbus.jar se.caplogic.mappedbus.sample.object.ObjectReader
 ...
 Read: PriceUpdate [source=0, price=20, quantity=40]
 Read: PriceUpdate [source=1, price=8, quantity=16]
