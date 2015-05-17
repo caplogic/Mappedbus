@@ -18,7 +18,7 @@ The throughput (on a laptop, i7-4558U @ 2.8 GHZ) between a single producer writi
 * IPC between multiple processes by exchanging messages
 * All messages are persisted
 * No single point of failure
-* Two modes of operation: byte array based (raw data), or message based (object oriented) 
+* Support for either object or byte array based messages
 
 ### Getting Started
 
@@ -35,22 +35,7 @@ MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
 MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
 ```
 
-The bus supports two modes of operation: byte array based (raw data), or message based (object oriented):
-
-```java
-// write a buffer
-writer.write(buffer, 0, buffer.length);
-
-// read buffers
-while (true) {
-   if (reader.hasNext()) {
-      if (!reader.next()) {
-         continue; // message was rolled back, skip it
-      }
-      int length = reader.read(buffer, 0);
-   }
-}
-```
+Object based read/write: 
 
 ```java
 PriceUpdate priceUpdate = new PriceUpdate();
@@ -68,6 +53,23 @@ while (true) {
       if (type == 0) {
          reader.readMessage(priceUpdate)
       }
+   }
+}
+```
+
+Byte array based read/write:
+
+```java
+// write a buffer
+writer.write(buffer, 0, buffer.length);
+
+// read buffers
+while (true) {
+   if (reader.hasNext()) {
+      if (!reader.next()) {
+         continue; // message was rolled back, skip it
+      }
+      int length = reader.read(buffer, 0);
    }
 }
 ```
