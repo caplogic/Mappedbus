@@ -1,11 +1,11 @@
-package se.caplogic.mappedbus.sample.message;
+package se.caplogic.mappedbus.sample.object;
 import se.caplogic.mappedbus.MappedBusReader;
 import se.caplogic.mappedbus.Message;
 
-public class MessageReader {
+public class ObjectReader {
 
 	public static void main(String[] args) {
-		MessageReader reader = new MessageReader();
+		ObjectReader reader = new ObjectReader();
 		reader.run();	
 	}
 

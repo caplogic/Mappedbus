@@ -1,10 +1,10 @@
-package se.caplogic.mappedbus.sample.message;
+package se.caplogic.mappedbus.sample.object;
 import se.caplogic.mappedbus.MappedBusWriter;
 
-public class MessageWriter {
+public class ObjectWriter {
 
 	public static void main(String[] args) {
-		MessageWriter writer = new MessageWriter();
+		ObjectWriter writer = new ObjectWriter();
 		writer.run(Integer.valueOf(args[0]));
 	}
 

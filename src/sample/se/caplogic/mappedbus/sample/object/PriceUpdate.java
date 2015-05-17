@@ -1,4 +1,4 @@
-package se.caplogic.mappedbus.sample.message;
+package se.caplogic.mappedbus.sample.object;
 import se.caplogic.mappedbus.MemoryMappedFile;
 import se.caplogic.mappedbus.Message;
 
