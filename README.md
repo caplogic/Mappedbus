@@ -36,7 +36,7 @@ In the code above the file is "/tmp/test" as thus is a memory mapped file. To us
 point to a file in "/dev/shm", for example, "/dev/shm/test".
 
 When using a memory mapped file the messages will be lazily persisted to disk.  With shared memory the messages will instead be stored in the RAM.
-<br><br><br>
+<br><br>
 Read/write messages using objects:
 ```java
 PriceUpdate priceUpdate = new PriceUpdate();
