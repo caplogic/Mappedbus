@@ -1,4 +1,5 @@
-## MappedBus is a Java based high throughput, low latency message bus, built on top of a memory mapped file
+## MappedBus is a Java based high throughput, low latency message bus, using either a memory mapped file or shared
+memory as transport
 
 MappedBus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.
 
@@ -14,7 +15,7 @@ MappedBus does not create any objects after startup and therefore has no GC impa
 
 #### Features:
 * IPC between multiple processes by message passing
-* All messages are persisted
+* Support for either a memory mapped file or shared memory as transport
 * Support for either object or byte array (raw data) based messages
 
 ### Getting Started
@@ -31,6 +32,11 @@ MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
 // Setup a writer
 MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
 ```
+
+In the code above the file is "/tmp/test" as thus is a memory mapped file. To use the library with shared memory, instead
+point to a file in "/dev/shm", for example, "/dev/shm/test".
+
+When using a memory mapped file the messages will be lazily persisted to disk.  With shared memory the messages will instead be stored in the RAM.
 
 Read/write messages using objects:
 ```java
