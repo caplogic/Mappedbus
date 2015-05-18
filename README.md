@@ -32,8 +32,7 @@ MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
 MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
 ```
 
-In the code above the file is "/tmp/test" as thus is a memory mapped file. To use the library with shared memory, instead
-point to a file in "/dev/shm", for example, "/dev/shm/test".
+In the code above the file "/tmp/test" is on disk and thus memory mapped by the library.  To use the library with shared memory, instead point to a file in "/dev/shm", for example, "/dev/shm/test".
 
 When using a memory mapped file the messages will be lazily persisted to disk.  With shared memory the messages will instead be stored in the RAM.
 <br><br>
