@@ -38,6 +38,7 @@ point to a file in "/dev/shm", for example, "/dev/shm/test".
 When using a memory mapped file the messages will be lazily persisted to disk.  With shared memory the messages will instead be stored in the RAM.
 
 
+
 Read/write messages using objects:
 ```java
 PriceUpdate priceUpdate = new PriceUpdate();
