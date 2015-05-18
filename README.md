@@ -34,8 +34,7 @@ MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
 
 In the code above the file "/tmp/test" is on disk and thus it's memory mapped by the library. To instead use the library with shared memory, point to a file in "/dev/shm", for example, "/dev/shm/test".
 
-When using a memory mapped file the messages will be lazily persisted to disk. With shared memory the messages will instead be stored in the RAM. 
-
+When using a memory mapped file the messages will be lazily persisted to disk. With shared memory the messages will instead be stored in the RAM.
 <br><br>
 Read/write messages using objects:
 ```java
