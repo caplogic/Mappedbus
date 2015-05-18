@@ -1,5 +1,4 @@
-## MappedBus is a Java based high throughput, low latency message bus, using either a memory mapped file or shared
-memory as transport
+## MappedBus is a Java based high throughput, low latency message bus, using either a memory mapped file or shared memory as transport
 
 MappedBus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.
 
