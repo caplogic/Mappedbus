@@ -27,9 +27,11 @@ Setup a reader and a writer:
 ```java
 // Setup a reader
 MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
+reader.open();
 
 // Setup a writer
 MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
+writer.open();
 ```
 
 In the code above the file "/tmp/test" is on disk and thus it's memory mapped by the library. To instead use the library with shared memory, point to a file in "/dev/shm", for example, "/dev/shm/test".
