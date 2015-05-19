@@ -14,80 +14,29 @@
 * limitations under the License. 
 */
 package se.caplogic.mappedbus;
+
 import java.io.EOFException;
-import java.io.File;
 import java.io.IOException;
 
-import se.caplogic.mappedbus.MappedBusConstants.Commit;
-import se.caplogic.mappedbus.MappedBusConstants.Structure;
-import se.caplogic.mappedbus.MappedBusConstants.Length;
-
 /**
- * Class for writing to the MappedBus.
+ * Interface for writing to the MappedBus.
  *
  */
-public class MappedBusWriter {
+public interface MappedBusWriter {
 
-	private MemoryMappedFile mem;
-	
-	private final String fileName;
-	
-	private final long fileSize;
-	
-	private final int recordSize;
-	
-	private final boolean append;
-
-	/**
-	 * Creates a new writer.
-	 * 
-	 * @param fileName the name of the memory mapped file
-	 * @param size the maximum size of the file
-	 * @param recordSize the maximum size of a record (excluding status flags and meta data)
-	 * @param append whether to append to the file (will create a new file if false)
-	 */
-	public MappedBusWriter(String fileName, long fileSize, int recordSize, boolean append) {
-		this.fileName = fileName;
-		this.fileSize = fileSize;
-		this.recordSize = recordSize;
-		this.append = append;
-	}
-	
 	/**
 	 * Opens the writer.
 	 *
 	 * @throws IOException if there was an error opening the file
 	 */
-	public void open() throws IOException {
-		if (!append) {
-			new File(fileName).delete();
-		}
-		try {
-			mem = new MemoryMappedFile(fileName, fileSize);
-		} catch(Exception e) {
-			throw new IOException("Unable to open the file: " + fileName, e);
-		}
-		if (append) {
-			mem.compareAndSwapLong(Structure.Limit, 0, Structure.Data);
-		} else {
-			mem.putLongVolatile(Structure.Limit, Structure.Data);
-		}
-	}
+	public void open() throws IOException;
 
 	/**
 	 * Writes a message.
 	 *
 	 * @param message the message object to write
 	 */
-	public void write(Message message) throws EOFException {
-		long limit = allocate();
-		long commitPos = limit;
-		limit += Length.StatusFlags;
-		mem.putInt(limit, message.type());
-		limit += Length.Metadata;
-		message.write(mem, limit);
-		commit(commitPos);
-	}
+	public void write(Message message) throws EOFException;
 
 	/**
 	 * Writes a buffer of data.
@@ -96,45 +45,12 @@ public class MappedBusWriter {
 	 * @param offset the offset in the buffer of the first byte to write
 	 * @param length the length of the data
 	 */
-	public void write(byte[] src, int offset, int length) throws EOFException {
-		long limit = allocate();
-		long commitPos = limit;
-		limit += Length.StatusFlags;
-		mem.putInt(limit, length);
-		limit += Length.Metadata;
-		mem.setBytes(limit, src, offset, length);
-		commit(commitPos);		
-	}
-	
-	private long allocate() throws EOFException {
-		int entrySize = Length.RecordHeader + recordSize;
-		long limit;
-		while (true) {
-			limit = mem.getLongVolatile(Structure.Limit);
-			if (limit + entrySize > fileSize) {
-				throw new EOFException("End of file was reached");
-			}
-			if (mem.compareAndSwapLong(Structure.Limit, limit, limit + entrySize)) {
-				break;
-			}
-		}
-		return limit;
-	}
+	public void write(byte[] src, int offset, int length) throws EOFException;
 
-	private void commit(long commitPos) {
-		mem.putIntVolatile(commitPos, Commit.Set);
-	}
-	
 	/**
 	 * Closes the writer.
 	 *
 	 * @throws IOException if there was an error closing the file
 	 */
-	public void close() throws IOException {
-		try {
-			mem.unmap();
-		} catch(Exception e) {
-			throw new IOException("Unable to close the file", e);
-		}
-	}
+	public void close() throws IOException;
 }

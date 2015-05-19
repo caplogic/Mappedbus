@@ -1,13 +1,13 @@
 package se.caplogic.mappedbus.sample.token;
-import se.caplogic.mappedbus.MappedBusReader;
-import se.caplogic.mappedbus.MappedBusWriter;
+import se.caplogic.mappedbus.MappedBusReaderImpl;
+import se.caplogic.mappedbus.MappedBusWriterImpl;
 import se.caplogic.mappedbus.Message;
 
 public class Node {
 
-	private MappedBusReader reader;
+	private MappedBusReaderImpl reader;
 	
-	private MappedBusWriter writer;
+	private MappedBusWriterImpl writer;
 	
 	public static void main(String[] args) throws Exception {
 		Node reader = new Node();
@@ -16,10 +16,10 @@ public class Node {
 	}
 
 	public void init() throws Exception {
-		writer = new MappedBusWriter("/tmp/token-test", 2000000L, 8, true);
+		writer = new MappedBusWriterImpl("/tmp/token-test", 2000000L, 8, true);
 		writer.open();
 		
-		reader = new MappedBusReader("/tmp/token-test", 2000000L, 8);
+		reader = new MappedBusReaderImpl("/tmp/token-test", 2000000L, 8);
 		reader.open();
 	}
 

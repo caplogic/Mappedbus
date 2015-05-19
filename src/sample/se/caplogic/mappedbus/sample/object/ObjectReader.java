@@ -1,5 +1,5 @@
 package se.caplogic.mappedbus.sample.object;
-import se.caplogic.mappedbus.MappedBusReader;
+import se.caplogic.mappedbus.MappedBusReaderImpl;
 import se.caplogic.mappedbus.Message;
 
 public class ObjectReader {
@@ -11,7 +11,7 @@ public class ObjectReader {
 
 	public void run() {
 		try {
-			MappedBusReader reader = new MappedBusReader("/tmp/test-message", 2000000L, 12);
+			MappedBusReaderImpl reader = new MappedBusReaderImpl("/tmp/test-message", 2000000L, 12);
 			reader.open();
 
 			PriceUpdate priceUpdate = new PriceUpdate();

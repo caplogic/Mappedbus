@@ -1,7 +1,7 @@
 package se.caplogic.mappedbus.sample.bytearray;
 import java.util.Arrays;
 
-import se.caplogic.mappedbus.MappedBusWriter;
+import se.caplogic.mappedbus.MappedBusWriterImpl;
 
 public class ByteArrayWriter {
 
@@ -12,7 +12,7 @@ public class ByteArrayWriter {
 
 	public void run(int source) {
 		try {
-			MappedBusWriter writer = new MappedBusWriter("/tmp/test-bytearray", 2000000L, 10, true);
+			MappedBusWriterImpl writer = new MappedBusWriterImpl("/tmp/test-bytearray", 2000000L, 10, true);
 			writer.open();
 			
 			byte[] buffer = new byte[10];

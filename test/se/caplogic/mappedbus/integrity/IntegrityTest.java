@@ -7,8 +7,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
-import se.caplogic.mappedbus.MappedBusReader;
-import se.caplogic.mappedbus.MappedBusWriter;
+import se.caplogic.mappedbus.MappedBusReaderImpl;
+import se.caplogic.mappedbus.MappedBusWriterImpl;
 
 /**
  * This class tests that records written by multiple concurrent writers are stored correctly.
@@ -56,7 +56,7 @@ public class IntegrityTest {
 			writers[i].join();
 		}
 		
-		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_LENGTH);
+		MappedBusReaderImpl reader = new MappedBusReaderImpl(FILE_NAME, FILE_SIZE, RECORD_LENGTH);
 		reader.open();
 		byte[] data = new byte[RECORD_LENGTH];
 		while (reader.hasNext()) {
@@ -88,7 +88,7 @@ public class IntegrityTest {
 		
 		public void run() {
 			try {
-				MappedBusWriter writer = new MappedBusWriter(IntegrityTest.FILE_NAME, IntegrityTest.FILE_SIZE, IntegrityTest.RECORD_LENGTH, true);
+				MappedBusWriterImpl writer = new MappedBusWriterImpl(IntegrityTest.FILE_NAME, IntegrityTest.FILE_SIZE, IntegrityTest.RECORD_LENGTH, true);
 				writer.open();
 				
 				byte[] data = new byte[IntegrityTest.RECORD_LENGTH];
