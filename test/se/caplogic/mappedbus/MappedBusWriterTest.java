@@ -30,6 +30,7 @@ public class MappedBusWriterTest {
 	@Test(expected=EOFException.class) public void testWriteEOF() throws Exception {
 		int fileSize = Length.Limit + Length.RecordHeader + RECORD_SIZE - 4;
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, fileSize, RECORD_SIZE, false);
+		writer.open();
 		byte[] data = new byte[RECORD_SIZE];
 		writer.write(data, 0, RECORD_SIZE); // throws EOFException
 	}
@@ -37,6 +38,7 @@ public class MappedBusWriterTest {
 	@Test(expected=EOFException.class) public void testWriteEOF2() throws Exception {
 		int fileSize = Length.Limit + Length.RecordHeader + (2 * RECORD_SIZE) - 4;
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, fileSize, RECORD_SIZE, false);
+		writer.open();
 		byte[] data = new byte[RECORD_SIZE];
 		writer.write(data, 0, RECORD_SIZE);
 		writer.write(data, 0, RECORD_SIZE); // throws EOFException
@@ -44,6 +46,7 @@ public class MappedBusWriterTest {
 	
 	@Test public void testWriteBuffer() throws Exception {
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
+		writer.open();
 		
 		MemoryMappedFile mem = new MemoryMappedFile(FILE_NAME, FILE_SIZE);
 				
@@ -58,6 +61,7 @@ public class MappedBusWriterTest {
 
 	@Test public void testWriteMessage() throws Exception {
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
+		writer.open();
 	
 		MemoryMappedFile mem = new MemoryMappedFile(FILE_NAME, FILE_SIZE);
 				

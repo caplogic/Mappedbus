@@ -30,6 +30,7 @@ public class MappedBusReaderTest {
 	
 	@Test public void testReadEmptyFile() throws Exception {
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
+		reader.open();
 		assertEquals(false, reader.hasNext());
 		reader.next();
 	}
@@ -37,7 +38,9 @@ public class MappedBusReaderTest {
 	@Test(expected=EOFException.class) public void testReadEOF() throws Exception {
 		int fileSize = Length.Limit + Length.RecordHeader + RECORD_SIZE;
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, fileSize, RECORD_SIZE, false);
+		writer.open();
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, fileSize, RECORD_SIZE);
+		reader.open();
 		byte[] data = new byte[RECORD_SIZE];
 		writer.write(data, 0, data.length);
 		assertEquals(true, reader.hasNext());
@@ -49,7 +52,8 @@ public class MappedBusReaderTest {
 	
 	@Test public void testReadBuffer() throws Exception {
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
-	
+		writer.open();
+		
 		byte[] data1 = {0, 1, 2, 3};
 		writer.write(data1, 0, data1.length);
 		
@@ -57,6 +61,7 @@ public class MappedBusReaderTest {
 		writer.write(data2, 0, data2.length);
 
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
+		reader.open();
 		
 		byte[] buffer = new byte[4];
 		assertEquals(true, reader.hasNext());
@@ -78,6 +83,7 @@ public class MappedBusReaderTest {
 	
 	@Test public void testReadMessage() throws Exception {
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
+		writer.open();
 	
 		PriceUpdate priceUpdate = new PriceUpdate(0, 1, 2);
 		writer.write(priceUpdate);
@@ -86,6 +92,7 @@ public class MappedBusReaderTest {
 		writer.write(priceUpdate);
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
+		reader.open();
 
 		assertEquals(true, reader.hasNext());
 		assertEquals(false, reader.hasRecovered());
@@ -111,7 +118,8 @@ public class MappedBusReaderTest {
 	
 	@Test public void testCrashBeforeCommit() throws Exception {
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
-		
+		writer.open();
+
 		PriceUpdate priceUpdate = new PriceUpdate(0, 1, 2);
 		writer.write(priceUpdate);
 		
@@ -122,6 +130,7 @@ public class MappedBusReaderTest {
 		mem.putIntVolatile(Structure.Data, 0);
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
+		reader.open();
 
 		assertEquals(true, reader.hasNext());
 		assertEquals(false, reader.hasRecovered());

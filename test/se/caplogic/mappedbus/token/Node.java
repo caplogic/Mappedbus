@@ -17,12 +17,14 @@ public class Node extends Thread {
 	
 	private MappedBusWriter writer;
 	
-	public Node(int id, int numberOfNodes, int numberOfMessages, String fileName, long fileSize, int recordSize) {
+	public Node(int id, int numberOfNodes, int numberOfMessages, String fileName, long fileSize, int recordSize) throws Exception {
 		this.id = id;
 		this.numberOfNodes = numberOfNodes;
 		this.numberOfMessages = numberOfMessages;
-		reader = new MappedBusReader(fileName, fileSize, recordSize);
 		writer = new MappedBusWriter(fileName, fileSize, recordSize, true);
+		writer.open();
+		reader = new MappedBusReader(fileName, fileSize, recordSize);
+		reader.open();
 	}
 
 	public void run() {

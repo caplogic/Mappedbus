@@ -44,7 +44,7 @@ public class MemoryMappedFile {
 		return (i + 0xfffL) & ~0xfffL;
 	}
  
-	private void mapAndSetOffset() throws Exception{
+	private void mapAndSetOffset() throws Exception {
 		final RandomAccessFile backingFile = new RandomAccessFile(this.loc, "rw");
 		backingFile.setLength(this.size);
 		final FileChannel ch = backingFile.getChannel();

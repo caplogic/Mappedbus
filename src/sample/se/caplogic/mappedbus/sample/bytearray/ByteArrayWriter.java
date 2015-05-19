@@ -13,7 +13,8 @@ public class ByteArrayWriter {
 	public void run(int source) {
 		try {
 			MappedBusWriter writer = new MappedBusWriter("/tmp/test-bytearray", 2000000L, 10, true);
-
+			writer.open();
+			
 			byte[] buffer = new byte[10];
 
 			for (int i = 0; i < 1000; i++) {

@@ -15,7 +15,8 @@ public class MessageWriter {
 			new File(fileName).delete();
 			
 			MappedBusWriter writer = new MappedBusWriter(fileName, 20000000000L, 12, false);
-
+			writer.open();
+			
 			PriceUpdate priceUpdate = new PriceUpdate();
 			
 			for(int i = 0; i < 80000000; i++) {

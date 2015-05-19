@@ -13,6 +13,7 @@ public class ByteArrayReader {
 	public void run() {
 		try {
 			MappedBusReader reader = new MappedBusReader("/tmp/test-bytearray", 2000000L, 10);
+			reader.open();
 
 			byte[] buffer = new byte[10];
 

@@ -29,12 +29,14 @@ import se.caplogic.mappedbus.MappedBusConstants.Rollback;
 public class MappedBusReader {
 
 	private final long TIMEOUT_COUNT = 1000000000;
-	
-	private final MemoryMappedFile mem;
 
+	private final String fileName;
+	
 	private final long fileSize;
 	
 	private final int recordSize;
+	
+	private MemoryMappedFile mem;
 
 	private int timeout = 2000;
 
@@ -53,14 +55,19 @@ public class MappedBusReader {
 	 * @param recordSize the maximum size of a record (excluding status flags and meta data)
 	 */
 	public MappedBusReader(String fileName, long fileSize, int recordSize) {
+		this.fileName = fileName;
 		this.fileSize = fileSize;
-		this.recordSize = recordSize;	
-		try {
-			mem = new MemoryMappedFile(fileName, fileSize);
-			initialLimit = mem.getLongVolatile(Structure.Limit);
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		}
+		this.recordSize = recordSize;
+	}
+	
+	/**
+	 * Opens the reader.
+	 *
+	 * @throws Exception if there was a problem opening the file
+	 */
+	public void open() throws Exception {
+		mem = new MemoryMappedFile(fileName, fileSize);
+		initialLimit = mem.getLongVolatile(Structure.Limit);
 	}
 	
 	/**

@@ -12,6 +12,7 @@ public class MessageReader {
 	public void run(String fileName) {
 		try {
 			MappedBusReader reader = new MappedBusReader(fileName, 20000000000L, 12);
+			reader.open();
 
 			PriceUpdate priceUpdate = new PriceUpdate();
 

@@ -57,6 +57,7 @@ public class IntegrityTest {
 		}
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_LENGTH);
+		reader.open();
 		byte[] data = new byte[RECORD_LENGTH];
 		while (reader.hasNext()) {
 			if (!reader.next()) {
@@ -88,7 +89,8 @@ public class IntegrityTest {
 		public void run() {
 			try {
 				MappedBusWriter writer = new MappedBusWriter(IntegrityTest.FILE_NAME, IntegrityTest.FILE_SIZE, IntegrityTest.RECORD_LENGTH, true);
-
+				writer.open();
+				
 				byte[] data = new byte[IntegrityTest.RECORD_LENGTH];
 				Arrays.fill(data, (byte)id);
 				

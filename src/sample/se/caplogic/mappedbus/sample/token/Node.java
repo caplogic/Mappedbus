@@ -9,16 +9,18 @@ public class Node {
 	
 	private MappedBusWriter writer;
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		Node reader = new Node();
 		reader.init();
 		reader.run(Integer.valueOf(args[0]), Integer.valueOf(args[1]));	
 	}
 
-	public void init() {
-		reader = new MappedBusReader("/tmp/token-test", 2000000L, 8);
-
+	public void init() throws Exception {
 		writer = new MappedBusWriter("/tmp/token-test", 2000000L, 8, true);
+		writer.open();
+		
+		reader = new MappedBusReader("/tmp/token-test", 2000000L, 8);
+		reader.open();
 	}
 
 	public void run(int id, int numberOfNodes) {

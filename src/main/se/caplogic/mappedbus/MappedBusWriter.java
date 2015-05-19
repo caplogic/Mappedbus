@@ -27,11 +27,15 @@ import se.caplogic.mappedbus.MappedBusConstants.Length;
  */
 public class MappedBusWriter {
 
-	private final MemoryMappedFile mem;
+	private MemoryMappedFile mem;
+	
+	private final String fileName;
 	
 	private final long fileSize;
 	
 	private final int recordSize;
+	
+	private final boolean append;
 
 	/**
 	 * Creates a new writer.
@@ -42,21 +46,23 @@ public class MappedBusWriter {
 	 * @param append whether to append to the file (will create a new file if false)
 	 */
 	public MappedBusWriter(String fileName, long fileSize, int recordSize, boolean append) {
+		this.fileName = fileName;
 		this.fileSize = fileSize;
 		this.recordSize = recordSize;
+		this.append = append;
+	}
+	
+	/**
+	 * Opens the writer.
+	 *
+	 * @throws Exception if there was an error opening the file
+	 */
+	public void open() throws Exception {
 		if (!append) {
 			new File(fileName).delete();
 		}
-		try {
-			mem = new MemoryMappedFile(fileName, fileSize);
-		} catch(Exception e) {
-			throw new RuntimeException(e);
-		}
+		mem = new MemoryMappedFile(fileName, fileSize);
 		if (append) {
-			/*long limit = mem.getLongVolatile(Structure.Limit);
-			if (limit == 0) {
-				mem.putLongVolatile(Structure.Limit, Structure.Data);
-			}*/
 			mem.compareAndSwapLong(Structure.Limit, 0, Structure.Data);
 		} else {
 			mem.putLongVolatile(Structure.Limit, Structure.Data);

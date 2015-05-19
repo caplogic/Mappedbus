@@ -30,13 +30,13 @@ public class TokenTest {
 	
 	public static final int NUM_RUNS = 100;
 
-	@Test public void test() {
+	@Test public void test() throws Exception {
 		for(int i=0; i < NUM_RUNS; i++) {
 			runTest();
 		}
 	}
 	
-	private void runTest() {
+	private void runTest() throws Exception {
 		new File(FILE_NAME).delete();
 
 		Node[] nodes = new Node[NUM_NODES];

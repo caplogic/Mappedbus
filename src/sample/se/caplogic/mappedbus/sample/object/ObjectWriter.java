@@ -11,7 +11,8 @@ public class ObjectWriter {
 	public void run(int source) {
 		try {
 			MappedBusWriter writer = new MappedBusWriter("/tmp/test-message", 2000000L, 12, true);
-
+			writer.open();
+			
 			PriceUpdate priceUpdate = new PriceUpdate();
 
 			for (int i = 0; i < 1000; i++) {
