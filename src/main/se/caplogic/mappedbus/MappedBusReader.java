@@ -16,6 +16,7 @@
 package se.caplogic.mappedbus;
 
 import java.io.EOFException;
+import java.io.IOException;
 
 import se.caplogic.mappedbus.MappedBusConstants.Commit;
 import se.caplogic.mappedbus.MappedBusConstants.Structure;
@@ -65,8 +66,12 @@ public class MappedBusReader {
 	 *
 	 * @throws Exception if there was a problem opening the file
 	 */
-	public void open() throws Exception {
-		mem = new MemoryMappedFile(fileName, fileSize);
+	public void open() throws IOException {
+		try {
+			mem = new MemoryMappedFile(fileName, fileSize);
+		} catch(Exception e) {
+			throw new IOException("Unable to open the file: " + fileName, e);
+		}
 		initialLimit = mem.getLongVolatile(Structure.Limit);
 	}
 	
@@ -186,9 +191,13 @@ public class MappedBusReader {
 	/**
 	 * Closes the reader.
 	 *
-	 * @throws Exception if there was an error closing the file
+	 * @throws IOException if there was an error closing the file
 	 */
-	public void close() throws Exception {
-		mem.unmap();
+	public void close() throws IOException {
+		try {
+			mem.unmap();
+		} catch(Exception e) {
+			throw new IOException("Unable to close the file", e);
+		}
 	}
 }

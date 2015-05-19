@@ -16,6 +16,7 @@
 package se.caplogic.mappedbus;
 import java.io.EOFException;
 import java.io.File;
+import java.io.IOException;
 
 import se.caplogic.mappedbus.MappedBusConstants.Commit;
 import se.caplogic.mappedbus.MappedBusConstants.Structure;
@@ -55,13 +56,17 @@ public class MappedBusWriter {
 	/**
 	 * Opens the writer.
 	 *
-	 * @throws Exception if there was an error opening the file
+	 * @throws IOException if there was an error opening the file
 	 */
-	public void open() throws Exception {
+	public void open() throws IOException {
 		if (!append) {
 			new File(fileName).delete();
 		}
-		mem = new MemoryMappedFile(fileName, fileSize);
+		try {
+			mem = new MemoryMappedFile(fileName, fileSize);
+		} catch(Exception e) {
+			throw new IOException("Unable to open the file: " + fileName, e);
+		}
 		if (append) {
 			mem.compareAndSwapLong(Structure.Limit, 0, Structure.Data);
 		} else {
@@ -123,9 +128,13 @@ public class MappedBusWriter {
 	/**
 	 * Closes the writer.
 	 *
-	 * @throws Exception if there was an error closing the file
+	 * @throws IOException if there was an error closing the file
 	 */
-	public void close() throws Exception {
-		mem.unmap();
+	public void close() throws IOException {
+		try {
+			mem.unmap();
+		} catch(Exception e) {
+			throw new IOException("Unable to close the file", e);
+		}
 	}
 }
