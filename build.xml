@@ -11,7 +11,7 @@
   <property name="src" location="src/main"/>
   <property name="sample" location="src/sample"/>
   <property name="perf" location="src/perf"/>
-  <property name="scramble" location="src/scramble"/>
+  <property name="integrity" location="src/integrity"/>
   <property name="test" location="test"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
@@ -36,7 +36,7 @@
   <target name="compile" depends="init" description="compile the source " >
     <!-- Compile the java code from ${src} into ${build} -->
     <javac debug="true" 
-	   srcdir="${src}:${sample}:${perf}:${scramble}" 
+	   srcdir="${src}:${sample}:${perf}:${integrity}" 
 	   destdir="${build}"
 	   source="1.7"
 	   target="1.7"
