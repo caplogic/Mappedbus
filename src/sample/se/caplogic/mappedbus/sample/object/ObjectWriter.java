@@ -1,5 +1,5 @@
 package se.caplogic.mappedbus.sample.object;
-import se.caplogic.mappedbus.MappedBusWriterImpl;
+import se.caplogic.mappedbus.MappedBusWriter;
 
 public class ObjectWriter {
 
@@ -10,7 +10,7 @@ public class ObjectWriter {
 
 	public void run(int source) {
 		try {
-			MappedBusWriterImpl writer = new MappedBusWriterImpl("/tmp/test-message", 2000000L, 12, true);
+			MappedBusWriter writer = new MappedBusWriter("/tmp/test-message", 2000000L, 12, true);
 			writer.open();
 			
 			PriceUpdate priceUpdate = new PriceUpdate();

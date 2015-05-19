@@ -1,7 +1,7 @@
 package se.caplogic.mappedbus.sample.bytearray;
 import java.util.Arrays;
 
-import se.caplogic.mappedbus.MappedBusReaderImpl;
+import se.caplogic.mappedbus.MappedBusReader;
 
 public class ByteArrayReader {
 
@@ -12,7 +12,7 @@ public class ByteArrayReader {
 
 	public void run() {
 		try {
-			MappedBusReaderImpl reader = new MappedBusReaderImpl("/tmp/test-bytearray", 2000000L, 10);
+			MappedBusReader reader = new MappedBusReader("/tmp/test-bytearray", 2000000L, 10);
 			reader.open();
 
 			byte[] buffer = new byte[10];

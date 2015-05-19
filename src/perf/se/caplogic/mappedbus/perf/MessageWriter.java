@@ -1,7 +1,7 @@
 package se.caplogic.mappedbus.perf;
 import java.io.File;
 
-import se.caplogic.mappedbus.MappedBusWriterImpl;
+import se.caplogic.mappedbus.MappedBusWriter;
 
 public class MessageWriter {
 
@@ -14,7 +14,7 @@ public class MessageWriter {
 		try {
 			new File(fileName).delete();
 			
-			MappedBusWriterImpl writer = new MappedBusWriterImpl(fileName, 20000000000L, 12, false);
+			MappedBusWriter writer = new MappedBusWriter(fileName, 20000000000L, 12, false);
 			writer.open();
 			
 			PriceUpdate priceUpdate = new PriceUpdate();

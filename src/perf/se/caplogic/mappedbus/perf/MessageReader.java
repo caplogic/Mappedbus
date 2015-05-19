@@ -1,5 +1,5 @@
 package se.caplogic.mappedbus.perf;
-import se.caplogic.mappedbus.MappedBusReaderImpl;
+import se.caplogic.mappedbus.MappedBusReader;
 import se.caplogic.mappedbus.Message;
 
 public class MessageReader {
@@ -11,7 +11,7 @@ public class MessageReader {
 
 	public void run(String fileName) {
 		try {
-			MappedBusReaderImpl reader = new MappedBusReaderImpl(fileName, 20000000000L, 12);
+			MappedBusReader reader = new MappedBusReader(fileName, 20000000000L, 12);
 			reader.open();
 
 			PriceUpdate priceUpdate = new PriceUpdate();
