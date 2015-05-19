@@ -53,10 +53,11 @@ public class MappedBusWriter {
 			throw new RuntimeException(e);
 		}
 		if (append) {
-			long limit = mem.getLongVolatile(Structure.Limit);
+			/*long limit = mem.getLongVolatile(Structure.Limit);
 			if (limit == 0) {
 				mem.putLongVolatile(Structure.Limit, Structure.Data);
-			}
+			}*/
+			mem.compareAndSwapLong(Structure.Limit, 0, Structure.Data);
 		} else {
 			mem.putLongVolatile(Structure.Limit, Structure.Data);
 		}
@@ -111,5 +112,9 @@ public class MappedBusWriter {
 
 	private void commit(long commitPos) {
 		mem.putIntVolatile(commitPos, Commit.Set);
+	}
+	
+	public void close() throws Exception {
+		mem.unmap();
 	}
 }

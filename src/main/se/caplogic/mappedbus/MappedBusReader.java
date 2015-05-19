@@ -175,4 +175,8 @@ public class MappedBusReader {
 	public boolean hasRecovered() {
 		return limit >= initialLimit;
 	}
+	
+	public void close() throws Exception {
+		mem.unmap();
+	}
 }

@@ -58,6 +58,10 @@ public class MemoryMappedFile {
 		this.size = roundTo4096(len);
 		mapAndSetOffset();
 	}
+	
+	public void unmap() throws Exception {
+		unmmap.invoke(null, addr, this.size);
+	}
  
 	public int getInt(long pos){
 		return unsafe.getInt(pos + addr);

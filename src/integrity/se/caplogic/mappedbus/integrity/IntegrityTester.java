@@ -69,7 +69,7 @@ class Writer extends Thread {
 	
 	public void run() {
 		try {
-			MappedBusWriter writer = new MappedBusWriter(IntegrityTester.FILE_NAME, IntegrityTester.FILE_SIZE, IntegrityTester.RECORD_LENGTH, false);
+			MappedBusWriter writer = new MappedBusWriter(IntegrityTester.FILE_NAME, IntegrityTester.FILE_SIZE, IntegrityTester.RECORD_LENGTH, true);
 
 			byte[] data = new byte[IntegrityTester.RECORD_LENGTH];
 			Arrays.fill(data, (byte)id);
