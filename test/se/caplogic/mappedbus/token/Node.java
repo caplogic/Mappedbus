@@ -62,6 +62,11 @@ public class Node extends Thread {
 		}
 	}
 	
+	public void close() throws Exception {
+		writer.close();
+		reader.close();
+	}
+	
 	public int getMessagesReceived() {
 		return messagesReceived;
 	}

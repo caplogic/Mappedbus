@@ -19,8 +19,16 @@ public class TokenTest {
 	public static final int NUM_NODES = 3;
 	
 	public static final int WAIT_TIME = 10000;
+	
+	public static final int NUM_RUNS = 100;
 
 	@Test public void test() {
+		for(int i=0; i < NUM_RUNS; i++) {
+			runTest();
+		}
+	}
+	
+	private void runTest() {
 		new File(FILE_NAME).delete();
 
 		Node[] nodes = new Node[NUM_NODES];
@@ -43,7 +51,17 @@ public class TokenTest {
 
 		for (int i = 0; i < nodes.length; i++) {
 			assertEquals(NUM_MESSAGES, nodes[i].getMessagesReceived());
-		}		
+		}
+		
+		try {
+			for (int i = 0; i < nodes.length; i++) {
+				nodes[i].close();
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		new File(FILE_NAME).delete();
 	}
 
 }
