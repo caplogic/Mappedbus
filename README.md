@@ -26,11 +26,11 @@ Download mappedbus.jar from the release tab (or clone the project and build it f
 Setup a reader and a writer:
 ```java
 // Setup a reader
-MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
+MappedBusReader reader = new MappedBusReaderImpl("/tmp/test", 100000L, 32);
 reader.open();
 
 // Setup a writer
-MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
+MappedBusWriter writer = new MappedBusWriterImpl("/tmp/test", 100000L, 32, true);
 writer.open();
 ```
 
