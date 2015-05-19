@@ -3,11 +3,13 @@ package se.caplogic.mappedbus;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+import java.io.EOFException;
 import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import se.caplogic.mappedbus.MappedBusConstants.Length;
 import se.caplogic.mappedbus.MappedBusConstants.Structure;
 
 public class MappedBusReaderTest {
@@ -20,6 +22,25 @@ public class MappedBusReaderTest {
 	
 	@Before public void setup() {
 		new File(FILE_NAME).delete();
+	}
+	
+	@Test public void testReadEmptyFile() throws Exception {
+		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
+		assertEquals(false, reader.hasNext());
+		reader.next();
+	}
+	
+	@Test(expected=EOFException.class) public void testReadEOF() throws Exception {
+		int fileSize = Length.Limit + Length.RecordHeader + RECORD_SIZE;
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, fileSize, RECORD_SIZE, false);
+		MappedBusReader reader = new MappedBusReader(FILE_NAME, fileSize, RECORD_SIZE);
+		byte[] data = new byte[RECORD_SIZE];
+		writer.write(data, 0, data.length);
+		assertEquals(true, reader.hasNext());
+		assertEquals(true, reader.next());
+		assertEquals(true, reader.hasRecovered());
+		assertEquals(RECORD_SIZE, reader.readBuffer(data, 0));		
+		reader.hasNext(); // throws EOFException
 	}
 	
 	@Test public void testReadBuffer() throws Exception {

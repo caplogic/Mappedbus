@@ -2,6 +2,7 @@ package se.caplogic.mappedbus;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.EOFException;
 import java.io.File;
 
 import org.junit.Before;
@@ -20,6 +21,21 @@ public class MappedBusWriterTest {
 	
 	@Before public void setup() {
 		new File(FILE_NAME).delete();
+	}
+	
+	@Test(expected=EOFException.class) public void testWriteEOF() throws Exception {
+		int fileSize = Length.Limit + Length.RecordHeader + RECORD_SIZE - 4;
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, fileSize, RECORD_SIZE, false);
+		byte[] data = new byte[RECORD_SIZE];
+		writer.write(data, 0, RECORD_SIZE); // throws EOFException
+	}
+	
+	@Test(expected=EOFException.class) public void testWriteEOF2() throws Exception {
+		int fileSize = Length.Limit + Length.RecordHeader + (2 * RECORD_SIZE) - 4;
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, fileSize, RECORD_SIZE, false);
+		byte[] data = new byte[RECORD_SIZE];
+		writer.write(data, 0, RECORD_SIZE);
+		writer.write(data, 0, RECORD_SIZE); // throws EOFException
 	}
 	
 	@Test public void testWriteBuffer() throws Exception {
