@@ -1,18 +1,18 @@
 /* 
-* Copyright 2015 Caplogic AB. 
-* 
-* Licensed under the Apache License, Version 2.0 (the "License"); 
-* you may not use this file except in compliance with the License. 
-* You may obtain a copy of the License at 
-* 
-* http://www.apache.org/licenses/LICENSE-2.0 
-* 
-* Unless required by applicable law or agreed to in writing, software 
-* distributed under the License is distributed on an "AS IS" BASIS, 
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-* See the License for the specific language governing permissions and 
-* limitations under the License. 
-*/
+ * Copyright 2015 Caplogic AB. 
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0 
+ * 
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License. 
+ */
 package se.caplogic.mappedbus;
 
 import java.io.EOFException;
@@ -32,11 +32,11 @@ public class MappedBusReader {
 	private final long TIMEOUT_COUNT = 1000000000;
 
 	private final String fileName;
-	
+
 	private final long fileSize;
-	
+
 	private final int recordSize;
-	
+
 	private MemoryMappedFile mem;
 
 	private int timeout = 2000;
@@ -44,7 +44,7 @@ public class MappedBusReader {
 	private long limit = Structure.Data;
 
 	private long initialLimit;
-	
+
 	private boolean typeRead;
 
 
@@ -60,7 +60,7 @@ public class MappedBusReader {
 		this.fileSize = fileSize;
 		this.recordSize = recordSize;
 	}
-	
+
 	/**
 	 * Opens the reader.
 	 *
@@ -74,7 +74,7 @@ public class MappedBusReader {
 		}
 		initialLimit = mem.getLongVolatile(Structure.Limit);
 	}
-	
+
 	/**
 	 * Sets the time for a reader to wait for a record to be committed.
 	 *
@@ -86,7 +86,7 @@ public class MappedBusReader {
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
-	
+
 	/**
 	 * Indicates whether there's a new record available.
 	 *
@@ -98,7 +98,7 @@ public class MappedBusReader {
 		}
 		return mem.getLongVolatile(Structure.Limit) > limit;
 	}
-	
+
 	/**
 	 * Reads the header of the next record.
 	 * 
@@ -178,7 +178,7 @@ public class MappedBusReader {
 		limit += recordSize;
 		return length;
 	}
-	
+
 	/**
 	 * Indicates whether all records available when the reader was created have been read.
 	 *
@@ -187,7 +187,7 @@ public class MappedBusReader {
 	public boolean hasRecovered() {
 		return limit >= initialLimit;
 	}
-	
+
 	/**
 	 * Closes the reader.
 	 *
