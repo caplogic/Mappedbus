@@ -6,6 +6,14 @@ import java.io.File;
 
 import org.junit.Test;
 
+/**
+ * This class tests that no messages are lost by passing a token around between a number of nodes.
+ *
+ * At the end of the run there's a test which asserts that each node received the expected number of messages. 
+ *
+ * For more exhaustive testing NUM_RUNS can be increased.
+ * 
+ */
 public class TokenTest {
 
 	public static final String FILE_NAME = "/tmp/token-test";

@@ -11,6 +11,10 @@ import org.junit.Test;
 import se.caplogic.mappedbus.MappedBusConstants.Structure;
 import se.caplogic.mappedbus.MappedBusConstants.Length;
 
+/**
+ * This class tests MappedBusWriter.
+ *
+ */
 public class MappedBusWriterTest {
 	
 	public static final String FILE_NAME = "/tmp/MappedBusWriterTest";

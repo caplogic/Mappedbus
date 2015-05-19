@@ -10,6 +10,18 @@ import static org.junit.Assert.fail;
 import se.caplogic.mappedbus.MappedBusReader;
 import se.caplogic.mappedbus.MappedBusWriter;
 
+/**
+ * This class tests that records written by multiple concurrent writers are stored correctly.
+ * 
+ * A number of writers are started that each run in their own thread. Each writer add records with
+ * data specific for that thread: thread 0 writes records with only zeros, thread 1 writes records
+ * only with ones, and so on.
+ * 
+ * Finally a reader goes through the file to check that the records only contain zeros, ones, etc.
+ * 
+ * For more exhaustive testing NUM_RUNS can be increased.
+ *
+ */
 public class IntegrityTest {
 	
 	public static final String FILE_NAME = "/home/mikael/tmp/integrity-test";
@@ -34,26 +46,26 @@ public class IntegrityTest {
 		new File(FILE_NAME).delete();
 
 		Writer[] writers = new Writer[NUM_WRITERS];
-		for(int i = 0; i < writers.length; i++) {
+		for (int i = 0; i < writers.length; i++) {
 			writers[i] = new Writer(i);
 		}
-		for(int i = 0; i < writers.length; i++) {
+		for (int i = 0; i < writers.length; i++) {
 			writers[i].start();
 		}
-		for(int i = 0; i < writers.length; i++) {
+		for (int i = 0; i < writers.length; i++) {
 			writers[i].join();
 		}
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_LENGTH);
 		byte[] data = new byte[RECORD_LENGTH];
-		while(reader.hasNext()) {
-			if(!reader.next()) {
+		while (reader.hasNext()) {
+			if (!reader.next()) {
 				continue; // the record was abandoned, skip it
 			}
 			int length = reader.readBuffer(data, 0);
 			Assert.assertEquals(RECORD_LENGTH, length);
-			for(int i=0; i < data.length; i++) {
-				if(data[0] != data[i]) {
+			for (int i=0; i < data.length; i++) {
+				if (data[0] != data[i]) {
 					fail();
 					return;
 				}
@@ -80,7 +92,7 @@ public class IntegrityTest {
 				byte[] data = new byte[IntegrityTest.RECORD_LENGTH];
 				Arrays.fill(data, (byte)id);
 				
-				for(int i=0; i < IntegrityTest.NUM_RECORDS; i++) {
+				for (int i=0; i < IntegrityTest.NUM_RECORDS; i++) {
 					writer.write(data, 0, data.length);
 				}
 				writer.close();

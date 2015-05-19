@@ -27,26 +27,26 @@ public class IntegrityTester {
 		new File(FILE_NAME).delete();
 
 		Writer[] writers = new Writer[NUM_WRITERS];
-		for(int i = 0; i < writers.length; i++) {
+		for (int i = 0; i < writers.length; i++) {
 			writers[i] = new Writer(i);
 		}
-		for(int i = 0; i < writers.length; i++) {
+		for (int i = 0; i < writers.length; i++) {
 			writers[i].start();
 		}
-		for(int i = 0; i < writers.length; i++) {
+		for (int i = 0; i < writers.length; i++) {
 			writers[i].join();
 		}
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_LENGTH);
 		byte[] data = new byte[RECORD_LENGTH];
-		while(reader.hasNext()) {
+		while (reader.hasNext()) {
 			if(!reader.next()) {
 				continue; // the record was abandoned, skip it
 			}
 			reader.readBuffer(data, 0);
-			for(int i=0; i < data.length; i++) {
+			for (int i=0; i < data.length; i++) {
 				System.out.println("Read: " + Arrays.toString(data));
-				if(data[0] != data[i]) {
+				if (data[0] != data[i]) {
 					System.out.println("---");
 					System.out.println("TEST FAILED!");
 					return;
@@ -74,7 +74,7 @@ class Writer extends Thread {
 			byte[] data = new byte[IntegrityTester.RECORD_LENGTH];
 			Arrays.fill(data, (byte)id);
 			
-			for(int i=0; i < IntegrityTester.NUM_RECORDS; i++) {
+			for (int i=0; i < IntegrityTester.NUM_RECORDS; i++) {
 				writer.write(data, 0, data.length);
 			}
 		} catch(Exception e) {

@@ -114,6 +114,11 @@ public class MappedBusWriter {
 		mem.putIntVolatile(commitPos, Commit.Set);
 	}
 	
+	/**
+	 * Closes the writer.
+	 *
+	 * @throws Exception if there was an error closing the file
+	 */
 	public void close() throws Exception {
 		mem.unmap();
 	}

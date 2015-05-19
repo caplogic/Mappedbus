@@ -176,6 +176,11 @@ public class MappedBusReader {
 		return limit >= initialLimit;
 	}
 	
+	/**
+	 * Closes the reader.
+	 *
+	 * @throws Exception if there was an error closing the file
+	 */
 	public void close() throws Exception {
 		mem.unmap();
 	}
