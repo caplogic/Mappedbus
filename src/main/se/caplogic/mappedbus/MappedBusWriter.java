@@ -14,6 +14,7 @@
 * limitations under the License. 
 */
 package se.caplogic.mappedbus;
+import java.io.EOFException;
 import java.io.File;
 
 import se.caplogic.mappedbus.MappedBusConstants.Commit;
@@ -66,7 +67,7 @@ public class MappedBusWriter {
 	 *
 	 * @param message the message object to write
 	 */
-	public void write(Message message) {
+	public void write(Message message) throws EOFException {
 		long limit = allocate();
 		long commitPos = limit;
 		limit += Length.StatusFlags;
@@ -83,7 +84,7 @@ public class MappedBusWriter {
 	 * @param offset the offset in the buffer of the first byte to write
 	 * @param length the length of the data
 	 */
-	public void write(byte[] src, int offset, int length) {
+	public void write(byte[] src, int offset, int length) throws EOFException {
 		long limit = allocate();
 		long commitPos = limit;
 		limit += Length.StatusFlags;
@@ -93,13 +94,13 @@ public class MappedBusWriter {
 		commit(commitPos);		
 	}
 	
-	private long allocate() {
+	private long allocate() throws EOFException {
 		int entrySize = Length.RecordHeader + recordSize;
 		long limit;
 		while (true) {
 			limit = mem.getLongVolatile(Structure.Limit);
 			if (limit + entrySize > fileSize) {
-				throw new RuntimeException("End of file was reached");
+				throw new EOFException("End of file was reached");
 			}
 			if (mem.compareAndSwapLong(Structure.Limit, limit, limit + entrySize)) {
 				break;

@@ -51,7 +51,7 @@ public class MappedBusReaderTest {
 		assertEquals(true, reader.hasRecovered());
 	}
 	
-	@Test public void testReadMessage() {
+	@Test public void testReadMessage() throws Exception {
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
 	
 		PriceUpdate priceUpdate = new PriceUpdate(0, 1, 2);

@@ -15,6 +15,8 @@
 */
 package se.caplogic.mappedbus;
 
+import java.io.EOFException;
+
 import se.caplogic.mappedbus.MappedBusConstants.Commit;
 import se.caplogic.mappedbus.MappedBusConstants.Structure;
 import se.caplogic.mappedbus.MappedBusConstants.Length;
@@ -78,9 +80,9 @@ public class MappedBusReader {
 	 *
 	 * @return true, if there's a new record available, otherwise false
 	 */
-	public boolean hasNext() {
+	public boolean hasNext() throws EOFException {
 		if (limit >= fileSize) {
-			throw new RuntimeException("End of file was reached");
+			throw new EOFException("End of file was reached");
 		}
 		return mem.getLongVolatile(Structure.Limit) > limit;
 	}
