@@ -34,11 +34,7 @@ public class Node {
 			}
 
 			while (true) {
-				if (reader.hasNext()) {
-					if(!reader.next()) {
-						continue; // the record was abandoned, skip it
-					}
-					
+				if (reader.next()) {
 					System.out.println("Read: " + reader.readMessage(token));
 
 					if(token.getTo() == id) {

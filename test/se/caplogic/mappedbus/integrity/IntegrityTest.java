@@ -61,10 +61,7 @@ public class IntegrityTest {
 		int records = 0;
 		byte[] data = new byte[RECORD_LENGTH];
 		while (true) {
-			if(reader.hasNext()) {
-				if (!reader.next()) {
-					fail(); // message was rolled back, this should not happen
-				}
+			if(reader.next()) {
 				int length = reader.readBuffer(data, 0);
 				Assert.assertEquals(data[0], length);
 				for (int i=0; i < length; i++) {

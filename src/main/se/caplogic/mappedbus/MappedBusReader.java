@@ -29,7 +29,7 @@ import se.caplogic.mappedbus.MappedBusConstants.Rollback;
  */
 public class MappedBusReader {
 
-	private final long TIMEOUT_COUNT = 1000000000;
+	public static final long MAX_TIMEOUT_COUNT = 100;
 
 	private final String fileName;
 
@@ -47,6 +47,9 @@ public class MappedBusReader {
 
 	private boolean typeRead;
 
+	protected long timeoutCounter;
+
+	protected long timerStart;
 
 	/**
 	 * Creates a new reader.
@@ -88,52 +91,48 @@ public class MappedBusReader {
 	}
 
 	/**
-	 * Indicates whether there's a new record available.
+	 * Steps forward to the next record if there's one available.
+	 * 
+	 * The method has a timeout for how long it will wait for the commit field to be set. When the timeout is
+	 * reached it will set the roll back field and skip over the record. 
 	 *
 	 * @return true, if there's a new record available, otherwise false
 	 */
-	public boolean hasNext() throws EOFException {
+	public boolean next() throws EOFException {
 		if (limit >= fileSize) {
 			throw new EOFException("End of file was reached");
 		}
-		return mem.getLongVolatile(Structure.Limit) > limit;
-	}
-
-	/**
-	 * Reads the header of the next record.
-	 * 
-	 * This method waits (busy-wait) until either the rollback, or the commit field is set.
-	 * 
-	 * The method has a timeout for how long it will wait for the commit field to be set. When the timeout is
-	 * reached it will set the rollback field and skip over the record. 
-	 *
-	 * @return true, if the record is committed and can be read, otherwise false and if so it should be skipped
-	 */
-	public boolean next() {
-		long start = 0;
-		while (true) {
-			for (long i=0; i < TIMEOUT_COUNT; i++) {
-				int commit = mem.getIntVolatile(limit);
-				int rollback = mem.getIntVolatile(limit + Length.Commit);
-				if (rollback == Rollback.Set) {
-					limit += Length.RecordHeader + recordSize;
-					return false;
-				}
-				if (commit == Commit.Set) {
-					limit += Length.StatusFlags;
-					return true;
-				}
-			}
-			if (start == 0) {
-				start = System.currentTimeMillis();
+		if (mem.getLongVolatile(Structure.Limit) <= limit) {
+			return false;
+		}
+		int commit = mem.getIntVolatile(limit);
+		int rollback = mem.getIntVolatile(limit + Length.Commit);
+		if (rollback == Rollback.Set) {
+			limit += Length.RecordHeader + recordSize;
+			timeoutCounter = 0;
+			timerStart = 0;
+			return false;
+		}
+		if (commit == Commit.Set) {
+			timeoutCounter = 0;
+			timerStart = 0;
+			return true;
+		}
+		timeoutCounter++;
+		if (timeoutCounter >= MAX_TIMEOUT_COUNT) {
+			if(timerStart == 0) {
+				timerStart = System.currentTimeMillis();
 			} else {
-				if (System.currentTimeMillis() - start > timeout) {
+				if (System.currentTimeMillis() - timerStart >= timeout) {
 					mem.putIntVolatile(limit + Length.Commit, Rollback.Set);
 					limit += Length.RecordHeader + recordSize;
+					timeoutCounter = 0;
+					timerStart = 0;
 					return false;
 				}
 			}
 		}
+		return false;
 	}
 
 	/**
@@ -143,6 +142,7 @@ public class MappedBusReader {
 	 */
 	public int readType() {
 		typeRead = true;
+		limit += Length.StatusFlags;
 		int type = mem.getInt(limit);
 		limit += Length.Metadata;
 		return type;
@@ -172,6 +172,7 @@ public class MappedBusReader {
 	 * @return the length of the record that was read
 	 */
 	public int readBuffer(byte[] dst, int offset) {
+		limit += Length.StatusFlags;
 		int length = mem.getInt(limit);
 		limit += Length.Metadata;
 		mem.getBytes(limit, dst, offset, length);

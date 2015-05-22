@@ -39,11 +39,7 @@ public class Node extends Thread {
 			}
 
 			while (true) {
-				if (reader.hasNext()) {
-					if(!reader.next()) {
-						continue; // the record was abandoned, skip it
-					}
-					
+				if (reader.next()) {				
 					//System.out.println(id + " Read: " + reader.readMessage(token));
 					reader.readMessage(token);
 					messagesReceived++;

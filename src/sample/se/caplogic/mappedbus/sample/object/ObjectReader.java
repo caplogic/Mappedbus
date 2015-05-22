@@ -19,12 +19,8 @@ public class ObjectReader {
 			Message message = null;
 
 			while (true) {
-				if (reader.hasNext()) {
+				if (reader.next()) {
 					boolean recovered = reader.hasRecovered();
-					boolean status = reader.next();
-					if (!status) {
-						continue; // the record was abandoned, skip it
-					}
 					int type = reader.readType();
 					switch (type) {
 					case PriceUpdate.TYPE:

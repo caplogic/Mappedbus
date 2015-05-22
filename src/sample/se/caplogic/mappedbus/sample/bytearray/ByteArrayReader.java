@@ -18,10 +18,7 @@ public class ByteArrayReader {
 			byte[] buffer = new byte[10];
 
 			while (true) {
-				if (reader.hasNext()) {
-					if (!reader.next()) {
-						continue; // the record was abandoned, skip it
-					}
+				if (reader.next()) {
 					int length = reader.readBuffer(buffer, 0);
 					System.out.println("Read: length = " + length + ", data= "+ Arrays.toString(buffer));
 				}

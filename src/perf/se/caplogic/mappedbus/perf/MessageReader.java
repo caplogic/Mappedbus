@@ -21,19 +21,17 @@ public class MessageReader {
 			long start = System.nanoTime();
 			for(int i = 0; i < 80000000; i++) {
 				while(true) {
-					if (reader.hasNext()) {
-						if(reader.next()) {
-							int type = reader.readType();
-							switch (type) {
-							case PriceUpdate.TYPE:
-								message = priceUpdate;
-								break;
-							default:
-								throw new RuntimeException("Unknown type: " + type);
-							}
-							reader.readMessage(message);
+					if (reader.next()) {
+						int type = reader.readType();
+						switch (type) {
+						case PriceUpdate.TYPE:
+							message = priceUpdate;
 							break;
+						default:
+							throw new RuntimeException("Unknown type: " + type);
 						}
+						reader.readMessage(message);
+						break;
 					}
 				}
 			}

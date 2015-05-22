@@ -2,6 +2,7 @@ package se.caplogic.mappedbus;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.EOFException;
 import java.io.File;
@@ -9,7 +10,9 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.caplogic.mappedbus.MappedBusConstants.Commit;
 import se.caplogic.mappedbus.MappedBusConstants.Length;
+import se.caplogic.mappedbus.MappedBusConstants.Rollback;
 import se.caplogic.mappedbus.MappedBusConstants.Structure;
 
 /**
@@ -31,8 +34,7 @@ public class MappedBusReaderTest {
 	@Test public void testReadEmptyFile() throws Exception {
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 		reader.open();
-		assertEquals(false, reader.hasNext());
-		reader.next();
+		assertEquals(false, reader.next());
 	}
 	
 	@Test(expected=EOFException.class) public void testReadEOF() throws Exception {
@@ -43,11 +45,10 @@ public class MappedBusReaderTest {
 		reader.open();
 		byte[] data = new byte[RECORD_SIZE];
 		writer.write(data, 0, data.length);
-		assertEquals(true, reader.hasNext());
 		assertEquals(true, reader.next());
 		assertEquals(true, reader.hasRecovered());
 		assertEquals(RECORD_SIZE, reader.readBuffer(data, 0));		
-		reader.hasNext(); // throws EOFException
+		reader.next(); // throws EOFException
 	}
 	
 	@Test public void testReadBuffer() throws Exception {
@@ -64,20 +65,18 @@ public class MappedBusReaderTest {
 		reader.open();
 		
 		byte[] buffer = new byte[4];
-		assertEquals(true, reader.hasNext());
 		assertEquals(true, reader.next());
 		assertEquals(false, reader.hasRecovered());
 		assertEquals(4, reader.readBuffer(buffer, 0));
 		assertArrayEquals(data1, buffer);
 		
 		buffer = new byte[3];
-		assertEquals(true, reader.hasNext());
 		assertEquals(true, reader.next());
 		assertEquals(false, reader.hasRecovered());
 		assertEquals(3, reader.readBuffer(buffer, 0));
 		assertArrayEquals(data2, buffer);
 		
-		assertEquals(false, reader.hasNext());
+		assertEquals(false, reader.next());
 		assertEquals(true, reader.hasRecovered());
 	}
 	
@@ -94,59 +93,129 @@ public class MappedBusReaderTest {
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 		reader.open();
 
-		assertEquals(true, reader.hasNext());
-		assertEquals(false, reader.hasRecovered());
 		assertEquals(true, reader.next());
+		assertEquals(false, reader.hasRecovered());
 		assertEquals(0, reader.readType());
 		reader.readMessage(priceUpdate);
 		assertEquals(0, priceUpdate.getSource());
 		assertEquals(1, priceUpdate.getPrice());
 		assertEquals(2, priceUpdate.getQuantity());
 		
-		assertEquals(true, reader.hasNext());
-		assertEquals(false, reader.hasRecovered());
 		assertEquals(true, reader.next());
+		assertEquals(false, reader.hasRecovered());
 		assertEquals(0, reader.readType());
 		reader.readMessage(priceUpdate);
 		assertEquals(3, priceUpdate.getSource());
 		assertEquals(4, priceUpdate.getPrice());
 		assertEquals(5, priceUpdate.getQuantity());
 		
-		assertEquals(false, reader.hasNext());
+		assertEquals(false, reader.next());
 		assertEquals(true, reader.hasRecovered());
 	}
 	
-	@Test public void testCrashBeforeCommit() throws Exception {
+	@Test public void testCrashBeforeCommitRollbackBySameReader() throws Exception {
 		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
 		writer.open();
 
+		// write first record
 		PriceUpdate priceUpdate = new PriceUpdate(0, 1, 2);
 		writer.write(priceUpdate);
 		
+		// write second record
 		priceUpdate = new PriceUpdate(3, 4, 5);
 		writer.write(priceUpdate);
 		
+		// set commit flag to false for the first record
 		MemoryMappedFile mem = new MemoryMappedFile(FILE_NAME, FILE_SIZE);
 		mem.putIntVolatile(Structure.Data, 0);
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
+		reader.setTimeout(0);
 		reader.open();
 
-		assertEquals(true, reader.hasNext());
-		assertEquals(false, reader.hasRecovered());
-		assertEquals(false, reader.next());
+		assertEquals(0, reader.timeoutCounter);
+		assertEquals(0, reader.timerStart);
+		for(int i = 0; i < MappedBusReader.MAX_TIMEOUT_COUNT - 1; i++) {
+			assertEquals(false, reader.next());	
+		}
+		assertEquals(99, reader.timeoutCounter);
+		assertEquals(0, reader.timerStart);
 		
-		assertEquals(true, reader.hasNext());
+		// the reader starts the timer
+		assertEquals(false, reader.next());
 		assertEquals(false, reader.hasRecovered());
+		assertEquals(100, reader.timeoutCounter);
+		assertTrue(reader.timerStart > 0);
+		
+		// the reader sets the roll back flag and skips the record
+		assertEquals(false, reader.next());
+		assertEquals(false, reader.hasRecovered());
+		assertEquals(0, reader.timeoutCounter);
+		assertEquals(0, reader.timerStart);
+		
+		// the reader reads the second record
 		assertEquals(true, reader.next());
+		assertEquals(false, reader.hasRecovered());
 		assertEquals(0, reader.readType());
 		reader.readMessage(priceUpdate);
 		assertEquals(3, priceUpdate.getSource());
 		assertEquals(4, priceUpdate.getPrice());
 		assertEquals(5, priceUpdate.getQuantity());
 		
-		assertEquals(false, reader.hasNext());
+		// no more records available
+		assertEquals(false, reader.next());
 		assertEquals(true, reader.hasRecovered());		
+	}
+
+	@Test public void testCrashBeforeCommitRollbackByDifferentReaderBefore() throws Exception {
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
+		writer.open();
+
+		// write first record
+		PriceUpdate priceUpdate = new PriceUpdate(0, 1, 2);
+		writer.write(priceUpdate);
+		
+		// write second record
+		priceUpdate = new PriceUpdate(3, 4, 5);
+		writer.write(priceUpdate);
+		
+		// set commit flag to false for the first record
+		MemoryMappedFile mem = new MemoryMappedFile(FILE_NAME, FILE_SIZE);		
+		mem.putIntVolatile(Structure.Data, Commit.NotSet);
+		
+		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
+		reader.setTimeout(0);
+		reader.open();
+
+		assertEquals(0, reader.timeoutCounter);
+		assertEquals(0, reader.timerStart);
+		for(int i = 0; i < MappedBusReader.MAX_TIMEOUT_COUNT - 10; i++) {
+			assertEquals(false, reader.next());	
+		}
+		assertEquals(MappedBusReader.MAX_TIMEOUT_COUNT - 10, reader.timeoutCounter);
+		assertEquals(0, reader.timerStart);
+
+		// another reader sets the rollback flag
+		mem.putIntVolatile(Structure.Data + Length.Commit, Rollback.Set);
+		
+		// the reader skips the record
+		assertEquals(false, reader.next());
+		assertEquals(false, reader.hasRecovered());
+		assertEquals(0, reader.timeoutCounter);
+		assertEquals(0, reader.timerStart);
+	
+		// the reader reads the second record
+		assertEquals(true, reader.next());
+		assertEquals(false, reader.hasRecovered());
+		assertEquals(0, reader.readType());
+		reader.readMessage(priceUpdate);
+		assertEquals(3, priceUpdate.getSource());
+		assertEquals(4, priceUpdate.getPrice());
+		assertEquals(5, priceUpdate.getQuantity());
+		
+		// no more records available
+		assertEquals(false, reader.next());
+		assertEquals(true, reader.hasRecovered());
 	}
 	
 }
