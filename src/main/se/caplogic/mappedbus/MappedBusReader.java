@@ -39,18 +39,18 @@ public class MappedBusReader {
 
 	private MemoryMappedFile mem;
 
-	private int timeout = 2000;
-
 	private long limit = Structure.Data;
 
 	private long initialLimit;
 
-	private boolean typeRead;
-
-	protected long timeoutCounter;
+	private int maxTimeout = 2000;
 
 	protected long timerStart;
 
+	protected long timeoutCounter;
+
+	private boolean typeRead;
+	
 	/**
 	 * Creates a new reader.
 	 *
@@ -87,7 +87,7 @@ public class MappedBusReader {
 	 * @param timeout the timeout in milliseconds
 	 */
 	public void setTimeout(int timeout) {
-		this.timeout = timeout;
+		this.maxTimeout = timeout;
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class MappedBusReader {
 			if (timerStart == 0) {
 				timerStart = System.currentTimeMillis();
 			} else {
-				if (System.currentTimeMillis() - timerStart >= timeout) {
+				if (System.currentTimeMillis() - timerStart >= maxTimeout) {
 					mem.putIntVolatile(limit + Length.Commit, Rollback.Set);
 					limit += Length.RecordHeader + recordSize;
 					timeoutCounter = 0;
