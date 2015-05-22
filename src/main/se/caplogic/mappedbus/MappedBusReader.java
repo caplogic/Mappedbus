@@ -120,7 +120,7 @@ public class MappedBusReader {
 		}
 		timeoutCounter++;
 		if (timeoutCounter >= MAX_TIMEOUT_COUNT) {
-			if(timerStart == 0) {
+			if (timerStart == 0) {
 				timerStart = System.currentTimeMillis();
 			} else {
 				if (System.currentTimeMillis() - timerStart >= timeout) {
