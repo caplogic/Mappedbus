@@ -47,10 +47,7 @@ writer.write(priceUpdate);
 
 // read messages
 while (true) {
-   if (reader.hasNext()) {
-      if (!reader.next()) {
-         continue; // message was rolled back, skip it
-      }
+   if (reader.next()) {
       int type = reader.readType();
       if (type == 0) {
          reader.readMessage(priceUpdate)
@@ -68,10 +65,7 @@ writer.write(buffer, 0, buffer.length);
 
 // read buffers
 while (true) {
-   if (reader.hasNext()) {
-      if (!reader.next()) {
-         continue; // message was rolled back, skip it
-      }
+   if (reader.next()) {
       int length = reader.read(buffer, 0);
    }
 }
