@@ -1,16 +1,16 @@
-## MappedBus is a Java based high throughput, low latency message bus, using either a memory mapped file or shared memory as transport
+## Mappedbus is a Java based high throughput, low latency message bus, using either a memory mapped file or shared memory as transport
 
-MappedBus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.
+Mappedbus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.
 
 <p align="center">
   <img src="http://3.bp.blogspot.com/-L51XiyruNMA/VU5K9dMtx9I/AAAAAAAAACg/AOkdwjTrzgI/s320/mappedbus.png">
 </p>
 
-MappedBus can also be described as an efficient IPC mechanism which enable several Java processes/JVMs to communicate by message passing.
+Mappedbus can also be described as an efficient IPC mechanism which enable several Java processes/JVMs to communicate by message passing.
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 25 ns per message.
 
-MappedBus does not create any objects after startup and therefore has no GC impact.
+Mappedbus does not create any objects after startup and therefore has no GC impact.
 
 #### Features:
 * IPC between multiple processes by message passing
@@ -132,7 +132,7 @@ Op/s: 44404868
 
 ### Implementation
 
-Here's how MappedBus solves the synchronization problem between multiple writers (each running in it's own process/JVM):
+Here's how Mappedbus solves the synchronization problem between multiple writers (each running in it's own process/JVM):
 
 * The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
 
@@ -148,4 +148,4 @@ The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it prob
 
 ### Questions
 
-For questions or suggestions about MappedBus feel free to drop a mail to: mappedbus@gmail.com
+For questions or suggestions about Mappedbus feel free to drop a mail to mappedbus@gmail.com
