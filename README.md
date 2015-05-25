@@ -148,4 +148,4 @@ The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it prob
 
 ### Questions
 
-For questions or suggestions feel free to drop a mail to mappedbus@gmail.com
+For questions or suggestions feel free to drop a mail to info@mappedbus.io
