@@ -637,12 +637,7 @@ form {
   color: #474747;
   text-indent: 4px;
 }
-#main-content h2:before {
-  padding-right: 0.3em;
-  margin-left: -1.5em;
-  content: "  ";
-  color: #9ddcff;
-}
+
 
 #main-content h3 {
   margin-top: 24px;
