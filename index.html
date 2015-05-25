@@ -167,7 +167,7 @@ Op/s: 44404868
 <h3>
 <a id="implementation" class="anchor" href="#implementation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Implementation</h3>
 
-<p>Here's how MappedBus solves the synchronization problem between multiple writers (each running in it's own process/JVM):</p>
+<p>Here's how Mappedbus solves the synchronization problem between multiple writers (each running in it's own process/JVM):</p>
 
 <ul>
 <li><p>The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.</p></li>
@@ -182,7 +182,7 @@ Op/s: 44404868
 <h3>
 <a id="questions" class="anchor" href="#questions" aria-hidden="true"><span class="octicon octicon-link"></span></a>Questions</h3>
 
-<p>For questions or suggestions about MappedBus feel free to drop a mail to <a href="mailto:mappedbus@gmail.com">mappedbus@gmail.com</a></p>
+<p>For questions or suggestions about Mappedbus feel free to drop a mail to <a href="mailto:mappedbus@gmail.com">mappedbus@gmail.com</a></p>
         </section>
 
         <aside id="sidebar">
