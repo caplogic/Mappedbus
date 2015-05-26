@@ -45,7 +45,7 @@ public interface MappedBusMessage {
 	public int type();
 	
 	/**
-	 * Return the message length.
+	 * Returns the message length.
 	 *
 	 * @return the length in bytes
 	 */
