@@ -78,15 +78,15 @@ The project contains examples of an object based and a byte array based reader/w
 The object based one work as follows. The ObjectWriter class will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the ObjectWriter is used to populate the source. The ObjectReader simply prints every message it receives.
 
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.object.ObjectWriter 0
+> java -cp mappedbus.jar io.mappedbus.sample.object.ObjectWriter 0
 ...
 ```
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.object.ObjectWriter 1
+> java -cp mappedbus.jar io.mappedbus.sample.object.ObjectWriter 1
 ...
 ```
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.object.ObjectReader
+> java -cp mappedbus.jar io.mappedbus.sample.object.ObjectReader
 ...
 Read: PriceUpdate [source=0, price=20, quantity=40]
 Read: PriceUpdate [source=1, price=8, quantity=16]
@@ -97,19 +97,19 @@ The byte array based example is run in the same way.
 
 Another example simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the "to" field set to it's id + 1 mod "number of nodes".
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 0 3
+> java -cp mappedbus.jar io.mappedbus.sample.token.Token 0 3
 Read: Token [from=0, to=1]
 Read: Token [from=1, to=2]
 ...
 ```
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 1 3
+> java -cp mappedbus.jar io.mappedbus.sample.token.Token 1 3
 Read: Token [from=0, to=1]
 Read: Token [from=1, to=2]
 ...
 ```
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.sample.token.Token 2 3
+> java -cp mappedbus.jar io.mappedbus.sample.token.Token 2 3
 Read: Token [from=0, to=1]
 Read: Token [from=1, to=2]
 ...
@@ -120,11 +120,11 @@ Read: Token [from=1, to=2]
 
 The project contains a performance test which can be run as follows:
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.perf.MessageWriter /home/youraccount/tmp/test
+> java -cp mappedbus.jar io.mappedbus.perf.MessageWriter /home/youraccount/tmp/test
 ...
 ```
 ```
-> java -cp mappedbus.jar se.caplogic.mappedbus.perf.MessageReader /home/youraccount/tmp/test
+> java -cp mappedbus.jar io.mappedbus.perf.MessageReader /home/youraccount/tmp/test
 Elapsed: 1801 ms
 Per op: 22 ns
 Op/s: 44404868
