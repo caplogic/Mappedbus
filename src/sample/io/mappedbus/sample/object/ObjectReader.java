@@ -1,6 +1,6 @@
 package io.mappedbus.sample.object;
 import io.mappedbus.MappedBusReader;
-import io.mappedbus.Message;
+import io.mappedbus.MappedBusMessage;
 
 public class ObjectReader {
 
@@ -16,7 +16,7 @@ public class ObjectReader {
 
 			PriceUpdate priceUpdate = new PriceUpdate();
 			
-			Message message = null;
+			MappedBusMessage message = null;
 
 			while (true) {
 				if (reader.next()) {

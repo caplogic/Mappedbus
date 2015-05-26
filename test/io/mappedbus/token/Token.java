@@ -1,9 +1,9 @@
 package io.mappedbus.token;
 import io.mappedbus.MemoryMappedFile;
-import io.mappedbus.Message;
+import io.mappedbus.MappedBusMessage;
 
 
-public class Token implements Message {
+public class Token implements MappedBusMessage {
 	
 	public static final int TYPE = 0;
 	

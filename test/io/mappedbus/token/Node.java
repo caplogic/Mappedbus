@@ -1,7 +1,7 @@
 package io.mappedbus.token;
 import io.mappedbus.MappedBusReader;
 import io.mappedbus.MappedBusWriter;
-import io.mappedbus.Message;
+import io.mappedbus.MappedBusMessage;
 
 public class Node extends Thread {
 	

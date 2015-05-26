@@ -16,13 +16,13 @@
 package io.mappedbus;
 
 /**
- * Interface for serializing a message.
+ * Interface for messages that can be serialized to the bus.
  *
  */
-public interface Message {
+public interface MappedBusMessage {
 
 	/**
-	 * Writes the message to the bus.
+	 * Writes a message to the bus.
 	 *
 	 * @param mem an instance of the memory mapped file
 	 * @param pos the start of the current record
@@ -30,7 +30,7 @@ public interface Message {
 	public void write(MemoryMappedFile mem, long pos);
 	
 	/**
-	 * Reads the message from the bus.
+	 * Reads a message from the bus.
 	 * 
 	 * @param mem an instance of the memory mapped file
 	 * @param pos the start of the current record

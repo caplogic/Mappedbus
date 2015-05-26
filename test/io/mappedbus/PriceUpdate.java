@@ -1,9 +1,9 @@
 package io.mappedbus;
 import io.mappedbus.MemoryMappedFile;
-import io.mappedbus.Message;
+import io.mappedbus.MappedBusMessage;
 
 
-public class PriceUpdate implements Message {
+public class PriceUpdate implements MappedBusMessage {
 	
 	public static final int TYPE = 0;
 	

@@ -23,8 +23,31 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Class for writing to the MappedBus.
+ * Class for writing messages to the bus.
+ * <p>
+ * Messages can either be message based or byte array based.
+ * <p>
+ * The typical usage is as follows:
+ * <pre>
+ * {@code
+ * // Construct a writer
+ * MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
+ * writer.open();
+ * 
+ * // A: write an object based message
+ * PriceUpdate priceUpdate = new PriceUpdate();
  *
+ * writer.write(priceUpdate);
+ * 
+ * // B: write a byte array based message
+ * byte[] buffer = new byte[32];
+ *
+ * writer.write(buffer, 0, buffer.length);
+ *
+ * // Close the writer
+ * writer.close();
+ * }
+ * </pre>
  */
 public class MappedBusWriter {
 
@@ -39,7 +62,7 @@ public class MappedBusWriter {
 	private final boolean append;
 
 	/**
-	 * Creates a new writer.
+	 * Constructs a new writer.
 	 * 
 	 * @param fileName the name of the memory mapped file
 	 * @param fileSize the maximum size of the file
@@ -80,7 +103,7 @@ public class MappedBusWriter {
 	 * @param message the message object to write
 	 * @throws EOFException in case the end of the file was reached
 	 */
-	public void write(Message message) throws EOFException {
+	public void write(MappedBusMessage message) throws EOFException {
 		long limit = allocate();
 		long commitPos = limit;
 		limit += Length.StatusFlags;

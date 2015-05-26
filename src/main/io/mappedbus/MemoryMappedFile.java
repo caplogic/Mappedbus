@@ -10,6 +10,10 @@ import java.nio.channels.FileChannel;
 import sun.nio.ch.FileChannelImpl;
 import sun.misc.Unsafe;
  
+/**
+ * Class for direct access to a memory mapped file. 
+ *
+ */
 @SuppressWarnings("restriction")
 public class MemoryMappedFile {
  
@@ -29,7 +33,7 @@ public class MemoryMappedFile {
 			mmap = getMethod(FileChannelImpl.class, "map0", int.class, long.class, long.class);
 			unmmap = getMethod(FileChannelImpl.class, "unmap0", long.class, long.class);
 			BYTE_ARRAY_OFFSET = unsafe.arrayBaseOffset(byte[].class);
-		} catch (Exception e){
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -53,61 +57,139 @@ public class MemoryMappedFile {
 		backingFile.close();
 	}
  
-	public MemoryMappedFile(final String loc, long len) throws Exception {
+	/**
+	 * Constructs a new memory mapped file.
+	 * @param loc the file name
+	 * @param len the file length
+	 * @throws Exception in case there was an error creating the memory mapped file
+	 */
+	protected MemoryMappedFile(final String loc, long len) throws Exception {
 		this.loc = loc;
 		this.size = roundTo4096(len);
 		mapAndSetOffset();
 	}
-	
-	public void unmap() throws Exception {
+
+	protected void unmap() throws Exception {
 		unmmap.invoke(null, addr, this.size);
 	}
+	
+	/**
+	 * Reads a byte from the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @return the value read
+	 */
+	public byte getByte(long pos) {
+		return unsafe.getByte(pos + addr);
+	}
  
-	public int getInt(long pos){
+	/**
+	 * Reads an int from the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @return the value read
+	 */
+	public int getInt(long pos) {
 		return unsafe.getInt(pos + addr);
 	}
 
-	public int getIntVolatile(long pos){
+	/**
+	 * Reads an int (using volatile) from the specified position.
+	 * @param pos position in the memory mapped file
+	 * @return the value read
+	 */
+	protected int getIntVolatile(long pos) {
 		return unsafe.getIntVolatile(null, pos + addr);
 	}
-	
-	public long getLong(long pos){
+
+	/**
+	 * Reads a long from the specified position.
+	 * @param pos position in the memory mapped file
+	 * @return the value read
+	 */
+	public long getLong(long pos) {
 		return unsafe.getLong(pos + addr);
 	}
 	
-	public long getLongVolatile(long pos){
+	/**
+	 * Reads a long (using volatile) from the specified position.
+	 * @param pos position in the memory mapped file
+	 * @return the value read
+	 */
+	protected long getLongVolatile(long pos) {
 		return unsafe.getLongVolatile(null, pos + addr);
 	}
- 
-	public void putInt(long pos, int val){
+	
+	/**
+	 * Writes a byte to the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @param val the value to write
+	 */
+	public void putByte(long pos, byte val) {
+		unsafe.putByte(pos + addr, val);
+	}
+
+	/**
+	 * Writes an int to the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @param val the value to write
+	 */
+	public void putInt(long pos, int val) {
 		unsafe.putInt(pos + addr, val);
 	}
-	
-	public void putIntVolatile(long pos, int val){
+
+	/**
+	 * Writes an int (using volatile) to the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @param val the value to write
+	 */
+	protected void putIntVolatile(long pos, int val) {
 		unsafe.putIntVolatile(null, pos + addr, val);
 	}
- 
-	public void putLong(long pos, long val){
+
+	/**
+	 * Writes a long to the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @param val the value to write
+	 */
+	public void putLong(long pos, long val) {
 		unsafe.putLong(pos + addr, val);
 	}
 	
-	public void putLongVolatile(long pos, long val){
+	/**
+	 * Writes a long (using volatile) to the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @param val the value to write
+	 */
+	protected void putLongVolatile(long pos, long val) {
 		unsafe.putLongVolatile(null, pos + addr, val);
 	}
 	
-	public boolean compareAndSwapInt(long pos, int expected, int value) {
-		return unsafe.compareAndSwapInt(null, pos + addr, expected, value);
-	}
-		
-	public boolean compareAndSwapLong(long pos, long expected, long value) {
-		return unsafe.compareAndSwapLong(null, pos + addr, expected, value);
-	}
- 
-	public void getBytes(long pos, byte[] data, int offset, int length){
+	/**
+	 * Reads a buffer of data.
+	 * @param pos the position in the memory mapped file
+	 * @param data the input buffer
+	 * @param offset the offset in the buffer of the first byte to read data into
+	 * @param length the length of the data
+	 */
+	public void getBytes(long pos, byte[] data, int offset, int length) {
 		unsafe.copyMemory(null, pos + addr, data, BYTE_ARRAY_OFFSET + offset, length);
 	}
  
-	public void setBytes(long pos, byte[] data, int offset, int length){
+	/**
+	 * Writes a buffer of data.
+	 * @param pos the position in the memory mapped file
+	 * @param data the output buffer
+	 * @param offset the offset in the buffer of the first byte to write
+	 * @param length the length of the data
+	 */
+	public void setBytes(long pos, byte[] data, int offset, int length) {
 		unsafe.copyMemory(data, BYTE_ARRAY_OFFSET + offset, null, pos + addr, length);
+	}
+
+	protected boolean compareAndSwapInt(long pos, int expected, int value) {
+		return unsafe.compareAndSwapInt(null, pos + addr, expected, value);
+	}
+		
+	protected boolean compareAndSwapLong(long pos, long expected, long value) {
+		return unsafe.compareAndSwapLong(null, pos + addr, expected, value);
 	}
 }

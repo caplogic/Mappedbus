@@ -1,6 +1,6 @@
 package io.mappedbus.perf;
 import io.mappedbus.MappedBusReader;
-import io.mappedbus.Message;
+import io.mappedbus.MappedBusMessage;
 
 public class MessageReader {
 
@@ -16,7 +16,7 @@ public class MessageReader {
 
 			PriceUpdate priceUpdate = new PriceUpdate();
 
-			Message message = null;
+			MappedBusMessage message = null;
 
 			long start = System.nanoTime();
 			for(int i = 0; i < 80000000; i++) {

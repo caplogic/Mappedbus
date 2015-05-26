@@ -1,7 +1,7 @@
 package io.mappedbus.sample.token;
 import io.mappedbus.MappedBusReader;
 import io.mappedbus.MappedBusWriter;
-import io.mappedbus.Message;
+import io.mappedbus.MappedBusMessage;
 
 public class Node {
 

@@ -16,12 +16,12 @@
 package io.mappedbus;
 
 /**
- * Class with constants used in the MappedBus structures.
+ * Class with constants.
  *
  */
-public class MappedBusConstants {
+class MappedBusConstants {
 
-	public static class Structure {
+	static class Structure {
 		
 		public static final int Limit = 0;
 		
@@ -29,7 +29,7 @@ public class MappedBusConstants {
 		
 	}
 
-	public static class Length {
+	static class Length {
 		
 		public static final int Limit = 8;
 		
@@ -45,7 +45,7 @@ public class MappedBusConstants {
 
 	}
 
-	public static class Commit {
+	static class Commit {
 		
 		public static final int NotSet = 0;
 		
@@ -53,7 +53,7 @@ public class MappedBusConstants {
 		
 	}
 	
-	public static class Rollback {
+	static class Rollback {
 
 		public static final int NotSet = 0;
 		

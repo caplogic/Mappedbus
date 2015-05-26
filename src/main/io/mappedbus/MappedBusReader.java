@@ -24,12 +24,42 @@ import java.io.EOFException;
 import java.io.IOException;
 
 /**
- * Class for reading from the MappedBus.
+ * Class for reading messages from the bus.
+ * <p>
+ * Messages can either be message based or byte array based.
+ * <p>
+ * The typical usage is as follows:
+ * <pre>
+ * {@code
+ * // Construct a reader
+ * MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
+ * reader.open();
+ * 
+ * // A: read messages as objects
+ * while (true) {
+ *    if (reader.next()) {
+ *       int type = reader.readType();
+ *       if (type == 0) {
+ *          reader.readMessage(priceUpdate)
+ *       }
+ *    }
+ * }
  *
+ * // B: read messages as byte arrays
+ * while (true) {
+ *    if (reader.next()) {
+ *       int length = reader.read(buffer, 0);
+ *    }
+ * }
+ *
+ * // Close the reader
+ * reader.close();
+ * }
+ * </pre>
  */
 public class MappedBusReader {
 
-	public static final long MAX_TIMEOUT_COUNT = 100;
+	protected static final long MAX_TIMEOUT_COUNT = 100;
 
 	private final String fileName;
 
@@ -52,7 +82,7 @@ public class MappedBusReader {
 	private boolean typeRead;
 	
 	/**
-	 * Creates a new reader.
+	 * Constructs a new reader.
 	 *
 	 * @param fileName the name of the memory mapped file
 	 * @param fileSize the maximum size of the file
@@ -155,7 +185,7 @@ public class MappedBusReader {
 	 * @param message the message object to populate
 	 * @return the message object
 	 */
-	public Message readMessage(Message message) {
+	public MappedBusMessage readMessage(MappedBusMessage message) {
 		if (!typeRead) {
 			readType();
 		}
