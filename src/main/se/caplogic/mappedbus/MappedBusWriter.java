@@ -42,7 +42,7 @@ public class MappedBusWriter {
 	 * Creates a new writer.
 	 * 
 	 * @param fileName the name of the memory mapped file
-	 * @param size the maximum size of the file
+	 * @param fileSize the maximum size of the file
 	 * @param recordSize the maximum size of a record (excluding status flags and meta data)
 	 * @param append whether to append to the file (will create a new file if false)
 	 */
@@ -78,6 +78,7 @@ public class MappedBusWriter {
 	 * Writes a message.
 	 *
 	 * @param message the message object to write
+	 * @throws EOFException in case the end of the file was reached
 	 */
 	public void write(Message message) throws EOFException {
 		long limit = allocate();
@@ -95,6 +96,7 @@ public class MappedBusWriter {
 	 * @param src the output buffer
 	 * @param offset the offset in the buffer of the first byte to write
 	 * @param length the length of the data
+	 * @throws EOFException in case the end of the file was reached
 	 */
 	public void write(byte[] src, int offset, int length) throws EOFException {
 		long limit = allocate();

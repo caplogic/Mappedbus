@@ -67,7 +67,7 @@ public class MappedBusReader {
 	/**
 	 * Opens the reader.
 	 *
-	 * @throws Exception if there was a problem opening the file
+	 * @throws IOException if there was a problem opening the file
 	 */
 	public void open() throws IOException {
 		try {
@@ -97,6 +97,7 @@ public class MappedBusReader {
 	 * reached it will set the roll back field and skip over the record. 
 	 *
 	 * @return true, if there's a new record available, otherwise false
+	 * @throws EOFException in case the end of the file was reached
 	 */
 	public boolean next() throws EOFException {
 		if (limit >= fileSize) {
