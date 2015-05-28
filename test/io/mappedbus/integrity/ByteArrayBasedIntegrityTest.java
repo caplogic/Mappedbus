@@ -25,9 +25,9 @@ import static org.junit.Assert.assertEquals;
  * For more exhaustive testing NUM_RUNS can be increased.
  *
  */
-public class IntegrityTest {
+public class ByteArrayBasedIntegrityTest {
 
-	public static final String FILE_NAME = "/home/mikael/tmp/integrity-test";
+	public static final String FILE_NAME = "/tmp/bytearraybased-integrity-test";
 
 	public static final long FILE_SIZE = 4000000L;
 
@@ -95,13 +95,13 @@ public class IntegrityTest {
 
 		public void run() {
 			try {
-				MappedBusWriter writer = new MappedBusWriter(IntegrityTest.FILE_NAME, IntegrityTest.FILE_SIZE, IntegrityTest.RECORD_LENGTH, true);
+				MappedBusWriter writer = new MappedBusWriter(ByteArrayBasedIntegrityTest.FILE_NAME, ByteArrayBasedIntegrityTest.FILE_SIZE, ByteArrayBasedIntegrityTest.RECORD_LENGTH, true);
 				writer.open();
 
-				byte[] data = new byte[IntegrityTest.RECORD_LENGTH];
+				byte[] data = new byte[ByteArrayBasedIntegrityTest.RECORD_LENGTH];
 				Arrays.fill(data, (byte)id);
 
-				for (int i=0; i < IntegrityTest.NUM_RECORDS; i++) {
+				for (int i=0; i < ByteArrayBasedIntegrityTest.NUM_RECORDS; i++) {
 					writer.write(data, 0, id);
 				}
 				writer.close();
