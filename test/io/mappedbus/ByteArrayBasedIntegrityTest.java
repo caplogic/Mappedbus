@@ -1,4 +1,4 @@
-package io.mappedbus.integrity;
+package io.mappedbus;
 
 import io.mappedbus.MappedBusReader;
 import io.mappedbus.MappedBusWriter;

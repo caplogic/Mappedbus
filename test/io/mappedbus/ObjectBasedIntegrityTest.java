@@ -1,4 +1,4 @@
-package io.mappedbus.integrity;
+package io.mappedbus;
 
 import static org.junit.Assert.assertEquals;
 import io.mappedbus.MappedBusMessage;
