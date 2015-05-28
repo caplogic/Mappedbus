@@ -19,8 +19,8 @@ public class MessageReader {
 			MappedBusMessage message = null;
 
 			long start = System.nanoTime();
-			for(int i = 0; i < 80000000; i++) {
-				while(true) {
+			for (int i = 0; i < 80000000; i++) {
+				while (true) {
 					if (reader.next()) {
 						int type = reader.readType();
 						switch (type) {

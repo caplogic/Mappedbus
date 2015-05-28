@@ -8,6 +8,8 @@ import io.mappedbus.MemoryMappedFile;
 
 import java.io.File;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -33,15 +35,24 @@ public class ObjectBasedIntegrityTest {
 	public static final int NUM_RECORDS = NUM_RECORDS_PER_WRITER * NUM_WRITERS;
 
 	public static final int NUM_RUNS = 10;
+	
+	@Before public void before() {
+		new File(FILE_NAME).delete();
+	}
+	
+	@After public void after() {
+		new File(FILE_NAME).delete();
+	}	
 
 	@Test public void test() throws Exception {
-		for(int i=0; i < NUM_RUNS; i++) {
+		for (int i=0; i < NUM_RUNS; i++) {
 			runTest();
 		}
 	}
 
 	private void runTest() throws Exception {
 		new File(FILE_NAME).delete();
+
 		Writer[] writers = new Writer[NUM_WRITERS];
 		for (int i = 0; i < writers.length; i++) {
 			writers[i] = new Writer(i + 1);
@@ -50,10 +61,10 @@ public class ObjectBasedIntegrityTest {
 			writers[i].start();
 		}
 		Reader[] readers = new Reader[NUM_READERS];
-		for(int i=0; i < readers.length; i++) {
+		for (int i=0; i < readers.length; i++) {
 			readers[i] = new Reader();
 		}
-		for(int i=0; i < readers.length; i++) {
+		for (int i=0; i < readers.length; i++) {
 			readers[i].start();
 		}
 		for (int i = 0; i < writers.length; i++) {
@@ -107,19 +118,19 @@ public class ObjectBasedIntegrityTest {
 				MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_LENGTH);
 				reader.open();
 				long[] counters = new long[NUM_WRITERS];
-				for(int i=0; i < counters.length; i++) {
+				for (int i=0; i < counters.length; i++) {
 					counters[i] = i+1;
 				}
 				Record record = new Record();
-				while(true) {
-					if(reader.next()) {
+				while (true) {
+					if (reader.next()) {
 						int type = reader.readType();
-						if(type == Record.TYPE) {
+						if (type == Record.TYPE) {
 							reader.readMessage(record);
 							long key = record.getKey();
 							long value = record.getValue();
 							long expected = counters[(int)(key-1)];
-							if(expected != value) {
+							if (expected != value) {
 								System.out.println("Expected: " + counters[(int)(key-1)] + ", actual: " + value);
 								failed = true;				
 								return;
@@ -127,7 +138,7 @@ public class ObjectBasedIntegrityTest {
 							counters[(int)(key-1)] += NUM_WRITERS;
 						}
 						recordsReceived++;
-						if(recordsReceived >= NUM_RECORDS) {
+						if (recordsReceived >= NUM_RECORDS) {
 							break;
 						}
 					}

@@ -37,7 +37,7 @@ public class Node {
 				if (reader.next()) {
 					System.out.println("Read: " + reader.readMessage(token));
 
-					if(token.getTo() == id) {
+					if (token.getTo() == id) {
 						Thread.sleep(1000);
 						token.setFrom(id);
 						token.setTo((id + 1) % numberOfNodes);

@@ -47,7 +47,7 @@ public class Node extends Thread {
 						break;
 					}
 					
-					if(token.getTo() == id) {
+					if (token.getTo() == id) {
 						//Thread.sleep(1000);
 						token.setFrom(id);
 						token.setTo((id + 1) % numberOfNodes);

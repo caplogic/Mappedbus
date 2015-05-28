@@ -19,7 +19,7 @@ public class MessageWriter {
 			
 			PriceUpdate priceUpdate = new PriceUpdate();
 			
-			for(int i = 0; i < 80000000; i++) {
+			for (int i = 0; i < 80000000; i++) {
 				writer.write(priceUpdate);
 			}
 			

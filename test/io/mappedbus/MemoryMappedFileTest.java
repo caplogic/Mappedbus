@@ -15,6 +15,14 @@ public class MemoryMappedFileTest {
 	public static final String FILE_NAME = "/tmp/memorymappedfile-test";
 
 	public static final long FILE_SIZE = 1000L;
+	
+	@Before public void before() {
+		new File(FILE_NAME).delete();
+	}
+	
+	@After public void after() {
+		new File(FILE_NAME).delete();
+	}	
 
 	@Test public void testVolatility() {
 		final int LIMIT = 0;
@@ -64,22 +72,6 @@ public class MemoryMappedFileTest {
 			assertEquals(2, data);
 			m.unmap();
 			writer.join();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	@After public void after() {
-		cleanup();
-	}
-	
-	@Before public void before() {
-		cleanup();
-	}
-	
-	private void cleanup() {
-		try {
-			new File(FILE_NAME).delete();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

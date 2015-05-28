@@ -14,6 +14,7 @@ import io.mappedbus.MappedBusConstants.Structure;
 import java.io.EOFException;
 import java.io.File;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +30,11 @@ public class MappedBusReaderTest {
 	
 	public static final int RECORD_SIZE = 12;
 	
-	@Before public void setup() {
+	@Before public void before() {
+		new File(FILE_NAME).delete();
+	}
+	
+	@After public void after() {
 		new File(FILE_NAME).delete();
 	}
 	
@@ -137,7 +142,7 @@ public class MappedBusReaderTest {
 
 		assertEquals(0, reader.timeoutCounter);
 		assertEquals(0, reader.timerStart);
-		for(int i = 0; i < MappedBusReader.MAX_TIMEOUT_COUNT - 1; i++) {
+		for (int i = 0; i < MappedBusReader.MAX_TIMEOUT_COUNT - 1; i++) {
 			assertEquals(false, reader.next());	
 		}
 		assertEquals(99, reader.timeoutCounter);
@@ -191,7 +196,7 @@ public class MappedBusReaderTest {
 
 		assertEquals(0, reader.timeoutCounter);
 		assertEquals(0, reader.timerStart);
-		for(int i = 0; i < MappedBusReader.MAX_TIMEOUT_COUNT - 10; i++) {
+		for (int i = 0; i < MappedBusReader.MAX_TIMEOUT_COUNT - 10; i++) {
 			assertEquals(false, reader.next());	
 		}
 		assertEquals(MappedBusReader.MAX_TIMEOUT_COUNT - 10, reader.timeoutCounter);

@@ -6,7 +6,9 @@ import io.mappedbus.MappedBusWriter;
 import java.io.File;
 import java.util.Arrays;
 
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.fail;
@@ -38,6 +40,14 @@ public class ByteArrayBasedIntegrityTest {
 	public static final int NUM_RECORDS = 10000;
 
 	public static final int NUM_RUNS = 1000;
+	
+	@Before public void before() {
+		new File(FILE_NAME).delete();
+	}
+	
+	@After public void after() {
+		new File(FILE_NAME).delete();
+	}
 
 	@Test public void test() throws Exception {
 		for (int i = 0; i < NUM_RUNS; i++) {
@@ -62,7 +72,7 @@ public class ByteArrayBasedIntegrityTest {
 		int records = 0;
 		byte[] data = new byte[RECORD_LENGTH];
 		while (true) {
-			if(reader.next()) {
+			if (reader.next()) {
 				int length = reader.readBuffer(data, 0);
 				Assert.assertEquals(data[0], length);
 				for (int i=0; i < length; i++) {
@@ -81,8 +91,6 @@ public class ByteArrayBasedIntegrityTest {
 		assertEquals(NUM_RECORDS * NUM_WRITERS, records);
 
 		reader.close();
-
-		new File(FILE_NAME).delete();
 	}
 
 	class Writer extends Thread {

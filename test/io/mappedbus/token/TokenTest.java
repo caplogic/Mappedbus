@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -30,8 +32,16 @@ public class TokenTest {
 	
 	public static final int NUM_RUNS = 100;
 
+	@Before public void before() {
+		new File(FILE_NAME).delete();
+	}
+	
+	@After public void after() {
+		new File(FILE_NAME).delete();
+	}
+	
 	@Test public void test() throws Exception {
-		for(int i=0; i < NUM_RUNS; i++) {
+		for (int i=0; i < NUM_RUNS; i++) {
 			runTest();
 		}
 	}
@@ -68,8 +78,6 @@ public class TokenTest {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		new File(FILE_NAME).delete();
 	}
 
 }
