@@ -3,7 +3,7 @@
 Mappedbus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.
 
 <p align="center">
-  <img src="http://3.bp.blogspot.com/-L51XiyruNMA/VU5K9dMtx9I/AAAAAAAAACg/AOkdwjTrzgI/s320/mappedbus.png">
+  <img src="http://mappedbus.io/images/mappedbus.png">
 </p>
 
 Mappedbus can also be described as an efficient IPC library which enable several Java processes/JVMs to communicate by message passing.
