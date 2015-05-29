@@ -14,7 +14,7 @@ import java.io.File;
  * Reader:
  * - reads a non-volatile value (should be zero at this point)
  * - reads a volatile value (should be zero at this point)
- * - in loop reads the volatile value and breaks the loop the when value is no longer zero
+ * - in loop reads the volatile value and breaks the loop when the value is no longer zero
  * - reads the non-volatile value and makes sure it's updated
  *
  * To run:
