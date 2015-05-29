@@ -6,8 +6,6 @@ Mappedbus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-
   <img src="http://mappedbus.io/images/mappedbus.png" width="337" height="126">
 </p>
 
-Mappedbus can also be described as an efficient IPC library which enable several Java processes/JVMs to communicate by message passing.
-
 The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 25 ns per message.
 
 Mappedbus does not create any objects after startup and therefore has no GC impact.
