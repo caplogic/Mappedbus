@@ -28,7 +28,7 @@ public class ObjectBasedIntegrityTest {
 
 	public static final int NUM_WRITERS = 4;
 
-	public static final int RECORD_LENGTH = Record.SIZE;
+	public static final int RECORD_LENGTH = 16;
 
 	public static final int NUM_RECORDS_PER_WRITER = 300000;
 
@@ -162,18 +162,12 @@ public class ObjectBasedIntegrityTest {
 
 		public static final int TYPE = 0;
 
-		public static final int SIZE = 16;
-
 		private long key;
 
 		private long value;
 
 		public int type() {
 			return TYPE;
-		}
-
-		public int size() {
-			return SIZE;
 		}
 
 		public long getKey() {

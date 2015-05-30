@@ -6,8 +6,6 @@ import io.mappedbus.MappedBusMessage;
 public class PriceUpdate implements MappedBusMessage {
 	
 	public static final int TYPE = 0;
-	
-	public static final int SIZE = 16;
 
 	private int source;
 	
@@ -26,10 +24,6 @@ public class PriceUpdate implements MappedBusMessage {
 	
 	public int type() {
 		return TYPE;
-	}
-	
-	public int size() {
-		return SIZE;
 	}
 	
 	public int getSource() {

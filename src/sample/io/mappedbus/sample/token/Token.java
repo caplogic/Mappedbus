@@ -6,8 +6,6 @@ import io.mappedbus.MappedBusMessage;
 public class Token implements MappedBusMessage {
 	
 	public static final int TYPE = 0;
-	
-	public static final int SIZE = 8;
 
 	private int from;
 	
@@ -23,10 +21,6 @@ public class Token implements MappedBusMessage {
 	
 	public int type() {
 		return TYPE;
-	}
-	
-	public int size() {
-		return SIZE;
 	}
 	
 	public int getFrom() {

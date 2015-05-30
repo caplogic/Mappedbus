@@ -73,17 +73,15 @@ public class MappedBusWriterTest {
 				
 		PriceUpdate priceUpdate = new PriceUpdate();
 		writer.write(priceUpdate);
-		assertEquals(Structure.Data + Length.Commit + Length.Rollback + Length.Metadata + PriceUpdate.SIZE , mem.getLongVolatile(Structure.Limit));
+		assertEquals(Structure.Data + Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE , mem.getLongVolatile(Structure.Limit));
 		
 		writer.write(priceUpdate);
-		assertEquals(Structure.Data + 2 * (Length.Commit + Length.Rollback + Length.Metadata + PriceUpdate.SIZE), mem.getLongVolatile(Structure.Limit));
+		assertEquals(Structure.Data + 2 * (Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE), mem.getLongVolatile(Structure.Limit));
 	}
 	
 	class PriceUpdate implements MappedBusMessage {
 		
 		public static final int TYPE = 0;
-		
-		public static final int SIZE = 12;
 
 		private int source;
 		
@@ -102,10 +100,6 @@ public class MappedBusWriterTest {
 		
 		public int type() {
 			return TYPE;
-		}
-		
-		public int size() {
-			return SIZE;
 		}
 		
 		public int getSource() {
