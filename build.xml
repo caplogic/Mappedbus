@@ -53,7 +53,7 @@
       <formatter type="plain"/>
       <batchtest fork="true">
         <fileset dir="${test}">
-          <include name="**/*Test*.java"/>
+          <include name="**/*Test.java"/>
         </fileset>
       </batchtest>
       <classpath refid="project.classpath" />
