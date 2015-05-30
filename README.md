@@ -134,7 +134,7 @@ Here's how Mappedbus solves the synchronization problem between multiple writers
 
 * The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
 
-* When a writer wants to add a record to the file it will use the [fetch-and-add](http://en.wikipedia.org/wiki/Fetch-and-add) instruction to atomically update the limit field.
+* When a writer wants to add a record to the file it will use the fetch-and-add instruction to atomically update the limit field.
 
 * When the limit field has increased a reader will know there's new data to be read, but the writer which updated the limit field might not yet have written any data in the record. To avoid this problem each record contains an initial byte which make up the commit field.
 
