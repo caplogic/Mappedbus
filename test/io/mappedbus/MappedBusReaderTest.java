@@ -188,7 +188,7 @@ public class MappedBusReaderTest {
 		
 		// set commit flag to false for the first record
 		MemoryMappedFile mem = new MemoryMappedFile(FILE_NAME, FILE_SIZE);		
-		mem.putIntVolatile(Structure.Data, Commit.NotSet);
+		mem.putByteVolatile(Structure.Data, Commit.NotSet);
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 		reader.setTimeout(0);
@@ -203,7 +203,7 @@ public class MappedBusReaderTest {
 		assertEquals(0, reader.timerStart);
 
 		// another reader sets the rollback flag
-		mem.putIntVolatile(Structure.Data + Length.Commit, Rollback.Set);
+		mem.putByteVolatile(Structure.Data + Length.Commit, Rollback.Set);
 		
 		// the reader skips the record
 		assertEquals(false, reader.next());

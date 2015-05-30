@@ -136,8 +136,8 @@ public class MappedBusReader {
 		if (mem.getLongVolatile(Structure.Limit) <= limit) {
 			return false;
 		}
-		int commit = mem.getIntVolatile(limit);
-		int rollback = mem.getIntVolatile(limit + Length.Commit);
+		byte commit = mem.getByteVolatile(limit);
+		byte rollback = mem.getByteVolatile(limit + Length.Commit);
 		if (rollback == Rollback.Set) {
 			limit += Length.RecordHeader + recordSize;
 			timeoutCounter = 0;
@@ -155,7 +155,7 @@ public class MappedBusReader {
 				timerStart = System.currentTimeMillis();
 			} else {
 				if (System.currentTimeMillis() - timerStart >= maxTimeout) {
-					mem.putIntVolatile(limit + Length.Commit, Rollback.Set);
+					mem.putByteVolatile(limit + Length.Commit, Rollback.Set);
 					limit += Length.RecordHeader + recordSize;
 					timeoutCounter = 0;
 					timerStart = 0;

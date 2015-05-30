@@ -140,7 +140,7 @@ public class MappedBusWriter {
 	}
 
 	private void commit(long commitPos) {
-		mem.putIntVolatile(commitPos, Commit.Set);
+		mem.putByteVolatile(commitPos, Commit.Set);
 	}
 	
 	/**

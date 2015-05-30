@@ -33,9 +33,9 @@ class MappedBusConstants {
 		
 		public static final int Limit = 8;
 		
-		public static final int Commit = 4;
+		public static final int Commit = 1;
 		
-		public static final int Rollback = 4;
+		public static final int Rollback = 1;
 		
 		public static final int Metadata = 4;
 		
@@ -47,17 +47,17 @@ class MappedBusConstants {
 
 	static class Commit {
 		
-		public static final int NotSet = 0;
+		public static final byte NotSet = 0;
 		
-		public static final int Set = 1;
+		public static final byte Set = 1;
 		
 	}
 	
 	static class Rollback {
 
-		public static final int NotSet = 0;
+		public static final byte NotSet = 0;
 		
-		public static final int Set = 1;
+		public static final byte Set = 1;
 		
 	}
 }

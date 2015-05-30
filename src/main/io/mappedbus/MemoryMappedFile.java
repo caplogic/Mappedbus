@@ -81,6 +81,15 @@ public class MemoryMappedFile {
 	public byte getByte(long pos) {
 		return unsafe.getByte(pos + addr);
 	}
+
+	/**
+	 * Reads a byte (volatile) from the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @return the value read
+	 */
+	protected byte getByteVolatile(long pos) {
+		return unsafe.getByteVolatile(null, pos + addr);
+	}
  
 	/**
 	 * Reads an int from the specified position.
@@ -92,7 +101,7 @@ public class MemoryMappedFile {
 	}
 
 	/**
-	 * Reads an int (using volatile) from the specified position.
+	 * Reads an int (volatile) from the specified position.
 	 * @param pos position in the memory mapped file
 	 * @return the value read
 	 */
@@ -110,7 +119,7 @@ public class MemoryMappedFile {
 	}
 	
 	/**
-	 * Reads a long (using volatile) from the specified position.
+	 * Reads a long (volatile) from the specified position.
 	 * @param pos position in the memory mapped file
 	 * @return the value read
 	 */
@@ -126,6 +135,15 @@ public class MemoryMappedFile {
 	public void putByte(long pos, byte val) {
 		unsafe.putByte(pos + addr, val);
 	}
+	
+	/**
+	 * Writes a byte (volatile) to the specified position.
+	 * @param pos the position in the memory mapped file
+	 * @param val the value to write
+	 */
+	protected void putByteVolatile(long pos, byte val) {
+		unsafe.putByteVolatile(null, pos + addr, val);
+	}
 
 	/**
 	 * Writes an int to the specified position.
@@ -137,7 +155,7 @@ public class MemoryMappedFile {
 	}
 
 	/**
-	 * Writes an int (using volatile) to the specified position.
+	 * Writes an int (volatile) to the specified position.
 	 * @param pos the position in the memory mapped file
 	 * @param val the value to write
 	 */
@@ -155,7 +173,7 @@ public class MemoryMappedFile {
 	}
 	
 	/**
-	 * Writes a long (using volatile) to the specified position.
+	 * Writes a long (volatile) to the specified position.
 	 * @param pos the position in the memory mapped file
 	 * @param val the value to write
 	 */
