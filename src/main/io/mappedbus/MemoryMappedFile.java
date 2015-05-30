@@ -192,4 +192,8 @@ public class MemoryMappedFile {
 	protected boolean compareAndSwapLong(long pos, long expected, long value) {
 		return unsafe.compareAndSwapLong(null, pos + addr, expected, value);
 	}
+
+	protected long getAndAddLong(long pos, long delta) {
+		return unsafe.getAndAddLong(null, pos + addr, delta);
+	}
 }

@@ -56,9 +56,9 @@ public class MappedBusWriter {
 	private final String fileName;
 	
 	private final long fileSize;
-	
-	private final int recordSize;
-	
+
+	private final int entrySize;
+
 	private final boolean append;
 
 	/**
@@ -72,7 +72,7 @@ public class MappedBusWriter {
 	public MappedBusWriter(String fileName, long fileSize, int recordSize, boolean append) {
 		this.fileName = fileName;
 		this.fileSize = fileSize;
-		this.recordSize = recordSize;
+		this.entrySize = recordSize + Length.RecordHeader;
 		this.append = append;
 	}
 	
@@ -132,16 +132,9 @@ public class MappedBusWriter {
 	}
 	
 	private long allocate() throws EOFException {
-		int entrySize = Length.RecordHeader + recordSize;
-		long limit;
-		while (true) {
-			limit = mem.getLongVolatile(Structure.Limit);
-			if (limit + entrySize > fileSize) {
-				throw new EOFException("End of file was reached");
-			}
-			if (mem.compareAndSwapLong(Structure.Limit, limit, limit + entrySize)) {
-				break;
-			}
+		long limit = mem.getAndAddLong(Structure.Limit, entrySize);
+		if (limit + entrySize > fileSize) {
+			throw new EOFException("End of file was reached");
 		}
 		return limit;
 	}
