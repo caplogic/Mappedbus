@@ -64,7 +64,7 @@ writer.write(buffer, 0, buffer.length);
 // read buffers
 while (true) {
    if (reader.next()) {
-      int length = reader.read(buffer, 0);
+      int length = reader.readBuffer(buffer, 0);
    }
 }
 ```
