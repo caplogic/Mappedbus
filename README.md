@@ -3,7 +3,7 @@
 Mappedbus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.
 
 <p align="center">
-  <img src="http://www.mappedbus.io/images/mappedbus.png" width="337" height="126">
+  <img src="https://raw.githubusercontent.com/caplogic/Mappedbus/gh-pages/images/mappedbus.png" width="337" height="126">
 </p>
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 25 ns per message.
