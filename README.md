@@ -147,7 +147,3 @@ The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it prob
 ### Questions
 
 For questions or suggestions drop a mail to info@mappedbus.io
-
-### Donations
-
-Donations to this project are very welcome: 1JXFuSanbDwUGSw2njR6CmbJhVqrnJwRCG
