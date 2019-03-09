@@ -69,6 +69,8 @@ public class MappedBusReader {
 
 	private long limit = Structure.Data;
 
+	private long prevLimit = 0;
+
 	private long initialLimit;
 
 	private int maxTimeout = 2000;
@@ -131,6 +133,9 @@ public class MappedBusReader {
 		if (limit >= fileSize) {
 			throw new EOFException("End of file was reached");
 		}
+		if (prevLimit != 0 && limit - prevLimit < Length.RecordHeader + recordSize) {
+			limit = prevLimit + Length.RecordHeader + recordSize;
+		}
 		if (mem.getLongVolatile(Structure.Limit) <= limit) {
 			return false;
 		}
@@ -138,6 +143,7 @@ public class MappedBusReader {
 		byte rollback = mem.getByteVolatile(limit + Length.Commit);
 		if (rollback == Rollback.Set) {
 			limit += Length.RecordHeader + recordSize;
+			prevLimit = 0;
 			timeoutCounter = 0;
 			timerStart = 0;
 			return false;
@@ -145,6 +151,7 @@ public class MappedBusReader {
 		if (commit == Commit.Set) {
 			timeoutCounter = 0;
 			timerStart = 0;
+			prevLimit = limit;
 			return true;
 		}
 		timeoutCounter++;
@@ -155,6 +162,7 @@ public class MappedBusReader {
 				if (System.currentTimeMillis() - timerStart >= maxTimeout) {
 					mem.putByteVolatile(limit + Length.Commit, Rollback.Set);
 					limit += Length.RecordHeader + recordSize;
+					prevLimit = 0;
 					timeoutCounter = 0;
 					timerStart = 0;
 					return false;
