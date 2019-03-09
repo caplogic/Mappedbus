@@ -6,7 +6,7 @@ Mappedbus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-
   <img src="https://raw.githubusercontent.com/caplogic/Mappedbus/gh-pages/images/mappedbus.png" width="337" height="126">
 </p>
 
-The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 25 ns per message.
+The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 20 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 50 ns per message.
 
 Mappedbus does not create any objects after startup and therefore has no GC impact.
 
@@ -146,4 +146,8 @@ The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it prob
 
 ### Questions
 
-For questions or suggestions feel free to drop a mail to info@mappedbus.io
+For questions or suggestions drop a mail to info@mappedbus.io
+
+### Donations
+
+Donations to this project are very welcome: 1JXFuSanbDwUGSw2njR6CmbJhVqrnJwRCG

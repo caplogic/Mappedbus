@@ -18,10 +18,16 @@ public class MessageReader {
 
 			MappedBusMessage message = null;
 
-			long start = System.nanoTime();
+			System.out.println("Waiting for first message");
+
+			long start = 0;
 			for (int i = 0; i < 80000000; i++) {
 				while (true) {
 					if (reader.next()) {
+						if (start == 0) {
+							start = System.nanoTime();
+							System.out.println("Got first message");
+						}
 						int type = reader.readType();
 						switch (type) {
 						case PriceUpdate.TYPE:

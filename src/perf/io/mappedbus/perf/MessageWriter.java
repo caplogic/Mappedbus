@@ -12,9 +12,7 @@ public class MessageWriter {
 
 	public void run(String fileName) {
 		try {
-			new File(fileName).delete();
-			
-			MappedBusWriter writer = new MappedBusWriter(fileName, 20000000000L, 12, false);
+			MappedBusWriter writer = new MappedBusWriter(fileName, 20000000000L, 12, true);
 			writer.open();
 			
 			PriceUpdate priceUpdate = new PriceUpdate();
@@ -24,7 +22,6 @@ public class MessageWriter {
 			}
 			
 			System.out.println("Done");
-			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
