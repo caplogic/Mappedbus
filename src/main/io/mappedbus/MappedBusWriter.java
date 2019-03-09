@@ -29,7 +29,7 @@ import java.io.IOException;
  * <pre>
  * {@code
  * // Construct a writer
- * MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
+ * MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32);
  * writer.open();
  * 
  * // A: write an object based message
@@ -57,21 +57,17 @@ public class MappedBusWriter {
 
 	private final int entrySize;
 
-	private final boolean append;
-
 	/**
 	 * Constructs a new writer.
 	 * 
 	 * @param fileName the name of the memory mapped file
 	 * @param fileSize the maximum size of the file
 	 * @param recordSize the maximum size of a record (excluding status flags and meta data)
-	 * @param append whether to append to the file (will create a new file if false)
 	 */
-	public MappedBusWriter(String fileName, long fileSize, int recordSize, boolean append) {
+	public MappedBusWriter(String fileName, long fileSize, int recordSize) {
 		this.fileName = fileName;
 		this.fileSize = fileSize;
 		this.entrySize = recordSize + Length.RecordHeader;
-		this.append = append;
 	}
 	
 	/**
@@ -80,19 +76,12 @@ public class MappedBusWriter {
 	 * @throws IOException if there was an error opening the file
 	 */
 	public void open() throws IOException {
-		if (!append) {
-			new File(fileName).delete();
-		}
 		try {
 			mem = new MemoryMappedFile(fileName, fileSize);
 		} catch(Exception e) {
 			throw new IOException("Unable to open the file: " + fileName, e);
 		}
-		if (append) {
-			mem.compareAndSwapLong(Structure.Limit, 0, Structure.Data);
-		} else {
-			mem.putLongVolatile(Structure.Limit, Structure.Data);
-		}
+		mem.compareAndSwapLong(Structure.Limit, 0, Structure.Data);
 	}
 
 	/**

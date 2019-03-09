@@ -103,7 +103,7 @@ public class ByteArrayBasedIntegrityTest {
 
 		public void run() {
 			try {
-				MappedBusWriter writer = new MappedBusWriter(ByteArrayBasedIntegrityTest.FILE_NAME, ByteArrayBasedIntegrityTest.FILE_SIZE, ByteArrayBasedIntegrityTest.RECORD_LENGTH, true);
+				MappedBusWriter writer = new MappedBusWriter(ByteArrayBasedIntegrityTest.FILE_NAME, ByteArrayBasedIntegrityTest.FILE_SIZE, ByteArrayBasedIntegrityTest.RECORD_LENGTH);
 				writer.open();
 
 				byte[] data = new byte[ByteArrayBasedIntegrityTest.RECORD_LENGTH];

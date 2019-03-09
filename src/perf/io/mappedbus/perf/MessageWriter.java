@@ -12,7 +12,7 @@ public class MessageWriter {
 
 	public void run(String fileName) {
 		try {
-			MappedBusWriter writer = new MappedBusWriter(fileName, 20000000000L, 12, true);
+			MappedBusWriter writer = new MappedBusWriter(fileName, 20000000000L, 12);
 			writer.open();
 			
 			PriceUpdate priceUpdate = new PriceUpdate();

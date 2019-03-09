@@ -46,7 +46,7 @@ public class MappedBusReaderTest {
 	
 	@Test(expected=EOFException.class) public void testReadEOF() throws Exception {
 		int fileSize = Length.Limit + Length.RecordHeader + RECORD_SIZE;
-		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, fileSize, RECORD_SIZE, false);
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, fileSize, RECORD_SIZE);
 		writer.open();
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, fileSize, RECORD_SIZE);
 		reader.open();
@@ -59,7 +59,7 @@ public class MappedBusReaderTest {
 	}
 	
 	@Test public void testReadBuffer() throws Exception {
-		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 		writer.open();
 		
 		byte[] data1 = {0, 1, 2, 3};
@@ -88,7 +88,7 @@ public class MappedBusReaderTest {
 	}
 	
 	@Test public void testReadMessage() throws Exception {
-		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 		writer.open();
 	
 		PriceUpdate priceUpdate = new PriceUpdate(0, 1, 2);
@@ -121,7 +121,7 @@ public class MappedBusReaderTest {
 	}
 	
 	@Test public void testCrashBeforeCommitRollbackBySameReader() throws Exception {
-		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 		writer.open();
 
 		// write first record
@@ -175,7 +175,7 @@ public class MappedBusReaderTest {
 	}
 
 	@Test public void testCrashBeforeCommitRollbackByDifferentReaderBefore() throws Exception {
-		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE, false);
+		MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 		writer.open();
 
 		// write first record

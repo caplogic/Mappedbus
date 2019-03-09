@@ -10,7 +10,7 @@ public class ObjectWriter {
 
 	public void run(int source) {
 		try {
-			MappedBusWriter writer = new MappedBusWriter("/tmp/test-message", 2000000L, 12, true);
+			MappedBusWriter writer = new MappedBusWriter("/tmp/test-message", 2000000L, 12);
 			writer.open();
 			
 			PriceUpdate priceUpdate = new PriceUpdate();

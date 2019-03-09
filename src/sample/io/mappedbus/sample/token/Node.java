@@ -16,7 +16,7 @@ public class Node {
 	}
 
 	public void init() throws Exception {
-		writer = new MappedBusWriter("/tmp/token-test", 2000000L, 8, true);
+		writer = new MappedBusWriter("/tmp/token-test", 2000000L, 8);
 		writer.open();
 		
 		reader = new MappedBusReader("/tmp/token-test", 2000000L, 8);

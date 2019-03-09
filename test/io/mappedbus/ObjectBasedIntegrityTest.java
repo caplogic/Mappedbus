@@ -89,7 +89,7 @@ public class ObjectBasedIntegrityTest {
 
 		public void run() {
 			try {
-				MappedBusWriter writer = new MappedBusWriter(ObjectBasedIntegrityTest.FILE_NAME, ObjectBasedIntegrityTest.FILE_SIZE, ObjectBasedIntegrityTest.RECORD_LENGTH, true);
+				MappedBusWriter writer = new MappedBusWriter(ObjectBasedIntegrityTest.FILE_NAME, ObjectBasedIntegrityTest.FILE_SIZE, ObjectBasedIntegrityTest.RECORD_LENGTH);
 				writer.open();
 				Record record = new Record();
 				record.setKey(id);

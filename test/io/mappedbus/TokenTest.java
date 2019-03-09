@@ -102,7 +102,7 @@ public class TokenTest {
 			this.id = id;
 			this.numberOfNodes = numberOfNodes;
 			this.numberOfMessages = numberOfMessages;
-			writer = new MappedBusWriter(fileName, fileSize, recordSize, true);
+			writer = new MappedBusWriter(fileName, fileSize, recordSize);
 			writer.open();
 			reader = new MappedBusReader(fileName, fileSize, recordSize);
 			reader.open();

@@ -28,7 +28,7 @@ MappedBusReader reader = new MappedBusReader("/tmp/test", 100000L, 32);
 reader.open();
 
 // Setup a writer
-MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32, true);
+MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32);
 writer.open();
 ```
 
@@ -95,19 +95,19 @@ The byte array based example is run in the same way.
 
 Another example simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the "to" field set to it's id + 1 mod "number of nodes".
 ```
-> java -cp mappedbus.jar io.mappedbus.sample.token.Token 0 3
+> java -cp mappedbus.jar io.mappedbus.sample.token.Node 0 3
 Read: Token [from=0, to=1]
 Read: Token [from=1, to=2]
 ...
 ```
 ```
-> java -cp mappedbus.jar io.mappedbus.sample.token.Token 1 3
+> java -cp mappedbus.jar io.mappedbus.sample.token.Node 1 3
 Read: Token [from=0, to=1]
 Read: Token [from=1, to=2]
 ...
 ```
 ```
-> java -cp mappedbus.jar io.mappedbus.sample.token.Token 2 3
+> java -cp mappedbus.jar io.mappedbus.sample.token.Node 2 3
 Read: Token [from=0, to=1]
 Read: Token [from=1, to=2]
 ...
