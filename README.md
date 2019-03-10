@@ -1,10 +1,6 @@
-## Mappedbus is a Java based high throughput, low latency message bus, using either a memory mapped file or shared memory as transport
+## Mappedbus is a Java based high throughput, low latency message bus, using a memory mapped file or shared memory as transport
 
 Mappedbus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/caplogic/Mappedbus/gh-pages/images/mappedbus.png" width="337" height="126">
-</p>
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 20 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 50 ns per message.
 
@@ -12,8 +8,8 @@ Mappedbus does not create any objects after startup and therefore has no GC impa
 
 #### Features:
 * IPC between multiple processes by message passing
-* Support for either a memory mapped file or shared memory as transport
-* Support for either object or byte array (raw data) based messages
+* Support for a memory mapped file or shared memory as transport
+* Support for object or byte array (raw data) based messages
 
 ### Getting Started
 
@@ -32,9 +28,9 @@ MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32);
 writer.open();
 ```
 
-In the code above the file "/tmp/test" is on disk and thus it's memory mapped by the library. To instead use the library with shared memory, point to a file in "/dev/shm", for example, "/dev/shm/test".
+In the code above the file "/tmp/test" is on disk and thus it's memory mapped by the library. To use the library with shared memory instead, point to a file in "/dev/shm", for example, "/dev/shm/test".
 
-When using a memory mapped file the messages will be lazily persisted to disk. With shared memory the messages will instead be stored in the RAM.
+When using a memory mapped file the messages will be lazily persisted to disk. With shared memory the messages will be stored in the RAM.
 <br><br>
 Read/write messages using objects:
 ```java
@@ -93,7 +89,7 @@ Read: PriceUpdate [source=0, price=22, quantity=44]
 
 The byte array based example is run in the same way.
 
-Another example simulates a token passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the "to" field set to it's id + 1 mod "number of nodes".
+Another example simulates a token being passed around between a number of nodes. Each node will send a message, Token, which contains two fields: to and from. When a node receives a token it will check whether it's the receiver and if so it will send a new token message with the "to" field set to it's id + 1 mod "number of nodes".
 ```
 > java -cp mappedbus.jar io.mappedbus.sample.token.Node 0 3
 Read: Token [from=0, to=1]
@@ -130,7 +126,7 @@ Op/s: 44404868
 
 ### Implementation
 
-Here's how Mappedbus solves the synchronization problem between multiple writers (each running in it's own process/JVM):
+This is how Mappedbus solves the synchronization problem between multiple writers (each running in it's own process/JVM):
 
 * The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
 
