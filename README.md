@@ -114,14 +114,15 @@ Read: Token [from=1, to=2]
 
 The project contains a performance test which can be run as follows:
 ```
+> java -cp mappedbus.jar io.mappedbus.perf.MessageReader /tmp/test
+...
+Elapsed: 4128 ms
+Per op: 51 ns
+Op/s: 19377668
+```
+```
 > java -cp mappedbus.jar io.mappedbus.perf.MessageWriter /tmp/test
 ...
-```
-```
-> java -cp mappedbus.jar io.mappedbus.perf.MessageReader /tmp/test
-Elapsed: 1801 ms
-Per op: 22 ns
-Op/s: 44404868
 ```
 
 ### Implementation
