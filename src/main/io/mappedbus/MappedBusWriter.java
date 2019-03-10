@@ -17,7 +17,6 @@ import io.mappedbus.MappedBusConstants.Length;
 import io.mappedbus.MappedBusConstants.Structure;
 
 import java.io.EOFException;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -56,6 +55,10 @@ public class MappedBusWriter {
 	private final long fileSize;
 
 	private final int entrySize;
+
+	public boolean autoCommit = true;
+
+	protected long commitPos;
 
 	/**
 	 * Constructs a new writer.
@@ -97,7 +100,9 @@ public class MappedBusWriter {
 		mem.putInt(limit, message.type());
 		limit += Length.Metadata;
 		message.write(mem, limit);
-		commit(commitPos);
+		if (autoCommit) {
+			commit(commitPos);
+		}
 	}
 
 	/**
@@ -115,7 +120,9 @@ public class MappedBusWriter {
 		mem.putInt(limit, length);
 		limit += Length.Metadata;
 		mem.setBytes(limit, src, offset, length);
-		commit(commitPos);		
+		if (autoCommit) {
+			commit(commitPos);
+		}
 	}
 	
 	private long allocate() throws EOFException {
@@ -129,7 +136,11 @@ public class MappedBusWriter {
 	private void commit(long commitPos) {
 		mem.putByteVolatile(commitPos, Commit.Set);
 	}
-	
+
+	protected void commit() {
+		commit(commitPos);
+	}
+
 	/**
 	 * Closes the writer.
 	 *
