@@ -139,7 +139,7 @@ This is how Mappedbus solves the synchronization problem between multiple writer
 
 * A writer might crash after it has updated the limit field but before it has updated the status flag field indicating the record has been committed. To avoid this problem the reader has a timeout for how long it will wait for the commit field to be set. When that time is reached the reader will set the status flag field (using compare and swap) to a value indicating the record has been rolled back, and continue with the next record. When the status flag field is set to indicate it's been rolled back the record is always ignored by the readers.
 
-* A slow writer may write a message and be about to set the status flag to indicate the record has been committed, while a reader has already timed out and set the status flag to indicate the record has been rolled back. Since the status flag is updated using compare-and-swap the writer will notice this, and the write() method call will return false to indicate the write was not successful.
+* A slow writer may write a message and be about to set the status flag to indicate the record has been committed, while a reader has already timed out and set the status flag to indicate the record has been rolled back. Since the status flag is updated using compare-and-swap the writer will detect this, and the write() method call will return false to indicate the write was not successful.
 
 The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it probably won't work on all platforms. The project contains a test (called IntegrityTest) to check whether it works on the platform used.
 
