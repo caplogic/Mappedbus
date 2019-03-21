@@ -2,7 +2,7 @@
 
 Mappedbus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-Queue) with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.
 
-The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 20 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 50 ns per message.
+The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 14 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 70 ns per message.
 
 Mappedbus does not create any objects after startup and therefore has no GC impact.
 
@@ -114,11 +114,11 @@ Read: Token [from=1, to=2]
 
 The project contains a performance test which can be run as follows:
 ```
-> java -cp mappedbus.jar io.mappedbus.perf.MessageReader /tmp/test
+> rm -rf /tmp/test;java -cp mappedbus.jar io.mappedbus.perf.MessageReader /tmp/test
 ...
-Elapsed: 4128 ms
-Per op: 51 ns
-Op/s: 19377668
+Elapsed: 5660 ms
+Per op: 70 ns
+Op/s: 14131938
 ```
 ```
 > java -cp mappedbus.jar io.mappedbus.perf.MessageWriter /tmp/test
@@ -129,15 +129,15 @@ Op/s: 19377668
 
 This is how Mappedbus solves the synchronization problem between multiple writers (each running in it's own process/JVM):
 
-* The first eight bytes of the file make up a field called the limit. This field specifies how much data has actually been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
+* The first eight bytes of the file make up a field called the limit. This field specifies how much data has been written to the file. The readers will poll the limit field (using volatile) to see whether there's a new record to be read.
 
-* When a writer wants to add a record to the file it will use the fetch-and-add instruction to atomically update the limit field.
+* When a writer adds a record to the file it will use the fetch-and-add instruction to atomically update the limit field.
 
-* When the limit field has increased a reader will know there's new data to be read, but the writer which updated the limit field might not yet have written any data in the record. To avoid this problem each record contains an initial byte which make up the commit field.
+* When the limit field has increased a reader will know there's new data to be read, but the writer which updated the limit field might not yet have written any data in the record. To avoid this problem each record contains an initial four bytes which make up the status flag field.
 
-* When a writer has finished writing a record it will set the commit field (using volatile) and the reader will only start reading a record once it has seen that the commit field has been set.
+* When a writer has finished writing a record it will set the status field to value indicating the record has been committed (using compare and swap) and the reader will only start reading a record once it has seen that the commit field has been set.
 
-* A writer might crash after it has updated the limit field but before it has updated the commit field. To avoid this problem there's a field next to the commit field called the rollback field. The reader has a timeout for how long it will wait for the commit field to be set. When that time is reached the reader will set the rollback field (using volatile) and continue with the next record. The rollback field has precedence over the commit field, when the rollback field is set the record is always ignored by the readers.
+* A writer might crash after it has updated the limit field but before it has updated the status flag field indicating the record has been committed. To avoid this problem the reader has a timeout for how long it will wait for the commit field to be set. When that time is reached the reader will set the status flag field (using compare and swap) to a value indicating the record has been rolled back, and continue with the next record. When the status flag field is set to indicate it's been rolled back the record is always ignored by the readers.
 
 The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it probably won't work on all platforms. The project contains a test (called IntegrityTest) to check whether it works on the platform used.
 
