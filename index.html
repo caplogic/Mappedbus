@@ -62,7 +62,7 @@
 reader<span class="pl-k">.</span>open();
 
 <span class="pl-c">// Setup a writer</span>
-<span class="pl-smi">MappedBusWriter</span> writer <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">MappedBusWriter</span>(<span class="pl-s"><span class="pl-pds">"</span>/tmp/test<span class="pl-pds">"</span></span>, <span class="pl-c1">100000L</span>, <span class="pl-c1">32</span>, <span class="pl-c1">true</span>);
+<span class="pl-smi">MappedBusWriter</span> writer <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-smi">MappedBusWriter</span>(<span class="pl-s"><span class="pl-pds">"</span>/tmp/test<span class="pl-pds">"</span></span>, <span class="pl-c1">100000L</span>, <span class="pl-c1">32</span>);
 writer<span class="pl-k">.</span>open();</pre></div>
 
 <p>In the code above the file "/tmp/test" is on disk and thus it's memory mapped by the library. To instead use the library with shared memory, point to a file in "/dev/shm", for example, "/dev/shm/test".</p>
