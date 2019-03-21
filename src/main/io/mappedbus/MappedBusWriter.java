@@ -12,7 +12,7 @@
 * limitations under the License. 
 */
 package io.mappedbus;
-import io.mappedbus.MappedBusConstants.Commit;
+import io.mappedbus.MappedBusConstants.StatusFlag;
 import io.mappedbus.MappedBusConstants.Length;
 import io.mappedbus.MappedBusConstants.Structure;
 
@@ -56,10 +56,6 @@ public class MappedBusWriter {
 
 	private final int entrySize;
 
-	public boolean autoCommit = true;
-
-	protected long commitPos;
-
 	/**
 	 * Constructs a new writer.
 	 * 
@@ -94,15 +90,22 @@ public class MappedBusWriter {
 	 * @throws EOFException in case the end of the file was reached
 	 */
 	public void write(MappedBusMessage message) throws EOFException {
+		while (true) {
+			long commitPos = writeRecord(message);
+			if (commit(commitPos)) {
+				return;
+			}
+		}
+	}
+
+	protected long writeRecord(MappedBusMessage message) throws EOFException {
 		long limit = allocate();
 		long commitPos = limit;
-		limit += Length.StatusFlags;
+		limit += Length.StatusFlag;
 		mem.putInt(limit, message.type());
 		limit += Length.Metadata;
 		message.write(mem, limit);
-		if (autoCommit) {
-			commit(commitPos);
-		}
+		return commitPos;
 	}
 
 	/**
@@ -114,17 +117,24 @@ public class MappedBusWriter {
 	 * @throws EOFException in case the end of the file was reached
 	 */
 	public void write(byte[] src, int offset, int length) throws EOFException {
+		while (true) {
+			long commitPos = writeRecord(src, offset, length);
+			if (commit(commitPos)) {
+				return;
+			}
+		}
+	}
+
+	protected long writeRecord(byte[] src, int offset, int length) throws EOFException {
 		long limit = allocate();
 		long commitPos = limit;
-		limit += Length.StatusFlags;
+		limit += Length.StatusFlag;
 		mem.putInt(limit, length);
 		limit += Length.Metadata;
 		mem.setBytes(limit, src, offset, length);
-		if (autoCommit) {
-			commit(commitPos);
-		}
+		return commitPos;
 	}
-	
+
 	private long allocate() throws EOFException {
 		long limit = mem.getAndAddLong(Structure.Limit, entrySize);
 		if (limit + entrySize > fileSize) {
@@ -133,12 +143,8 @@ public class MappedBusWriter {
 		return limit;
 	}
 
-	private void commit(long commitPos) {
-		mem.putByteVolatile(commitPos, Commit.Set);
-	}
-
-	protected void commit() {
-		commit(commitPos);
+	protected boolean commit(long commitPos) {
+		return mem.compareAndSwapInt(commitPos, StatusFlag.NotSet, StatusFlag.Commit);
 	}
 
 	/**

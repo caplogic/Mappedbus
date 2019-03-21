@@ -3,12 +3,8 @@ package io.mappedbus;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import io.mappedbus.MappedBusReader;
-import io.mappedbus.MappedBusWriter;
-import io.mappedbus.MemoryMappedFile;
-import io.mappedbus.MappedBusConstants.Commit;
+import io.mappedbus.MappedBusConstants.StatusFlag;
 import io.mappedbus.MappedBusConstants.Length;
-import io.mappedbus.MappedBusConstants.Rollback;
 import io.mappedbus.MappedBusConstants.Structure;
 
 import java.io.EOFException;
@@ -188,7 +184,7 @@ public class MappedBusReaderTest {
 		
 		// set commit flag to false for the first record
 		MemoryMappedFile mem = new MemoryMappedFile(FILE_NAME, FILE_SIZE);		
-		mem.putByteVolatile(Structure.Data, Commit.NotSet);
+		mem.putByteVolatile(Structure.Data, StatusFlag.NotSet);
 		
 		MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
 		reader.setTimeout(0);
@@ -203,7 +199,7 @@ public class MappedBusReaderTest {
 		assertEquals(0, reader.timerStart);
 
 		// another reader sets the rollback flag
-		mem.putByteVolatile(Structure.Data + Length.Commit, Rollback.Set);
+		mem.putByteVolatile(Structure.Data, StatusFlag.Rollback);
 		
 		// the reader skips the record
 		assertEquals(false, reader.next());

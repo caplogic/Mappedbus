@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import java.io.File;
 
+import static org.junit.Assert.assertEquals;
+
 public class RollbackTest {
 
     public static final String FILE_NAME = "/tmp/rollback-tester";
@@ -37,7 +39,6 @@ public class RollbackTest {
         public void run() {
             try {
                 MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
-                reader.setTimeout(500);
                 reader.open();
 
                 MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE);
@@ -48,10 +49,10 @@ public class RollbackTest {
                 for (long i = 0; i < RECORDS; i++) {
                     message.setValue(INITIAL_VALUE + i);
                     if(i == 5 || i == 15) {
-                        writer.autoCommit = false;
-                        writer.write(message);
+                        long commitPos = writer.writeRecord(message);
                         Thread.sleep(1000);
-                        writer.autoCommit = true;
+                        boolean result = writer.commit(commitPos);
+                        assertEquals(false, result);
                     } else {
                         writer.write(message);
                     }
@@ -66,6 +67,7 @@ public class RollbackTest {
         public void run() {
             try {
                 MappedBusReader reader = new MappedBusReader(FILE_NAME, FILE_SIZE, RECORD_SIZE);
+                reader.setTimeout(500);
                 reader.open();
 
                 MappedBusWriter writer = new MappedBusWriter(FILE_NAME, FILE_SIZE, RECORD_SIZE);

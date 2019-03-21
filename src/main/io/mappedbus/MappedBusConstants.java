@@ -31,31 +31,21 @@ public class MappedBusConstants {
 		
 		public static final int Limit = 8;
 		
-		public static final int Commit = 1;
-		
-		public static final int Rollback = 1;
+		public static final int StatusFlag = 4;
 		
 		public static final int Metadata = 4;
-		
-		public static final int StatusFlags = Commit + Rollback;
 
-		public static final int RecordHeader = Commit + Rollback + Metadata;
+		public static final int RecordHeader = StatusFlag + Metadata;
 
 	}
 
-	public static class Commit {
+	public static class StatusFlag {
 		
 		public static final byte NotSet = 0;
 		
-		public static final byte Set = 1;
-		
-	}
+		public static final byte Commit = 1;
 
-	public static class Rollback {
+		public static final byte Rollback = 2;
 
-		public static final byte NotSet = 0;
-		
-		public static final byte Set = 1;
-		
 	}
 }

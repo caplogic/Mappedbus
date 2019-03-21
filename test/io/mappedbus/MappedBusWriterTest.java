@@ -58,11 +58,11 @@ public class MappedBusWriterTest {
 				
 		byte[] data1 = {0, 1, 2, 3};
 		writer.write(data1, 0, data1.length);
-		assertEquals(Structure.Data + Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE , mem.getLongVolatile(Structure.Limit));
+		assertEquals(Structure.Data + Length.StatusFlag + Length.Metadata + RECORD_SIZE , mem.getLongVolatile(Structure.Limit));
 		
 		byte[] data2 = {4, 5, 6};
 		writer.write(data2, 0, data2.length);
-		assertEquals(Structure.Data + 2 * (Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE), mem.getLongVolatile(Structure.Limit));
+		assertEquals(Structure.Data + 2 * (Length.StatusFlag + Length.Metadata + RECORD_SIZE), mem.getLongVolatile(Structure.Limit));
 	}
 
 	@Test public void testWriteMessage() throws Exception {
@@ -73,10 +73,10 @@ public class MappedBusWriterTest {
 				
 		PriceUpdate priceUpdate = new PriceUpdate();
 		writer.write(priceUpdate);
-		assertEquals(Structure.Data + Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE , mem.getLongVolatile(Structure.Limit));
+		assertEquals(Structure.Data + Length.StatusFlag + Length.Metadata + RECORD_SIZE , mem.getLongVolatile(Structure.Limit));
 		
 		writer.write(priceUpdate);
-		assertEquals(Structure.Data + 2 * (Length.Commit + Length.Rollback + Length.Metadata + RECORD_SIZE), mem.getLongVolatile(Structure.Limit));
+		assertEquals(Structure.Data + 2 * (Length.StatusFlag + Length.Metadata + RECORD_SIZE), mem.getLongVolatile(Structure.Limit));
 	}
 	
 	class PriceUpdate implements MappedBusMessage {

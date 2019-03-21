@@ -13,9 +13,8 @@
  */
 package io.mappedbus;
 
-import io.mappedbus.MappedBusConstants.Commit;
+import io.mappedbus.MappedBusConstants.StatusFlag;
 import io.mappedbus.MappedBusConstants.Length;
-import io.mappedbus.MappedBusConstants.Rollback;
 import io.mappedbus.MappedBusConstants.Structure;
 
 import java.io.EOFException;
@@ -139,16 +138,15 @@ public class MappedBusReader {
 		if (mem.getLongVolatile(Structure.Limit) <= limit) {
 			return false;
 		}
-		byte commit = mem.getByteVolatile(limit);
-		byte rollback = mem.getByteVolatile(limit + Length.Commit);
-		if (rollback == Rollback.Set) {
+		int statusFlag = mem.getIntVolatile(limit);
+		if (statusFlag == StatusFlag.Rollback) {
 			limit += Length.RecordHeader + recordSize;
 			prevLimit = 0;
 			timeoutCounter = 0;
 			timerStart = 0;
 			return false;
 		}
-		if (commit == Commit.Set) {
+		if (statusFlag == StatusFlag.Commit) {
 			timeoutCounter = 0;
 			timerStart = 0;
 			prevLimit = limit;
@@ -160,7 +158,13 @@ public class MappedBusReader {
 				timerStart = System.currentTimeMillis();
 			} else {
 				if (System.currentTimeMillis() - timerStart >= maxTimeout) {
-					mem.putByteVolatile(limit + Length.Commit, Rollback.Set);
+					if (!mem.compareAndSwapInt(limit, StatusFlag.NotSet, StatusFlag.Rollback)) {
+						// there are two cases this can happen
+						// 1) a slow writer eventually set the status flag to commit
+						// 2) another reader set the status flag to rollback right before this reader was going to
+						// in both cases return false, and the value of the status flag will be used in the next call to this method
+						return false;
+					}
 					limit += Length.RecordHeader + recordSize;
 					prevLimit = 0;
 					timeoutCounter = 0;
@@ -179,7 +183,7 @@ public class MappedBusReader {
 	 */
 	public int readType() {
 		typeRead = true;
-		limit += Length.StatusFlags;
+		limit += Length.StatusFlag;
 		int type = mem.getInt(limit);
 		limit += Length.Metadata;
 		return type;
@@ -209,7 +213,7 @@ public class MappedBusReader {
 	 * @return the length of the record that was read
 	 */
 	public int readBuffer(byte[] dst, int offset) {
-		limit += Length.StatusFlags;
+		limit += Length.StatusFlag;
 		int length = mem.getInt(limit);
 		limit += Length.Metadata;
 		mem.getBytes(limit, dst, offset, length);
