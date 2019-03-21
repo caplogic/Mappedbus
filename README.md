@@ -133,11 +133,13 @@ This is how Mappedbus solves the synchronization problem between multiple writer
 
 * When a writer adds a record to the file it will use the fetch-and-add instruction to atomically update the limit field.
 
-* When the limit field has increased a reader will know there's new data to be read, but the writer which updated the limit field might not yet have written any data in the record. To avoid this problem each record contains an initial four bytes which make up the status flag field.
+* When the limit field has increased a reader will know there's new data to be read, but the writer which updated the limit field might not yet have written any data in the record. To avoid this problem each record contains an initial four bytes which make up the status flag field. The status flag field has three possible values: not set, committed, rolled back.
 
 * When a writer has finished writing a record it will set the status field to value indicating the record has been committed (using compare and swap) and the reader will only start reading a record once it has seen that the commit field has been set.
 
 * A writer might crash after it has updated the limit field but before it has updated the status flag field indicating the record has been committed. To avoid this problem the reader has a timeout for how long it will wait for the commit field to be set. When that time is reached the reader will set the status flag field (using compare and swap) to a value indicating the record has been rolled back, and continue with the next record. When the status flag field is set to indicate it's been rolled back the record is always ignored by the readers.
+
+* An extremely slow writer may write a message and be about to set the status flag to indicate the record has been committed, while a reader has already timed out and set the status flag to indicate the record has been rolled back. Since the status flag is updated using compare-and-swap, the writer will get an indicate the write failed in this case.
 
 The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it probably won't work on all platforms. The project contains a test (called IntegrityTest) to check whether it works on the platform used.
 

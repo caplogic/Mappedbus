@@ -87,15 +87,12 @@ public class MappedBusWriter {
 	 * Writes a message.
 	 *
 	 * @param message the message object to write
+	 * @return returns true if the message could be written, or otherwise false
 	 * @throws EOFException in case the end of the file was reached
 	 */
-	public void write(MappedBusMessage message) throws EOFException {
-		while (true) {
-			long commitPos = writeRecord(message);
-			if (commit(commitPos)) {
-				return;
-			}
-		}
+	public boolean write(MappedBusMessage message) throws EOFException {
+		long commitPos = writeRecord(message);
+		return commit(commitPos);
 	}
 
 	protected long writeRecord(MappedBusMessage message) throws EOFException {
@@ -114,15 +111,12 @@ public class MappedBusWriter {
 	 * @param src the output buffer
 	 * @param offset the offset in the buffer of the first byte to write
 	 * @param length the length of the data
+	 * @return returns true if the message could be written, or otherwise false
 	 * @throws EOFException in case the end of the file was reached
 	 */
-	public void write(byte[] src, int offset, int length) throws EOFException {
-		while (true) {
-			long commitPos = writeRecord(src, offset, length);
-			if (commit(commitPos)) {
-				return;
-			}
-		}
+	public boolean write(byte[] src, int offset, int length) throws EOFException {
+		long commitPos = writeRecord(src, offset, length);
+		return commit(commitPos);
 	}
 
 	protected long writeRecord(byte[] src, int offset, int length) throws EOFException {
