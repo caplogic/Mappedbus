@@ -34,10 +34,6 @@
 
 <p>Mappedbus was inspired by <a href="https://github.com/OpenHFT/Chronicle-Queue">Java Chronicle</a> with the main difference that it's designed to efficiently support multiple writers – enabling use cases where the order of messages produced by multiple processes are important.</p>
 
-<p align="center">
-  <img src="images/mappedbus2.png" width="337" height="126">
-</p>
-
 <p>The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 40 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 25 ns per message.</p>
 
 <p>Mappedbus does not create any objects after startup and therefore has no GC impact.</p>
