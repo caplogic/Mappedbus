@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RollbackTest {
 
-    public static final String FILE_NAME = "/tmp/rollback-tester";
+    public static final String FILE_NAME = System.getProperty("java.io.tmpdir") + File.separator + "rollback-tester";
 
     public static final int RECORD_SIZE = 8 * 8;
 
