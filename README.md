@@ -13,7 +13,7 @@ Mappedbus does not create any objects after startup and therefore has no GC impa
 
 ### Getting Started
 
-Download mappedbus.jar from the release tab (or clone the project and build it from source by running "ant") and try out any of the sample applications described below.
+Download mappedbus.jar from the release tab (or clone the project and build it from source by running "ant") and try any of the sample applications described below.
 
 ### Usage
 
@@ -145,4 +145,4 @@ The solution seems to work well on Linux x86 with Oracle's JVM (1.8) but it prob
 
 ### Questions
 
-For questions or suggestions drop a mail to info@mappedbus.io
+For questions or suggestions drop an email to info@mappedbus.io
