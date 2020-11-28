@@ -22,7 +22,7 @@ import org.junit.Test;
  */
 public class TokenTest {
 
-	public static final String FILE_NAME = "/tmp/token-test";
+	public static final String FILE_NAME = System.getProperty("java.io.tmpdir") + File.separator + "token-test";
 
 	public static final int RECORD_SIZE = 8;
 

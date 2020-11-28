@@ -29,7 +29,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class ByteArrayBasedIntegrityTest {
 
-	public static final String FILE_NAME = "/tmp/bytearraybased-integrity-test";
+	public static final String FILE_NAME = System.getProperty("java.io.tmpdir") + File.separator + "bytearraybased-integrity-test";
 
 	public static final long FILE_SIZE = 4000000L;
 

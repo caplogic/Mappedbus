@@ -36,7 +36,7 @@ public class MemoryTester {
 
 	public static long VOLATILE_FIELD = 512;
 
-	public static final String FILE_NAME = "/tmp/memory-tester";
+	public static final String FILE_NAME = System.getProperty("java.io.tmpdir") + File.separator + "memory-tester";
 	
 	public static final long FILE_SIZE = 1000L;
 

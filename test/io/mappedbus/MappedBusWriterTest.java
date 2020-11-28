@@ -19,7 +19,7 @@ import org.junit.Test;
  */
 public class MappedBusWriterTest {
 	
-	public static final String FILE_NAME = "/tmp/MappedBusWriterTest";
+	public static final String FILE_NAME = System.getProperty("java.io.tmpdir") + File.separator + "MappedBusWriterTest";
 	
 	public static final long FILE_SIZE = 1000;
 	

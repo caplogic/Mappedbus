@@ -12,7 +12,7 @@ import org.junit.Test;
 
 public class MemoryMappedFileTest {
 
-	public static final String FILE_NAME = "/tmp/memorymappedfile-test";
+	public static final String FILE_NAME = System.getProperty("java.io.tmpdir") + File.separator + "memorymappedfile-test";
 
 	public static final long FILE_SIZE = 1000L;
 	
