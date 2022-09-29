@@ -8,12 +8,12 @@ Mappedbus does not create any objects after startup and therefore has Zero GC im
 
 #### Features:
 * IPC between multiple processes by message passing.
-* Support for a memory mapped file or shared memory as transport.
+* Support for a memory mapped file, or shared memory as transport.
 * Support for object or byte array (raw data) based messages.
 
 ### Getting Started
 
-Download mappedbus.jar from the release tab (or clone the project and build it from source by running "ant") and try any of the sample applications described below.
+Download mappedbus.jar from the release tab (or clone the project and build it from source by running "ant") and try out any of the samples described below.
 
 ### Usage
 
@@ -69,7 +69,7 @@ while (true) {
 
 The project contains examples of an object based and a byte array based reader/writer.
 
-The object based one works as follows. The ObjectWriter class will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the ObjectWriter is used to populate the source. The ObjectReader simply prints every message it receives.
+The object based one works as follows. The ObjectWriter class will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the ObjectWriter is the source. The ObjectReader simply prints every message it receives.
 
 ```
 > java -cp mappedbus.jar io.mappedbus.sample.object.ObjectWriter 0
