@@ -7,9 +7,9 @@ The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writi
 Mappedbus does not create any objects after startup and therefore has Zero GC impact.
 
 #### Features:
-* IPC between multiple processes by message passing
-* Support for a memory mapped file or shared memory as transport
-* Support for object or byte array (raw data) based messages
+* IPC between multiple processes by message passing.
+* Support for a memory mapped file or shared memory as transport.
+* Support for object or byte array (raw data) based messages.
 
 ### Getting Started
 
@@ -28,7 +28,7 @@ MappedBusWriter writer = new MappedBusWriter("/tmp/test", 100000L, 32);
 writer.open();
 ```
 
-In the code above the file "/tmp/test" is on disk and thus it's memory mapped by the library. To use the library with shared memory instead, point to a file in "/dev/shm", for example, "/dev/shm/test".
+In the code above the file "/tmp/test" is on disk and thus is memory mapped by the library. To use the library with shared memory, instead point to a file in "/dev/shm", for example, "/dev/shm/test".
 
 When using a memory mapped file the messages will be lazily persisted to disk. With shared memory the messages will be stored in the RAM.
 <br><br>
@@ -69,7 +69,7 @@ while (true) {
 
 The project contains examples of an object based and a byte array based reader/writer.
 
-The object based one work as follows. The ObjectWriter class will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the ObjectWriter is used to populate the source. The ObjectReader simply prints every message it receives.
+The object based one works as follows. The ObjectWriter class will send a message, PriceUpdate, which contains three fields: source, price and quantity. The first argument of the ObjectWriter is used to populate the source. The ObjectReader simply prints every message it receives.
 
 ```
 > java -cp mappedbus.jar io.mappedbus.sample.object.ObjectWriter 0
