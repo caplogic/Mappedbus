@@ -7,6 +7,7 @@ The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writi
 Mappedbus does not create any objects after startup and therefore has Zero GC impact.
 
 #### Features:
+* Lock-free data structure.
 * IPC between multiple processes by message passing.
 * Support for a memory mapped file, or shared memory as transport.
 * Support for object or byte array (raw data) based messages.
