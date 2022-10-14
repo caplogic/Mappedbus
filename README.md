@@ -4,10 +4,11 @@ Mappedbus was inspired by [Java Chronicle](https://github.com/OpenHFT/Chronicle-
 
 The throughput (on a laptop, i7-4558U @ 2.8 GHz) between a single producer writing at full speed and a single consumer is around 14 million messages per second (a small message consisting of three integer fields), and the average read/write latency is around 70 ns per message.
 
+Mappedbus is a lock-free data structure.
+
 Mappedbus does not create any objects after startup and therefore has Zero GC impact.
 
 #### Features:
-* Lock-free data structure.
 * IPC between multiple processes by message passing.
 * Support for a memory mapped file, or shared memory as transport.
 * Support for object or byte array (raw data) based messages.
