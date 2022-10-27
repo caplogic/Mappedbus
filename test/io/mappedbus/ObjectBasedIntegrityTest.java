@@ -20,7 +20,7 @@ import org.junit.Test;
  */
 public class ObjectBasedIntegrityTest {
 
-	public static final String FILE_NAME = "/tmp/objectbased-integrity-test";
+	public static final String FILE_NAME = System.getProperty("java.io.tmpdir") + File.separator + "objectbased-integrity-test";
 
 	public static final long FILE_SIZE = 40000000;
 
